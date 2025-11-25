@@ -1,0 +1,164 @@
+.popup-overlay1 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: flex-end; /* Aligns modal to the right side */
+  align-items: center;
+  z-index: 299;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.popup1 {
+  background: white;
+  border-radius: 10px 0 0 10px;
+  text-align: center;
+  width: 70%;
+  height: 100vh;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  right: -100%; /* Initially hidden off-screen to the right */
+  top: 0;
+  transition: right 0.5s ease-in-out;
+}
+
+/* Show Modal */
+.popup-overlay1.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.popup-overlay1.show .popup1 {
+  right: 0; /* Slide in from the right */
+}
+
+
+  .p-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 12px 10px;
+  }
+  
+  .p-content {
+    flex: 1;
+    padding: 10px;
+    /* overflow-y: auto;  */
+  }
+  
+  .p-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 12px 10px;
+  }
+  
+  .flight-info-container {
+    max-width: 100%;
+    margin: auto;
+    background-color: #f2f9ff;
+    border: 1px solid blue;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .flight-info-container div p{
+    font-size: 12px;
+  }
+  
+  .airline-logo {
+    width: 50px; /* Adjust size as needed */
+    margin-right: 10px;
+  }
+  
+  .flight-info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 1rem; /* Adjust size as needed */
+  }
+  
+  .fare-card {
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: start;
+  }
+  
+  
+  .fare-card .card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    padding: 10px 15px;
+  }
+  .fare-card .card-header input {
+   
+    width: 24px;
+    height: 24px;
+  }
+  .fare-card .card-header div {
+  display: inline-block;
+  }
+  .fare-card .card-price {
+    font-size: 1.5rem;
+    color: #212529;
+  }
+  
+  .fare-card .card-subtitle {
+    font-size: 0.875rem;
+    margin-bottom: 15px;
+  }
+  
+  .fare-card .card-details .card-detail {
+    font-weight: bold;
+    margin-top: 5px;
+    display: flex;
+    font-size: 14px;
+    align-items: center;
+  }
+  
+  .fare-card .card-details .card-detail i {
+    margin-right: 10px;
+  }
+  
+  .fare-card .card-details ul {
+    list-style-type: none;
+    padding-left: 0;
+    /* margin-bottom: 2px; */
+  }
+  
+  .fare-card .card-details ul li {
+    margin-left: 20px;
+    font-size: 12px;
+    margin-bottom: 5px;
+  }
+  
+  .fare-card .badge {
+    margin-top: 0px;
+  }
+  
+  .fare-card .btn {
+    background-color: #007bff;
+    border-color: #007bff;
+    font-size: 1rem;
+  }
+  
+
+  @media screen and (max-width: 780px) {
+    .popup1{
+      width: 100%;
+    }
+  }

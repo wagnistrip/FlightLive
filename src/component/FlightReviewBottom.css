@@ -1,0 +1,94 @@
+
+
+
+.gud-to-know {
+    /* background: #99daa8 ; */
+    background: #9b4bfd3d;
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    /* row-gap: 10px; */
+    color: var(--black-color);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 8px;
+}
+.toggle-icon[aria-expanded="true"] {
+    transform: rotate(90deg);
+  }
+
+.list ul {
+    font-size: 13px;
+}
+.gud-to-know div h6{
+    font-size: 16px;
+}
+.gud-to-know div p{
+    font-size: 14px;
+}
+
+.gud-to-know-maindiv {
+    background: #fff;
+    /* border: 1px solid #b8d0e5; */
+    box-shadow: 0 0 6px rgb(64 64 64 / 5%);
+}
+
+
+.Imp-info {
+    background: #9b4bfd3d;
+    /* border: 1px solid #cddbdc; */
+    padding: 10px 20px;
+    /* box-shadow: 0 0 6px rgb(64 64 64 / 21%); */
+    font-size: 13px;
+}
+
+
+.acko-issurance {
+    background: #d2c7f1;
+    /* width: 100%; */
+    color: #0e0e0e;
+    /* float: left; */
+    /* padding: 20px 0; */
+    font-size: 13px;
+     box-shadow: 0 0 6px rgb(64 64 64 / 21%);
+}
+
+
+.issurance-radio-grid {
+    font-size: 13px;
+}
+
+
+.issurance-radio-grid {
+    background-color:  #fbfbfb;
+    width: 100%;
+    padding: 0% 2% 1% 2%;
+    /* box-shadow: 0 0 6px rgb(64 64 64 / 10%); */
+}
+
+
+.success_ins_msg {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d7e8ca;
+    padding: 1px 15px;
+    margin-bottom: 6px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 13px;
+    display: inline-block;
+}
+.warning_ins_msg {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+    padding: 1px 15px;
+    margin-bottom: 6px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 13px;
+    display: inline-block;
+  }
+
+
+

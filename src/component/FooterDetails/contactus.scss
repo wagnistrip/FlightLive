@@ -1,0 +1,81 @@
+/* Remove border on focus */
+.input-placeholder-color:focus {
+    outline: none; /* Remove the default focus outline */
+    border: none;  /* Remove the border */
+    -webkit-box-shadow: none; /* Remove the box shadow */
+    box-shadow: none; /* Remove the box shadow for other browsers */
+  }
+  
+  /* Remove hover effect */
+  .input-placeholder-color:hover {
+    border: none;  /* Remove the hover border */
+  }
+  
+  /* Ensure placeholder color change without hover effect */
+  .input-placeholder-color::placeholder {
+    color: white; /* Set the initial placeholder color */
+  }
+  
+  .input-placeholder-color:focus::placeholder {
+    color: #6c757d; /* Secondary color from Bootstrap when focused */
+  }
+  
+
+  /* Default styling for large screens (flex-direction: row) */
+.content-wrapper {
+    display: flex;
+    flex-direction: row; /* Row layout for large screens */
+  }
+  
+  /* For small to medium screens (below lg), use column layout */
+  @media (max-width: 992px) {
+    .content-wrapper {
+      flex-direction: column; /* Stack items vertically for smaller screens */
+    }
+  
+    /* Adjust the form width on smaller screens */
+    .form-control {
+      font-size: 1rem; /* Adjust font size */
+    }
+  
+    .btn {
+      font-size: 1rem; /* Adjust button size */
+    }
+  
+    h1 {
+      font-size: 2rem; /* Adjust header size */
+    }
+  }
+  
+
+  /* Default styling for large screens (flex-direction: row) */
+.content-wrapper {
+    display: flex;
+    flex-direction: row; /* Row layout for large screens */
+  }
+  
+  /* For small to medium screens (below lg), use column layout */
+  // @media (max-width: 992px) {
+  //   .content-wrapper {
+  //     flex-direction: column;
+  //   }
+  
+  //   /* Adjust the form width on smaller screens */
+  //   .form-control {
+  //     font-size: 1rem; /* Adjust font size */
+  //   }
+  
+  //   .btn {
+  //     font-size: 1rem; /* Adjust button size */
+  //   }
+  
+  //   h1 {
+  //     font-size: 2rem; /* Adjust header size */
+  //   }
+  // }
+  
+  @media (min-width: 992px) {
+    .email-section{
+      margin-left: 15px;
+    }
+  }

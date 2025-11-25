@@ -1,0 +1,148 @@
+
+
+#baggage-meal {
+    // box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    // box-shadow: rgba(0, 0, 0, 0.2) 0px 18px 50px -10px;
+    border-radius: 5px;
+
+    
+    .free {
+        display: inline-block;
+        background-color: #95f1bc;
+        height: 12px;
+        width: 12px;
+        border-radius: 3px;
+    }
+
+    .fare1 {
+        display: inline-block;
+        background-color: #c9e3ff;
+        height: 12px;
+        width: 12px;
+        border-radius: 3px;
+    }
+
+    .fare2 {
+        display: inline-block;
+        background-color: #2196f3;
+        height: 12px;
+        width: 12px;
+        border-radius: 3px;
+    }
+
+    .fare3 {
+        display: inline-block;
+        background-color: #dc39d0;
+        height: 12px;
+        width: 12px;
+        border-radius: 3px;
+    }
+
+    .fare4 {
+        display: inline-block;
+        background-color: #f2c77f;
+        height: 12px;
+        width: 12px;
+        border-radius: 3px;
+    }
+
+    .fare5 {
+        display: inline-block;
+        background-color: #f9cfbb;
+        height: 12px;
+        width: 12px;
+        border-radius: 3px;
+    }
+
+    .fare6 {
+        display: inline-block;
+        background-color: #c7bff9;
+        height: 12px;
+        width: 12px;
+        border-radius: 3px;
+    }
+
+    .fare7 {
+        display: inline-block;
+        background-color: #891e74;
+        height: 12px;
+        width: 12px;
+        border-radius: 3px;
+    }
+
+    .fare8 {
+        display: inline-block;
+        background-color: #e87ff7;
+        height: 12px;
+        width: 12px;
+        border-radius: 3px;
+    }
+
+    .rupee-icon {
+        font-size: 11px;
+        color: #212529bf;
+        padding: 2px;
+    }
+
+    .Row-seat-font {
+        font-size: 11px;
+        font-weight: 500;
+    }
+
+    .seat-design-section {
+        background-color: #f8f8f8;
+
+        max-height: 550px;
+        max-width: 100%;
+        padding: 10px;
+
+
+    }
+
+    .inner-seat {
+        height: 30px;
+        width: 25px;
+        background-color: #2196f3;
+        padding: 4px 0px;
+        border-radius: 3px;
+        text-align: center;
+    }
+
+    /* General styles */
+    .col-item {
+        display: flex;
+        align-items: center;
+    }
+
+    .container {
+        max-width: 100%;
+    }
+
+    @media (max-width: 576px) {
+        .text-nowrap {
+            white-space: nowrap;
+        }
+
+        .flex-sm-nowrap {
+            flex-wrap: nowrap !important;
+        }
+    }
+
+}
+
+.seat-container {
+    position: relative;
+}
+
+.remove-btn {
+    display: none; /* Hide the button initially */
+    font-size: 12px;
+    color: red;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.seat-container:hover .remove-btn {
+    display: inline-block; /* Show the button on hover */
+}

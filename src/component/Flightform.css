@@ -1,0 +1,598 @@
+/* --Theme Search Form-- */
+#theme_search_form {
+  margin-top: -140px;
+  z-index: 9;
+}
+
+.flight-form-section {
+  background: #fff;
+  /* background-color: rgba(255, 255, 255, 0.7); */
+  border-radius: 20px;
+  box-shadow: 4px 14px 28px #0000001a;
+  padding: 30px;
+  position: relative;
+  top: -420;
+  height: auto;
+  margin-top: 10px;
+}
+
+.flight_Search_boxed {
+  background: #8b3eea17;
+  border-radius: 10px;
+  padding: 10px 10px 10px 20px;
+  position: relative;
+}
+
+.flight_Search_boxed span {
+  /* display: block; */
+  font-size: 12px;
+  overflow: hidden;
+  padding-top: 5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.flight_Search_boxed input {
+  background: #0000;
+  border: none;
+  font-size: 22px;
+  font-weight: 500;
+  height: 35px;
+  padding: 0;
+  width: 87%;
+}
+
+.plan_icon_posation {
+  position: absolute;
+  right: 30px;
+  top: 20px;
+}
+
+.plan_icon_posation i {
+  font-weight: 900;
+  font-size: 24px;
+}
+
+.range_plan i {
+  background: #f5eefd;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  color: #8b3eea;
+  color: var(--main-color);
+  font-size: 24px;
+  height: 50px;
+  line-height: 46px;
+  text-align: center;
+  width: 50px;
+}
+
+.range_plan {
+  left: -37px;
+  position: absolute;
+  top: 50%;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.flight-form-inner-sec {
+  display: flex;
+  justify-content: space-between;
+}
+
+.flight-form-inner-sec .nav-link {
+  margin-bottom: 0;
+  color: var(--black-color);
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--main-color);
+}
+
+.flight-form-inner-sec .nav-tabs .nav-item.show .nav-link,
+.flight-form-inner-sec .nav-link.active {
+  color: var(--white-color);
+  background-color: var(--main-color);
+  border-color: none;
+}
+
+.form-flight-details {
+  border: 1px solid #8b3eea;
+  border-radius: 6px;
+  padding: 8px 15px;
+  font-size: 16px;
+  display: flex;
+  gap: 2px;
+}
+
+.form-trip-sec {
+  display: flex;
+  gap: 15px;
+}
+
+.top_form_search_button .btn_theme_form {
+  background-color: #01186c;
+  /* Default background color */
+  color: white;
+  /* Text color */
+  border: none;
+  /* Remove border */
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  padding: 12px 35px;
+  /* Adjust padding to make it bigger */
+  cursor: pointer;
+  border-radius: 5px;
+  /* Rounded corners */
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  /* Smooth transition */
+  display: inline-flex;
+  /* Inline flexbox for horizontal alignment */
+  justify-content: center;
+  /* Center text horizontally */
+  align-items: center;
+  /* Center text vertically */
+  text-align: center;
+  /* Make sure text is aligned */
+  height: 50px;
+  /* Set a consistent height for the button */
+}
+
+.top_form_search_button .btn_theme_form:hover {
+  background-color: #000 !important;
+  /* Change background to black when hovered */
+  transform: scale(1.05);
+  /* Slight scale effect */
+}
+
+/* Remove default focus effect for the button */
+.top_form_search_button .btn_theme_form:focus {
+  box-shadow: none;
+  /* Remove default focus shadow */
+  background-color: #01186c;
+  /* Keep the background color on focus */
+  border: none;
+  /* Ensure no border on focus */
+}
+
+.flight_Search_boxed p {
+  font-size: 14px;
+  /* color: #000; */
+}
+
+p,
+p:last-child {
+  margin-bottom: 0;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown_passenger_area button {
+  background: #0000;
+  border: none;
+  font-size: 22px;
+  font-weight: 500;
+  padding: 0;
+}
+
+.dropdown-toggle {
+  white-space: nowrap;
+}
+
+
+
+
+/* 
+
+=======
+.dropdown_passenger_area .dropdown-menu {
+  background-clip: padding-box;
+  background-color: #fff;
+  border: 1px solid #00000026;
+  border-radius: 0.25rem;
+  color: #212529;
+  font-size: 1rem;
+  list-style: none;
+  min-width: 350px;
+  padding: 15px 20px;
+  text-align: left;
+  z-index: 1000;
+} */
+
+.dropdown_passenger_area {
+  position: relative; /* Ensures the dropdown is positioned relative to this container */
+}
+
+.dropdown_passenger_area .dropdown-menu {
+    background-clip: padding-box;
+    background-color: #fff;
+    border: 1px solid #00000026;
+    border-radius: .25rem;
+    color: #212529;
+    font-size: 1rem;
+    list-style: none;
+    min-width: 350px;
+    padding: 15px 20px;
+    text-align: left;
+    z-index: 1000;
+    position: absolute;
+    top: 100%; /* Positions the dropdown just below the parent */
+    left: 50%; /* Aligns it horizontally to the center of the parent */
+    transform: translateX(-50%); /* Centers it by shifting 50% of its own width */
+}
+
+.dropdown-menu.show {
+  display: block;
+ 
+}
+
+.traveller-calulate-persons .cabin-selection {
+  border-top: 1px solid #c7c7cc;
+  margin-top: 20px;
+  padding-top: 10px;
+}
+
+.traveller-calulate-persons .cabin-selection h6 {
+
+  color: var(--main-color);
+  font-size: 16px;
+  font-weight: 500;
+  padding: 15px 0;
+}
+
+.traveller-calulate-persons .label-select-btn {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 10px;
+  width: 100%;
+}
+
+.dropdown_passenger_area button {
+  background: #0000;
+  border: none;
+  font-size: 22px;
+  font-weight: 500;
+  padding: 0;
+}
+
+.traveller-calulate-persons .label-select-btn.active,
+.traveller-calulate-persons .label-select-btn:hover {
+  /* background: #8b3eea; */
+  background: var(--main-color);
+  /* color: #fff; */
+  color: var(--white-color);
+}
+
+.traveller-calulate-persons .label-select-btn {
+  align-items: center;
+  display: flex;
+
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 10px;
+  width: 100%;
+}
+
+.traveller-calulate-persons .label-select-btn.active,
+.traveller-calulate-persons .label-select-btn:hover {
+  /* background: #8b3eea; */
+  background: var(--main-color);
+  /* color: #fff; */
+  color: var(--white-color);
+}
+
+.traveller-calulate-persons .passengers .passengers-types .passengers-type {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 16px;
+}
+
+.traveller-calulate-persons
+  .passengers
+  .passengers-types
+  .passengers-type
+  .button-set
+  button {
+  border: 1px solid #d8d8d8;
+  color: #4c4c4c;
+  font-size: 12px;
+  height: 20px;
+  width: 20px;
+}
+
+.traveller-calulate-persons
+  .passengers
+  .passengers-types
+  .passengers-type
+  .text {
+  align-items: center;
+  display: flex;
+}
+
+.traveller-calulate-persons
+  .passengers
+  .passengers-types
+  .passengers-type
+  .text
+  .count {
+  display: inline-block;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-right: 20px;
+  width: 24px;
+}
+
+.form-p {
+  color: #818090;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 28px;
+}
+
+.traveller-calulate-persons .passengers h6 {
+  /* color: #8b3eea; */
+  /* // color: var(--main-color); */
+  font-size: 16px;
+  font-weight: 500;
+}
+
+@media (max-width: 600px) {
+  .flight-form-section {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 4px 14px 28px #0000001a;
+    padding: 30px;
+    position: relative !important;
+    top: 0 !important;
+    height: auto;
+  }
+
+  #theme_search_form {
+    margin-top: 0px;
+    z-index: 9;
+  }
+
+  .flight-form-inner-sec {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .form-flight-details {
+    border-radius: 6px;
+    padding: 5px 8px;
+    font-size: 16px;
+    display: flex;
+    gap: 2px;
+  }
+
+  .form-inner-trip {
+    border: 1px solid #8b3eea;
+    border-radius: 6px;
+    padding: 5px 8px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+  }
+
+}
+
+/* .dropdown-modal {
+  position: absolute;
+  background-color: white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  z-index: 20;
+  top: 60px;
+  left: 2;
+  display: none;
+
+}  */
+
+.dropdown-modal {
+  position: absolute;
+  background-color: white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  z-index: 20;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%); 
+  display: none;
+}
+
+
+
+.dropdown-content {
+  background: #fff;
+  /* // padding: 20px;
+  // border-radius: 8px */
+  width: 350px;
+}
+
+.search-inputs {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  outline: none;
+  width: 100%;
+  padding: 10px;
+  /* // margin-bottom: 10px; */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.fromList {
+  max-height: 300px;
+  /* height: 300px; */
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 350px;
+}
+
+.fromList::-webkit-scrollbar {
+  width: 4px; /* Set scrollbar width to 4px */
+}
+.fromList::-webkit-scrollbar {
+  height: 4px; /* Set scrollbar width to 4px */
+}
+
+.fromList::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 10px; /* Add rounding to the scrollbar thumb */
+}
+
+.fromList::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+.fromList li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.departure-calender-css1 {
+  position: absolute;
+  z-index: 1000;
+  top: 50;
+  left: 0;
+}
+.return-calender-css-3 {
+  position: absolute;
+  z-index: 1000;
+  top: 50;
+  left: 0;
+}
+@media (max-width: 768px) {
+  .departure-calender-css1 {
+    position: absolute;
+    z-index: 1000;
+    top: 50;
+
+    left: -35px;
+  }
+}
+@media (max-width: 768px) {
+  .return-calender-css-3 {
+    position: absolute;
+    z-index: 1000;
+    top: -109px;
+    left: -44px;
+  }
+}
+
+.dropdown-modal {
+  position: absolute;
+  background-color: white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  z-index: 20;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: none;
+}
+
+/* calender-cssssssssssssssssssssssssssssss */
+
+/* calender-cssssssssssssssssssssssssssssss */
+
+.custom-calendar {
+  width: 100%;
+  max-width: 750px; /* Keeps it responsive */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: white;
+}
+
+/* Responsive Calendar */
+@media (max-width: 640px) {
+  .custom-calendar {
+    width: 110% !important;
+  }
+}
+
+/* Ensure calendar elements are aligned properly */
+.custom-calendar .rmdp-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.custom-calendar .rmdp-calendar {
+  width: 100% !important;
+}
+
+.custom-calendar .rmdp-week {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Properly align each day */
+.custom-calendar .rmdp-day {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  position: relative;
+}
+
+/* Custom styles for each day */
+.custom-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Ensuring the day number is visible */
+.custom-day .day-number {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Ensuring price is visible and centered */
+.custom-day .price {
+  font-size: 12px;
+  color: green;
+  font-weight: bold;
+  margin-top: 3px;
+}
+
+/* ✅ Remove unwanted arrow & shadow */
+.rmdp-ep-arrow,
+.rmdp-ep-shadow {
+
+  /* display: none !important; */
+  box-shadow: none !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+
+@media (max-width: 414px) {
+  .calendar-container {
+    width: 100%;
+    padding-left: 1px !important;
+    padding-right: 1px !important;
+  }
+
+  .custom-calendar {
+    width: 100% !important;
+    padding-left: 1px !important;
+    padding-right: 1px !important;
+  }
+}
+

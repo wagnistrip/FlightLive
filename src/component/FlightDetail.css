@@ -1,0 +1,178 @@
+.flight-row-cardlist, .filter{
+    background-color: white;
+    /* border-radius: 8px; */
+    /* padding: 10px 0px 0px 0px ; */
+    margin-bottom: 20px;
+    transition: all .3s ease-out;
+    /* box-shadow: 0 0 20px 0 rgb(0 0 0 / 25%); */
+    /* position: relative; */
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.watermark {
+    position: absolute;
+    font-size: 12px;
+    rotate: -40deg;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.1);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.loading-content {
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.flight-book-btn{
+        background: #ff7200;
+        cursor: pointer;
+        padding: 2px 16px;
+        border: #ff7200;
+        border-radius: 30px;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 400;
+        /* box-shadow: 0 0 20px 0 rgb(0 0 0 / 30%); */
+}
+.img-fluid-flight{
+    max-width: 200%;
+    height: 50px;
+}
+.form-range {
+    width: 72% !important;
+}
+.duration-arrow{
+    border-bottom: 2px dashed #d1cdcd;
+    width: 100%;
+}
+.container-div{
+    background-color: rgb(246, 252, 252);
+}
+.flight-chair-icon{
+    padding: 3px !important;
+    font-size: 12px !important;
+    color: #dc3545   !important;
+    background: none !important;
+}
+.filter-text, .checklist, .price-range, .stops, .departure-from {
+    border-bottom: 2px solid #d9d4d4;
+    width: 100%;
+}
+.form-check-label {
+    margin-bottom: 0;
+    font-size: 1rem;
+    font-weight: 500 !important;
+}
+.stop-buttons .btn{
+    font-size: 14px;
+    padding: 4px 12px;
+}
+.stop-buttons .btn:hover{
+    background: #b2f1ff;
+}
+.weather-icon{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    font-size: 11px;
+    color: #989494;
+    cursor: pointer;
+    border:"2px solid red";
+    padding: 5px;
+    border-radius: 4px;
+    transition: var(--transition);
+}
+.weather-icon:hover{
+    background: var(--main-color);
+    color: var(--white-color);
+}
+.weather-icon1{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    color: #0e0e0e;
+    font-size: 11px;
+    /* background-image: linear-gradient(to right, rgb(210, 255, 194), rgb(210, 255, 194)); */
+    /* background-color: #6C757D; */
+    /* background-image: linear-gradient(45deg, #6C757D, #adb5bd); */
+    background-color: var(--main-color);
+    border-radius: 4px;
+    color: white;
+    padding: 5px;
+    
+}
+
+.weather-icon p{
+    font-size: 10px;
+    color: #989494;
+    line-height: 18px;
+}
+.weather-icon1 p{
+    font-size: 10px;
+    color: white;
+    line-height: 18px;
+}
+
+/* .weather-icon:hover{
+    color: white;
+    background:  rgb(165, 165, 165);
+    border-radius: 10px;
+
+} */
+
+.mobile {
+    width: 8px;
+    height: 8px;
+    background: #fff;
+    border: 1px solid #d8d7d7;
+    border-radius: 50%;
+    position: relative;
+    top: 0;
+}
+
+.duration-arrow-mobile {
+    font-size: 14px;
+    width: 100%;
+    border-bottom: 1px solid #d4d0d0;
+
+
+    position: relative;
+}
+
+.duration-container-mobile {
+    display: flex;
+    align-items: center;
+}
+
+
+
+.price-section-mobile {
+    margin-left: 15px;
+    box-sizing: border-box;
+   color: rgb(221, 82, 82);
+   font-weight: 600;
+}
+.more-detail-mobile:hover{
+text-decoration: underline;
+}
+.more-detail-mobile{
+cursor: pointer;
+}
+.mobile-device{
+    border-bottom: 1px solid #c9c9c9;
+/* box-shadow: 0 0 20px 0 rgb(0 0 0 / 25%); */
+background-color: white;
+border-radius: 4px;
+}

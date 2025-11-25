@@ -1,0 +1,499 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+/* #8B3EEA */
+:root {
+  --main-color: #01186c;
+  --white-color: #ffffff;
+  --black-color: #2B2540;
+  --black-color-opacity: #2b2540c4;
+  --paragraph-color: #818090;
+  --bg-color: #F3F6FD;
+  --transition: .4s all ease-in-out;
+  --palette-grey-800Channel: 28 37 46;
+  --palette-grey-900Channel: 20 26 33;
+  --palette-grey-900: #141A21;
+  --spacing: 8px;
+  --shape-borderRadius: 8px;
+  --palette-background-paper: #FFFFFF;
+  --customShadows-card: 0 0 2px 0 rgba(145 158 171 / 0.2), 0 12px 24px -4px rgba(145 158 171 / 0.12);
+  --palette-text-primary: #1C252E;
+  
+}
+  body {
+    /* line-height: 0; */
+    font-family: "Poppins", sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+   font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+ 
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
+}
+  .text-primary {
+    color: #00196e !important;
+  }
+  .btn-primary{
+    background: #00196e !important;
+  }
+  .bg-primary{
+    background: #00196e !important;
+  }
+  .unit {
+    border: 0.5px solid #222;
+    width: 1.8em;
+    height: 1.8em;
+    display: inline-block;
+    margin: 0;
+  }
+ 
+  .unit span {
+    font-size: 0.5em;
+  }
+ 
+  .seat,
+  .facility {
+    width: 1.8em;
+    height: 1.8em;
+    z-index: 10000;
+  }
+ 
+  /* p {
+    font-size: 0.8em;
+  } */
+ 
+  #deck {
+    /* border: 1px solid #222; */
+    position: absolute;
+    /* left: 40vw; */
+  }
+ 
+  #deck div {
+    position: absolute;
+    left: 1em;
+  }
+
+
+
+
+  .horizontal-slider {
+    width: 100%;
+    height: 5px;
+    background: red;
+    margin: 20px 0;
+    position: relative;
+  }
+ 
+  .example-thumb {
+    height: 16px;
+    width: 16px;
+    background-color: white;
+    border: 1px solid var(--main-color);
+    border-radius: 50%;
+    cursor: grab;
+    margin-top: -6px;
+    position: absolute;
+    z-index: 2;
+  }
+ 
+  .example-track {
+    top: 0;
+    bottom: 0;
+    background: #bdbaba;
+  }
+ 
+  .left-track {
+    background: #cccaca;
+  }
+ 
+  .right-track {
+    background: var(--main-color);
+  }
+ 
+  .range-values {
+    display: flex;
+    justify-content: space-between;
+  }
+ 
+  .range-values span {
+    font-size: 14px;
+  }
+ 
+
+
+  .paymentCard{
+    background: #ffff;
+    border-left: 3px solid #00196e ;
+    color: #00196e;
+  }
+  .paymentcardactive{
+    background: #faf8f8;
+    border: 1px solid #d6d7da;
+    color: #222;
+    border-left: none;
+  }
+
+
+  .card-title {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+ 
+  .card-text {
+    margin: 0;
+  }
+ 
+  .text-muted {
+    font-size: 0.75rem;
+  }
+ 
+ 
+  .custom-datepicker {
+    display: flex;
+    /* flex-wrap: wrap; */
+    justify-content: center;
+    border-radius: 0;
+    border: 1px solid #e0e0e0;
+    box-shadow: rgba(173, 172, 172, 0.2);
+    width: fit-content;
+  }
+ 
+  .custom-datepicker .react-datepicker__month-container {
+    width: 50%;
+    border-radius: 0;
+ 
+  }
+ 
+  .custom-datepicker .react-datepicker__header {
+    background-color: #aaaaaa;
+    border-bottom: 1px solid #ddd;
+    border-radius: 0;
+  }
+ 
+  .custom-datepicker .react-datepicker__current-month {
+    font-size: 18px; /* Customize the font size of the month */
+    /* background: none; */
+    color: white;
+ 
+  }
+  /* .custom-datepicker .react-datepicker__current-week{
+    color: white;
+  } */
+
+
+  .custom-datepicker .react-datepicker__day-name {
+    color: #1e1e1e; /* Customize the color of weekday names */
+    font-weight: 700; /* Optionally, make weekday names bold */
+    margin: 8px;
+  }
+ 
+  .custom-datepicker .react-datepicker__day {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    margin: 2px;
+    border: 1px solid rgb(240, 235, 235);
+  }
+ 
+  .custom-datepicker .react-datepicker__day--selected {
+    background-color: #00196e; /* Customize the background color of the selected day */
+    color: #fff;
+   
+  }
+ 
+ 
+@media (max-width: 808px) {  
+  .custom-datepicker .react-datepicker__month-container {
+    width: 100%;
+    border-radius: 0;
+ 
+  }
+
+
+  .calendar-wrapper {
+    top: 20px;
+    left: 0;
+  }
+  .calendar-wrapper2 {
+    position: absolute;
+    top: 20px;
+    z-index: 1000;
+    right: 0;
+    box-shadow: 0 4px 8px rgba(187, 184, 184, 0.1);
+  }
+  .custom-datepicker .react-datepicker__day {
+ 
+    border: none;
+  }
+
+
+  .calendar-wrapper-dep {
+    top: 20px;
+    right: 0;
+  }
+}
+
+
+
+
+
+
+
+
+.button {
+  position: relative;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+  padding-block: 0.2rem;
+  padding-inline: 1.25rem;
+  background-color: var(--main-color);
+  /* background-color: rgb(0 107 179); */
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #ffff;
+  gap: 3px;
+  font-weight: 500;
+  border: 2px solid #ffffff4d;
+  outline: none;
+  overflow: hidden;
+  font-size: 12px;
+
+
+}
+.button2 {
+  position: relative;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+  padding:6px 30px;
+  /* width: 160px; */
+  padding-inline: 1.25rem;
+  background-color: rgb(0 107 179);
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #ffff;
+  gap: 10px;
+  font-weight: 500;
+  border: 2px solid #ffffff4d;
+  outline: none;
+  overflow: hidden;
+  font-size: 14px;
+
+
+}
+/* .button2:hover{
+  background-color: rgb(26, 135, 207);;
+} */
+
+
+.icon {
+  width: 16px;
+  height: 16px;
+  transition: all 0.3s ease-in-out;
+}
+
+
+.button:hover,.button2:hover {
+  transform: scale(1.05);
+  border-color: #fff9;
+}
+
+
+.button:hover .icon {
+  transform: translate(4px);
+}
+.button2:hover .icon {
+  transform: translate(4px);
+}
+
+
+.button:hover::before {
+  animation: shine 1.5s ease-out infinite;
+}
+.button2:hover::before {
+  animation: shine 1.5s ease-out infinite;
+}
+
+
+.button::before,.button2::before {
+  content: "";
+  position: absolute;
+  width: 100px;
+  height: 100%;
+  background-image: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0.8),
+    rgba(255, 255, 255, 0) 70%
+  );
+  top: 0;
+  left: -100px;
+  opacity: 0.6;
+}
+
+
+@keyframes shine {
+  0% {
+    left: -100px;
+  }
+
+
+  60% {
+    left: 100%;
+  }
+
+
+  to {
+    left: 100%;
+  }
+}
+
+
+.form-check-input:checked {
+  background-color: var(--main-color);
+  border-color: var(--main-color);
+}
+
+
+.accordion-button:not(.collapsed) {
+  color: var(--bs-accordion-active-color);
+  background-color: #fff;
+  box-shadow: inset 0 calc(-1* var(--bs-accordion-border-width)) 0 var(--bs-accordion-border-color);
+}
+
+
+.accordion {
+  --bs-accordion-border-color: #f5f5f5;
+
+
+}
+
+
+.PhoneInputInput:focus {
+  outline: none;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+    transition: background-color 600000s 0s, color 600000s 0s;
+}
+input[data-autocompleted] {
+    background-color: transparent !important;
+}
+
+
+
+.custom-list {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+
+
+.custom-btn {
+  position: relative;
+  background-color: white;
+  border: 2px solid #ccc;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.custom-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  background-color: red; /* Change to your desired color */
+  border-top-right-radius: 5px;
+}
+
+
+.gst-details {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+.gst-details.show {
+  max-height: 150px; /* Adjust height as needed */
+  opacity: 1;
+}
+
+.loading-container {
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  background: rgba(247, 247, 248, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  gap: 8px;
+}
+.dot {
+  width: 32px;
+  height: 32px;
+  background-color: #403e3e;
+  border-radius: 50%;
+  animation: fadeInOut 1s infinite alternate;
+}
+
+@keyframes fadeInOut {
+  0% {
+    background-color: #BDB3FD;
+  }
+  50% {
+    background-color: #A697FF;
+  }
+  100% {
+    background-color: #7661F5;
+  }
+}
+.only-text {
+  display: none; 
+
+}
+
+.form-check:hover .only-text {
+  display: inline-block; /* Show "Only" text when hovering over the checkbox container */
+}
+
+/* this css is used to click dropdown open */
+.collapse-container {
+  cursor: pointer;
+  list-style: none; /* Removes default dropdown icon */
+}
+
+/* Default hidden state */
+.collapse-content {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+/* Trick: Animate inner wrapper when details is open */
+.collapse-container[open] .collapse-content {
+  max-height: 500px; /* Set large enough height */
+  opacity: 1;
+}
+

@@ -1,0 +1,145 @@
+.flight-fee-detail .btn{
+    font-size: 12px;
+    padding: 3px 17px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+.flight-fee-detail .btn:hover{
+  background-color: #23ceec;
+  color: white;
+}
+
+
+.iata-code{
+    border-bottom: 2px solid rgb(201, 201, 201);
+}
+
+.table{
+        font-size: 12px;
+}
+.clock-icon{
+    padding: 5px !important;
+    background: #adb0b1 !important;
+    
+}
+.layover{
+    background: #ece9e9;
+    padding: 10px;
+    border-radius: 30px;
+    
+}
+
+
+.buttons-group {
+    display: flex;
+   justify-content: space-between;
+
+   
+
+}
+
+.buttons-group .col-lg-3,
+.buttons-group .col-md-3,
+.buttons-group .col-sm-3 {
+    
+    text-align: center; 
+}
+
+.buttons-group .flight-fee-detail {
+    width: 100%;
+}
+
+.buttons-group button {
+    width: 100%;
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    font-size: 12px; 
+    border: 1px solid #ccc; 
+    transition: background-color 0.3s; 
+    color: goldenrod;
+    border-radius: 50px;
+   
+}
+
+.buttons-group button:hover {
+    background-color: #e0e0e0; 
+}
+
+
+@media (max-width: 1199px) {
+    .buttons-group .col-lg-3 {
+        max-width: calc(50% - 10px); 
+    }
+    .classes-name{
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 991px) {
+    .buttons-group .col-md-6 {
+        max-width: calc(50% - 10px); 
+    }
+    .buttons-group button {
+        font-size: 12px; 
+    }
+    .buttons-group {
+        gap: 6px; 
+    }
+    .classes-name{
+        font-size: 13px;
+    }
+    
+}
+
+@media (max-width: 767px) {
+    .buttons-group .col-sm-6 {
+        max-width: calc(50% - 10px); 
+    }
+    .buttons-group {
+        gap: 6px; 
+    }
+    .buttons-group button {
+        font-size: 10px; 
+    }
+    .classes-name{
+        font-size: 12px;
+    }
+}
+
+@media (max-width:576px){
+  
+.clock-icon{
+   padding: 2px !important;
+    
+}
+.clock{
+   
+}
+.terminal{
+    font-size: 10px;
+    font-weight: bold;
+}
+.ternimal-number{
+   font-size: 9px; 
+   font-weight: bold;
+
+
+}
+.airlinenumber{
+    font-size: 12px;
+    font-weight: bold;
+    
+}
+
+.carrierName{
+    font-size: 13px;
+    font-weight: bold;
+  
+}
+.classes-name{
+    font-size: 9px;
+}
+}
+
+

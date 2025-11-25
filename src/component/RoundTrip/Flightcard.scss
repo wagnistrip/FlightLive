@@ -1,0 +1,49 @@
+#FlightCard{
+  
+  
+.flight-card-section-1{
+    // box-shadow: 0 0 20px 0 rgb(0 0 0 / 25%);
+    background-color: white;
+    // border-radius: 4px;
+}
+.flight-card-selected {
+    border: 2px solid #007bff; /* Blue border for selected card */
+    background-color: #e7f0ff; /* Light blue background for selected card */
+  }
+  
+    
+    .flightCard-circleIcon {
+        width: 8px;
+        height: 8px;
+        background: #fff;
+        border: 1px solid #d8d7d7;
+        border-radius: 50%;
+        position: relative;
+        top: -4px;
+    }
+    
+    .duration-arrow-flightCard{
+        font-size: 14px;
+        width: 100%;
+        border-bottom: 1px solid #d4d0d0;
+        position: relative;
+    }
+    
+    .duration-container-FlightCard {
+        display: flex;
+        align-items: center;
+    }
+.from-origin{
+    font-size: 10px;
+}
+.to-destination{
+    font-size: 10px;
+}
+.duration-section{
+    font-size: 11px;
+}
+
+}
+
+
+  

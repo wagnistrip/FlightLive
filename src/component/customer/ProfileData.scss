@@ -1,0 +1,32 @@
+.outerContainerStyle{
+       padding: 40px;
+       background-color: #f1f7fa;
+      
+}
+@media only screen and (max-width: 992px) {
+    .outerContainerStyle{
+        padding: 0;
+    }
+}
+
+
+@media only screen and (max-width: 576px) {
+    .text-responsive {
+      font-size: 10px; 
+  
+    }
+  }
+
+  @media  (min-width: 992px) {
+   .text-responsive {
+      font-size: 1.4rem; 
+    }
+  }
+
+  .back-icon {
+    display: block !important;
+    cursor: pointer !important;
+    color: #73c7d6 !important; /* Ensure it's visible */
+    margin-bottom: 10px;
+  }
+  

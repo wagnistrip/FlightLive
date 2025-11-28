@@ -2280,6 +2280,30 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
     background-repeat: no-repeat;
     background-size: cover;
   }
+
+#home_one_banner .blinktext {
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: red;
+    text-align: center;
+    font-weight: 600;
+    font-size: 28px;
+    width: 100%;
+    max-width: 800px;
+}
+
+.blinktext {
+  animation: blink 2.5s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+
   
   
   .banner_one_text {

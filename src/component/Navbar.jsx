@@ -23,6 +23,7 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const displayName = user?.users ? user.users.email || user.users.phone || '' : '';
+  console.log("user data => ",user);
 
   const greenChipsPrice = useSelector((state) => state.booking.greenChipsPrice);
   const walletAmout = useSelector((state) => state.booking.walletAmount);
@@ -202,11 +203,11 @@ const Navbar = () => {
                         Flights
                       </Link>
                     </li>
-                    {/* <li className="nav-item">
-                      <Link onClick={() => setActiveBtn('Hotels')} className={`nav-link  ${activeBtn === 'Hotels' ? 'active' : ''}`} to="/hotels">
-                        Hotels
+                    <li className="nav-item">
+                      <Link onClick={() => setActiveBtn('package')} className={`nav-link  ${activeBtn === 'Hotels' ? 'active' : ''}`} to="https://package.wagnistrip.com/package-list">
+                        Holidays
                       </Link>
-                    </li> */}
+                    </li>
                     <li className="nav-item">
                       <Link className={`nav-link`} to="https://event.wagnistrip.com/">
                         Events

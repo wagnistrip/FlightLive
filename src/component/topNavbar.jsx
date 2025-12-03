@@ -9,6 +9,7 @@ import flighticon from '../image/flighticon.png';
 import contacticon from '../image/contacticon.png';
 import visaicon from '../image/visaicon.png';
 import eventicon from '../image/eventicon.png';
+import packageicons from '../image/holidaysicon.png';
 import blogicon from '../image/blogicon.png';
 import splicon from '../image/splicon.png';
 
@@ -98,6 +99,29 @@ const TopNavbar = () => {
                 )}
 
                 {/* Event */}
+                <Link to="https://package.wagnistrip.com/package-list" className="d-flex flex-column align-items-center position-relative">
+
+                    {/* NEW Badge */}
+                    <span className="new-badge">New</span>
+                    <img
+                        src={packageicons}
+                        alt="Event"
+                        style={{
+                            height: '32px',
+                        }}
+                    />
+
+                    <p
+                        style={{
+                            color: activeBtn === 'Events' ? 'var(--main-color)' : '#4a4a4a',
+                            fontSize: '14px',
+                            fontWeight: activeBtn === 'Events' ? '700' : '400',
+                        }}
+                    >
+                        Holidays
+                    </p>
+                </Link>
+
                 <Link to="https://event.wagnistrip.com/" className="d-flex flex-column align-items-center">
                     <img
                         src={eventicon}
@@ -180,7 +204,7 @@ const TopNavbar = () => {
                     </p>
                 </Link>
                 {/* Contact */}
-                <Link to="/contact-us" className="d-flex flex-column align-items-center">
+                {/* <Link to="/contact-us" className="d-flex flex-column align-items-center">
                     <img
                         src={contacticon}
                         alt="Contact"
@@ -198,7 +222,7 @@ const TopNavbar = () => {
                     >
                         Contact
                     </p>
-                </Link>
+                </Link> */}
 
             </div>
         </div>

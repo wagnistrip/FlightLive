@@ -48,6 +48,8 @@ import { logout } from "../../redux/actions/authActions";
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import { galileoApi } from "../../Api/apiService";
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
+
 import toast from "react-hot-toast";
 import Coinstranctions from "./Coinstranctions";
 import SpecialBooking from "./SpecialBooking";
@@ -81,8 +83,9 @@ const NAVIGATION = [
     segment: "reports", title: "Reports", icon: <BarChartIcon />,
     children: [
       { segment: "booking", title: "Booking", icon: <DescriptionIcon /> },
-       { segment: "special-flight-booking", title: "special flight booking", icon: <FlightTakeoffIcon /> },
-       { segment: "hold_booking", title: "Hold Booking", icon: <PendingActionsIcon /> },
+      { segment: "special-flight-booking", title: "special flight booking", icon: <FlightTakeoffIcon /> },
+      { segment: "hold_booking", title: "Hold Booking", icon: <PendingActionsIcon /> },
+      { segment: "package_booking", title: "Package Booking", icon: <CardGiftcardIcon /> },
       { segment: "wallet", title: "Wallet", icon: <AccountBalanceWalletIcon /> },
       { segment: "coins", title: "Commission Earn", icon: <MonetizationOnIcon /> },
     ],
@@ -468,10 +471,17 @@ const cards = [
               )}
             </>
           )}
+          {router.pathname === "/reports/package_booking" && (
+            <>
+              {router.pathname === "/reports/package_booking" && (
+                loading ? <LoaderSkeleton /> : <SpecialBooking type="package"/>
+              )}
+            </>
+          )}
            {router.pathname === "/reports/special-flight-booking" && (
             <>
               {router.pathname === "/reports/special-flight-booking" && (
-                loading ? <LoaderSkeleton /> :   <SpecialBooking/>
+                loading ? <LoaderSkeleton /> :   <SpecialBooking type="specialflight" />
               )}
             </>
           )}

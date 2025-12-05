@@ -127,7 +127,7 @@ const SpecialFlightDetails = () => {
 
   const walletBalance = Number(walletAmout || 0);
   // const totalFare = Number(flight?.total_payable_price || 0);
-  const totalFare = Math.floor(Number(flight?.total_payable_price || 0) + (flight?.onward_connecting ? 300 : 0) + (flight?.ticket_id ? flight?.total_payable_price * 0.05 : 0));
+  const totalFare = Math.floor(Number(flight?.total_payable_price || 0) + (flight?.onward_connecting ? 300 : 0) + (flight?.ticket_id ? flight?.total_payable_price * 0.005 : 0));
   const passengerCount = (travellers?.adults || 0) + (travellers?.children || 0);
   // const baseFare = totalFare * passengerCount;
   const baseFare = totalFare
@@ -140,8 +140,9 @@ const SpecialFlightDetails = () => {
   const earnPercent = parseFloat(responseData1?.earnCoin?.replace('%', '') || 5);
   const commissionEarn = Math.round((flight?.total_payable_price || 0) * (earnPercent / 100));
 
-  const grandTotal = baseFare
-    + (passengerCount * (trip === 'D' ? 600 : 1000))
+  const grandTotal = baseFare + 50
+    // + (passengerCount * (trip === 'D' ? 600 : 1000))
+    + (passengerCount * (trip === 'D' ? 0 : 0))
     - (isGreenChipsUsed ? chipsValue : 0);
 
 
@@ -216,7 +217,8 @@ const SpecialFlightDetails = () => {
       chips: isGreenChipsUsed ? chipsValue : 0,
       totalAmt: grandTotal,
       seatCount: travellersCount,
-      earnCoins: commissionEarn || 0,
+      // earnCoins: commissionEarn || 0,
+      earnCoins: 0 || 0,
       paymentShow: selectedOption || 0,
       markUp: markup || "0",
     }
@@ -229,12 +231,10 @@ const SpecialFlightDetails = () => {
       requestbody.IQtoken = responseData1?.IQtoken || "";
     }
 
-    console.log('requestbody => ', requestbody);
     // return;
     setIsPaying(true);
-
+    
     try {
-
       const encryptedPayload = encryptPayload(requestbody || '');
       const responseData1 = await galileoApi('/passangerCreate', { payload: encryptedPayload }, token);
       const decryptedResponse1 = decryptPayload(responseData1?.data || "");
@@ -372,7 +372,7 @@ const SpecialFlightDetails = () => {
                   Fare:
                 </Typography>
                 <Typography variant="subtitle1" fontWeight="bold">
-                  ₹ {(baseFare + passengerCount * (trip === "D" ? 600 : 1000)).toLocaleString("en-IN")}
+                  ₹ {(baseFare + passengerCount * (trip === "D" ? 0 : 0) + 200).toLocaleString("en-IN")}
                 </Typography>
               </Box>
               <Divider />
@@ -382,8 +382,11 @@ const SpecialFlightDetails = () => {
                 <Typography variant="subtitle1" fontWeight="medium" color="primary">
                   Grand Total:
                 </Typography>
-                <Typography variant="subtitle1" fontWeight="bold" color="error">
+                {/* <Typography variant="subtitle1" fontWeight="bold" color="error">
                   ₹ {(grandTotal + (isGreenChipsUsed ? chipsValue : 0)).toLocaleString("en-IN")}
+                </Typography> */}
+                <Typography variant="subtitle1" fontWeight="bold" color="error">
+                  ₹ {(grandTotal + 150).toLocaleString("en-IN")}
                 </Typography>
               </Box>
               <Divider />
@@ -412,7 +415,8 @@ const SpecialFlightDetails = () => {
               )}
 
               {/* Commission Earn */}
-              <Box display="flex" justifyContent="space-between" py={1.2}>
+              {/* <Box display="flex" justifyContent="space-between" py={1.2}> */}
+              <Box display="none" justifyContent="space-between" py={1.2}>
                 <Typography variant="subtitle1" color="success.main" fontWeight="medium">
                   Commission Earn:
                 </Typography>
@@ -428,7 +432,8 @@ const SpecialFlightDetails = () => {
                   Net Fare:
                 </Typography>
                 <Typography variant="subtitle1" fontWeight="bold" color="primary">
-                  ₹ {(grandTotal - commissionEarn).toLocaleString("en-IN")}
+                  {/* ₹ {(grandTotal - commissionEarn).toLocaleString("en-IN")} */}
+                  ₹ {(grandTotal).toLocaleString("en-IN")}
                 </Typography>
               </Box>
             </Card>
@@ -455,7 +460,7 @@ const SpecialFlightDetails = () => {
                 </div>
               )}
 
-              <div className='mt-4'>
+              <div className='mt-4 d-none'>
                 <div className="tour_details_right_sidebar_wrapper d-block mb-3">
                   <Card sx={{ p: 2 }}>
                     <div className="d-flex align-items-center justify-content-between gap-1">
@@ -479,7 +484,7 @@ const SpecialFlightDetails = () => {
                 </div>
               </div>
 
-              <div className="">
+              <div className="d-none">
                 <Card sx={{ p: 2 }}>
                   <h6 className="fw-semibold text-danger">🎉 Bumper Offer!</h6>
                   <p className="mb-2">Pay ₹999 and get ₹2100 commission point instantly.</p>

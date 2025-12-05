@@ -5,7 +5,7 @@ import data from '../utils/data.json';
 const SECRET_KEY = "k7sP1Dg4WmRpTcA1ZfLuQxBvNmCa8eGs";
 const IV = CryptoJS.enc.Utf8.parse("uA6vW1k2PsRsYz3S");
 const apiClient = axios.create({
-  baseURL: "https://admin.wagnistrip.com/api",
+  baseURL: "http://192.168.0.186:8000/api",
   headers: {
     "Content-Type": "application/json",
   },

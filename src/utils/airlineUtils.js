@@ -2727,7 +2727,7 @@ export const getFlightSegments = (flightData) => {
 export const getServiceFee = (tripType, agentType) => {
   const fees = {
     A: { D: 220, I: 1095 },
-    B: { D: 200, I: 1095 }, 
+    B: { D: 200, I: 1499 }, 
     C: { D: 420, I: 1095 },
   };
 

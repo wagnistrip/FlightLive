@@ -184,7 +184,7 @@ const TopNavbar = () => {
 
 
                 {/* Visa */}
-                <Link to="https://visa.wagnistrip.com/" className="d-flex flex-column align-items-center">
+                {/* <Link to="https://visa.wagnistrip.com/" className="d-flex flex-column align-items-center">
                     <img
                         src={visaicon}
                         alt="Visa"
@@ -202,9 +202,9 @@ const TopNavbar = () => {
                     >
                         Visa
                     </p>
-                </Link>
+                </Link> */}
                 {/* Contact */}
-                {/* <Link to="/contact-us" className="d-flex flex-column align-items-center">
+                <Link to="/contact-us" className="d-flex flex-column align-items-center">
                     <img
                         src={contacticon}
                         alt="Contact"
@@ -222,7 +222,7 @@ const TopNavbar = () => {
                     >
                         Contact
                     </p>
-                </Link> */}
+                </Link>
 
             </div>
         </div>

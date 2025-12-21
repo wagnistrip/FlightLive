@@ -353,15 +353,7 @@ const CommonFlightCard = ({ index, data, responseData, bookFlightGAL, isOpen, to
                                 >
                                     <FiberManualRecordIcon fontSize='14px' className='text-danger' /> FLAT ₹ {responseData && responseData?.coupons && responseData?.coupons?.discount_amount} OFF using <strong>{responseData && responseData?.coupons && responseData?.coupons?.code}</strong> UPTO 10% OFF
                                 </div>
-                            ) : user?.users.role === 2 && user?.users?.agent_type === 'B' ?
-                                (
-                                    <div
-                                        style={{ fontSize: '12px', width: 'fit-content', background: '#e0ffe3' }}
-                                        className='my-2 d-flex align-items-center justify-content-center gap-2 mx-auto py-1 text-black text-center'
-                                    >
-                                        <FiberManualRecordIcon fontSize='14px' className='text-danger' /> Commission Earn upto {responseData?.trip === 'I' ? '3000' : '1000'}
-                                    </div>
-                                ) : null
+                            ) : null
                         )
 
                     }

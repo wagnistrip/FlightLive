@@ -10,11 +10,11 @@ import SeatModal from './SeatModal';
 import FlightReviewDetail from './FlightReviewDetail ';
 import { decryptPayload, encryptPayload, galileoApi } from '../Api/apiService';
 import { ImAirplane } from "react-icons/im";
-import { extractFlightAma, extractFlightDetails, findMatchingPricingSolution, formatDate, getAdditiondiscount, getAirportDataByCountry, getSeatCodes, getServiceFee, handleBookingupdate, matchSegmentsWithHostToken, mergeSegmentData } from '../utils/airlineUtils';
+import { extractFlightAma, extractFlightDetails, findMatchingPricingSolution, formatDate, getAdditiondiscount, getAirportDataByCountry, getSeatCodes, getServiceFee, handleBookingupdate, isAfterThreeDays, matchSegmentsWithHostToken, mergeSegmentData } from '../utils/airlineUtils';
 import Offer from './Offer';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormControlLabel, Radio, RadioGroup, TextField, useMediaQuery } from '@mui/material';
-import { setCommonChips,setGreenChipsUsed } from '../redux/actions/bookingActions';
+import { setCommonChips, setGreenChipsUsed } from '../redux/actions/bookingActions';
 import LoadingPage from '../LoadingPage';
 import PaymentSummary from './PaymentSummary';
 function FlightReview() {
@@ -44,6 +44,7 @@ function FlightReview() {
     let totalTaxes = 0;
     let totalTaxes2 = 0;
     let originCity = '';
+    let carrierCode = '';
     let destinationCity = '';
     let stopFlight = ''
     let stopFlight1 = ''
@@ -240,35 +241,35 @@ function FlightReview() {
         setPassangerData1(formData1)
     };
 
- const handleRadioChange = (amt) => {
-    const deduction = parseFloat(amt);
+    const handleRadioChange = (amt) => {
+        const deduction = parseFloat(amt);
 
-    // Case 1: If the same coupon is clicked again — remove it
-    if (isGreenChipsUsed && usechipsamt === deduction) {
-        setUsedchipsamout(0);
-        dispatch(setGreenChipsUsed(false));
-        dispatch(setCommonChips(greenChipsPrice + deduction));
-        return;
-    }
+        // Case 1: If the same coupon is clicked again — remove it
+        if (isGreenChipsUsed && usechipsamt === deduction) {
+            setUsedchipsamout(0);
+            dispatch(setGreenChipsUsed(false));
+            dispatch(setCommonChips(greenChipsPrice + deduction));
+            return;
+        }
 
-    // Case 2: If switching to a new coupon
-    if (isGreenChipsUsed && usechipsamt !== deduction) {
-        // First add back the previous coupon amount
-        const restoredBalance = greenChipsPrice + usechipsamt;
-        // Then deduct the new coupon amount
-        const updatedBalance = restoredBalance - deduction;
+        // Case 2: If switching to a new coupon
+        if (isGreenChipsUsed && usechipsamt !== deduction) {
+            // First add back the previous coupon amount
+            const restoredBalance = greenChipsPrice + usechipsamt;
+            // Then deduct the new coupon amount
+            const updatedBalance = restoredBalance - deduction;
 
+            setUsedchipsamout(deduction);
+            dispatch(setGreenChipsUsed(true));
+            dispatch(setCommonChips(updatedBalance));
+            return;
+        }
+
+        // Case 3: If applying for the first time
         setUsedchipsamout(deduction);
         dispatch(setGreenChipsUsed(true));
-        dispatch(setCommonChips(updatedBalance));
-        return;
-    }
-
-    // Case 3: If applying for the first time
-    setUsedchipsamout(deduction);
-    dispatch(setGreenChipsUsed(true));
-    dispatch(setCommonChips(greenChipsPrice - deduction));
-};
+        dispatch(setCommonChips(greenChipsPrice - deduction));
+    };
 
 
     function EditPassanger() {
@@ -340,6 +341,7 @@ function FlightReview() {
             stopFlight = details.stopFlight;
             timeDuration = details.timeDuration;
             originCity = details.originCity;
+            carrierCode = details?.carrierCode
             destinationCity = details.destinationCity;
 
             matchedSolution = findMatchingPricingSolution(responseData1?.responseData?.AirPriceResult, responseData1?.targetPrice);
@@ -377,6 +379,7 @@ function FlightReview() {
             stopFlight = details.stopFlight;
             timeDuration = details.timeDuration;
             originCity = details.originCity;
+            carrierCode = details.carrierCode;
             destinationCity = details.destinationCity;
 
             stopFlight1 = details1.stopFlight;
@@ -425,7 +428,7 @@ function FlightReview() {
             originCity = details.originCity;
             destinationCity = details.destinationCity;
             formatedate = details.formatedate;
-            carrierCodes = details.carrierscode;
+            // carrierCode = details.carrierCode;
         }
     } else if (responseData1 && responseData1.trip_type === 'roundtrip' && responseData1.trip === 'I') {
         if (responseData1 && responseData1?.responseData && responseData1?.responseData?.AirItinerary) {
@@ -437,6 +440,7 @@ function FlightReview() {
             stopFlight = details.stopFlight;
             timeDuration = details.timeDuration;
             originCity = details.originCity;
+            carrierCode = details.carrierCode;
             destinationCity = details.destinationCity;
 
             stopFlight1 = details1.stopFlight;
@@ -818,7 +822,7 @@ function FlightReview() {
             ...(userdata?.role === 2 && bookingType === 'WithoutWailet' && { bookingType: "WithoutWailet" }),
             ...(airPriceArray.length > 0 && { airPriceArray }),
             // ...(userdata?.role === 2 && { earnCoins: (greenchipsamt ?? 0) - (isGreenChipsUsed ? (usechipsamt ?? 0) : 0) }),
-            ...(userdata?.role === 2 && { earnCoins:0 }),
+            ...(userdata?.role === 2 && { earnCoins: 0 }),
             ...(userdata?.role === 2 && {
                 useCoin: isGreenChipsUsed ? usechipsamt : 0
             }),
@@ -855,14 +859,14 @@ function FlightReview() {
 
     }
 
-    const totalFlgithAmt = grandTotal + grandTotal2 + othercharges + othercharges1 + ((!user || user?.users?.role === 1) ? convenienceFee : 0) + (user?.users?.role === 2 ? getServiceFee(trip,user?.users?.agent_type) : 0) - (user && user?.users.role === 1 ? 0 : (isGreenChipsUsed ? usechipsamt : 0)) - (user?.users?.role === 2 && user?.users?.agent_type === 'A' ? getAdditiondiscount(trip) : 0) - (user?.users?.role === 2 && user?.users?.agent_type === 'B' ? greenchipsamt : 0) - discountedPrice;
+    const totalFlgithAmt = grandTotal + grandTotal2 + othercharges + othercharges1 + ((!user || user?.users?.role === 1) ? convenienceFee : 0) + (user?.users?.role === 2 ? getServiceFee(trip, user?.users?.agent_type) : 0) - (user && user?.users.role === 1 ? 0 : (isGreenChipsUsed ? usechipsamt : 0)) - (user?.users?.role === 2 && user?.users?.agent_type === 'A' ? getAdditiondiscount(trip) : 0) - (user?.users?.role === 2 && user?.users?.agent_type === 'B' ? greenchipsamt : 0) - discountedPrice;
     // add here 4% extra charge
     const AdditionCharge = (!user || user?.users?.role === 1) ? parseFloat((totalFlgithAmt * 0.045).toFixed(2)) : 0;
 
     const greenChipsfetch = async (token, trip, triptype, amount, travellers, carrierCode, carrierCode1) => {
         const flightcode = Array.isArray(carrierCode?.AirSegment) ? carrierCode?.AirSegment : [carrierCode?.AirSegment]
         const flightcode1 = Array.isArray(carrierCode1?.AirSegment) ? carrierCode1?.AirSegment : [carrierCode1?.AirSegment] || ""
-        const serviceFee = getServiceFee(trip,user?.users?.agent_type);
+        const serviceFee = getServiceFee(trip, user?.users?.agent_type);
         const finalTotal = (amount || 0) + serviceFee;
         const carrier1 = flightcode?.[0]?.["@attributes"]?.Carrier || "";
         const carrier2 = flightcode1?.[0]?.["@attributes"]?.Carrier || "";
@@ -1394,7 +1398,7 @@ function FlightReview() {
                                                                     </div>
                                                                     <div className="d-flex flex-column flex-md-row gap-2 mt-3 mt-lg-0">
 
-                                                                        {!(responseData1?.trip === "D" && responseData1?.trip_type === "roundtrip") && (
+                                                                        {!(responseData1?.trip === "D" && responseData1?.trip_type === "roundtrip") && isAfterThreeDays(formatedate,carrierCode) && (
                                                                             <button onClick={() => handleBooking(TransactionID, flightType, selectSeat, passangerData, galileoData, totalFlgithAmt, selectSeat1, TransactionID1, passangerData1, galileoData1, responseData1?.flightFare, responseData1.trip, responseData1.trip_type, responseData1, responseData1 && responseData1?.travellers, discountedPrice, matchedSolution, matchedSolution1, responseData?.HostToken, "WithoutWailet", AdditionCharge)} disabled={
                                                                                 user &&
                                                                                 user?.users?.role === 2 &&

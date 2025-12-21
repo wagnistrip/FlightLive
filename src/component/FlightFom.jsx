@@ -575,7 +575,6 @@ const currentNum = user && user?.users.agent_type === 'B' ? 0 : 1;
   useEffect(() => {
     if (existingData) {
 
-      console.log("localstorage data", currentNum);
       const dubaiSector = {
         iata: "DXB",
         text: "Dubai\n (DXB) \n Dubai United Arab Emirates\nDubai International Airport",

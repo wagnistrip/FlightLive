@@ -791,7 +791,7 @@ function FlightDetail() {
         }
     }, [returnGalileoData, dispatch]);
 
-    // console.log("filter data => ", filteredGalileoData);
+    console.log("filter data => ", filteredGalileoData);
 
     const bookNowSpecialflight = (data, travellers) => {
         setloadingcompon(true); // Show loading modal

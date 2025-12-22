@@ -4,7 +4,7 @@ import { Card } from "react-bootstrap";
 import { getAdditiondiscount, getServiceFee } from "../utils/airlineUtils";
 
 const PaymentSummary = ({ noOfAdults, noOfChildren, noOfInfants, responseData, responseData1, activeStep, othercharges, othercharges1, adultPrice, adultPrice2, childPrice, childPrice2, totalTaxes, totalTaxes2, discountedPrice, grandTotal, grandTotal2, user, couponOption, selectedCoupon, typedCoupon, handleCouponChange, handleApplyCoupon, warningMessage, discountMessage, visibleCoupons, isCouponActive, handleClearCoupon, infantPrice, infantPrice2, convenienceFee, handleCouponSelect, setShowAll, showAll, isGreenChipsUsed, greenChipsPrice, handleRadioChange, walletAmout, greenchipsamt, tripType, trip, usechipsamt1, AdditionCharge, usechipsamt }) => {
-    console.log("dldlkd => ", usechipsamt1);
+    // console.log("dldlkd => ", usechipsamt1);
     return (
         <>
             <div className="tour_details_right_sidebar_wrapper">

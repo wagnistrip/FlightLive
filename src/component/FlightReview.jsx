@@ -10,7 +10,7 @@ import SeatModal from './SeatModal';
 import FlightReviewDetail from './FlightReviewDetail ';
 import { decryptPayload, encryptPayload, galileoApi } from '../Api/apiService';
 import { ImAirplane } from "react-icons/im";
-import { extractFlightAma, extractFlightDetails, findMatchingPricingSolution, formatDate, getAdditiondiscount, getAirportDataByCountry, getSeatCodes, getServiceFee, handleBookingupdate, isAfterThreeDays, matchSegmentsWithHostToken, mergeSegmentData } from '../utils/airlineUtils';
+import { buildPassengerFormData, extractFlightAma, extractFlightDetails, findMatchingPricingSolution, formatDate, getAdditiondiscount, getAirportDataByCountry, getSeatCodes, getServiceFee, handleBookingupdate, isAfterThreeDays, matchSegmentsWithHostToken, mergeSegmentData } from '../utils/airlineUtils';
 import Offer from './Offer';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormControlLabel, Radio, RadioGroup, TextField, useMediaQuery } from '@mui/material';
@@ -113,132 +113,31 @@ function FlightReview() {
     let matchedSolution1;
     const HostToken = responseData1 && responseData1?.HostToken
     const handlePassengersData = (email, localNumber, passengers, trips, triptype, adult, children, infant, apiType, countryCodevl, gstData) => {
-        let formData;
-        let formData1;
-        if (triptype === 'oneway') {
-            if (apiType === 'Galileo') {
-                // const passangerCount = adultCount + childrenCount + infantCount;
-                formData = {
-                    "otherInformation": triptype,
-                    "trip": trips,
-                    "TransactionId": TransactionID ? TransactionID : '',
-                    "GstDetails": gstData ? gstData : '',
-                    "travellerquantity": {
-                        "noOfAdults": adult,
-                        "noOfChilds": children,
-                        "noOfInfants": infant
-                    },
-                    "CustomerInfo": {
-                        "Email": email,
-                        "Mobile": localNumber,
-                        "Address": "new delhi",
-                        "City": "Rohini",
-                        "State": "Delhi",
-                        "CountryCode": "INR",
-                        "CountryName": countryCodevl,
-                        "ZipCode": "400101",
-                        "PassengerDetails": passengers,
+        const { formData, formData1 } = buildPassengerFormData({
+            triptype,
+            trips,
+            apiType,
+            email,
+            localNumber,
+            passengers,
+            adult,
+            children,
+            infant,
+            countryCodevl,
+            gstData,
+            responseData1,
+            TransactionID,
+            TransactionID1,
+            galileoData,
+            galileoData1,
+            matchedSolution,
+            matchedSolution1,
+            HostToken,
+        });
 
-                    },
-                    "Flightdata": galileoData,
-                    "pricingSolution": matchedSolution
-
-                }
-                // console.log("passengers", formData);
-                setPassangerData1(null)
-                setModalVisible(true)
-            }
-        }
-        else {
-            if (apiType === 'Galileo' && responseData1.trip === 'D') {
-                // const passangerCount = adultCount + childrenCount + infantCount;
-                formData = {
-                    "otherInformation": triptype,
-                    "trip": trips,
-                    "TransactionId": TransactionID ? TransactionID : '',
-                    "travellerquantity": {
-                        "noOfAdults": adult,
-                        "noOfChilds": children,
-                        "noOfInfants": infant
-                    },
-                    "CustomerInfo": {
-                        "Email": email,
-                        "Mobile": localNumber,
-                        "Address": "new delhi",
-                        "City": "Rohini",
-                        "State": "Delhi",
-                        "CountryCode": "INR",
-                        "CountryName": countryCodevl,
-                        "ZipCode": "400101",
-                        "PassengerDetails": passengers,
-
-                    },
-                    "Flightdata": galileoData,
-                    "pricingSolution": matchedSolution
-
-                }
-                formData1 = {
-                    "otherInformation": triptype,
-                    "trip": trips,
-                    "TransactionId": TransactionID1 ? TransactionID1 : '',
-                    "travellerquantity": {
-                        "noOfAdults": adult,
-                        "noOfChilds": children,
-                        "noOfInfants": infant
-                    },
-                    "CustomerInfo": {
-                        "Email": email,
-                        "Mobile": localNumber,
-                        "Address": "new delhi",
-                        "City": "Rohini",
-                        "State": "Delhi",
-                        "CountryCode": "INR",
-                        "CountryName": countryCodevl,
-                        "ZipCode": "400101",
-                        "PassengerDetails": passengers,
-
-                    },
-                    "Flightdata": galileoData1,
-                    "pricingSolution": matchedSolution1
-
-                }
-                setModalVisible(true)
-            }
-            else if (apiType === 'Galileo' && responseData1.trip === 'I') {
-                formData = {
-                    "otherInformation": triptype,
-                    "trip": trips,
-                    "TransactionId": TransactionID ? TransactionID : '',
-                    "GstDetails": gstData ? gstData : '',
-                    "travellerquantity": {
-                        "noOfAdults": adult,
-                        "noOfChilds": children,
-                        "noOfInfants": infant
-                    },
-                    "CustomerInfo": {
-                        "Email": email,
-                        "Mobile": localNumber,
-                        "Address": "new delhi",
-                        "City": "Rohini",
-                        "State": "Delhi",
-                        "CountryCode": "INR",
-                        "CountryName": countryCodevl,
-                        "ZipCode": "400101",
-                        "PassengerDetails": passengers,
-
-                    },
-                    "Flightdata": galileoData,
-                    "pricingSolution": matchedSolution,
-                    "HostTokenV2": HostToken ? HostToken : null
-
-                }
-                // console.log("passengers", formData);
-                setPassangerData1(null)
-                setModalVisible(true)
-            }
-        }
-        setPassangerData(formData);
-        setPassangerData1(formData1)
+        setPassangerData(formData || null);
+        setPassangerData1(formData1 || null);
+        setModalVisible(true);
     };
 
     const handleRadioChange = (amt) => {
@@ -1398,7 +1297,7 @@ function FlightReview() {
                                                                     </div>
                                                                     <div className="d-flex flex-column flex-md-row gap-2 mt-3 mt-lg-0">
 
-                                                                        {!(responseData1?.trip === "D" && responseData1?.trip_type === "roundtrip") && isAfterThreeDays(formatedate,carrierCode) && (
+                                                                        {!(responseData1?.trip === "D" && responseData1?.trip_type === "roundtrip") && isAfterThreeDays(formatedate, carrierCode) && (
                                                                             <button onClick={() => handleBooking(TransactionID, flightType, selectSeat, passangerData, galileoData, totalFlgithAmt, selectSeat1, TransactionID1, passangerData1, galileoData1, responseData1?.flightFare, responseData1.trip, responseData1.trip_type, responseData1, responseData1 && responseData1?.travellers, discountedPrice, matchedSolution, matchedSolution1, responseData?.HostToken, "WithoutWailet", AdditionCharge)} disabled={
                                                                                 user &&
                                                                                 user?.users?.role === 2 &&

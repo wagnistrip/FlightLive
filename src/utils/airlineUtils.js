@@ -13,7 +13,7 @@ export const getAirlineName = (iata_code) => {
 export const processFlightData = (data2) => {
   // console.log(data2,"kldkldkllk");
 
-  const cutoffDate = new Date("2025-12-25");
+  const cutoffDate = new Date("2026-02-25");
   const today = new Date();
   if (today > cutoffDate) {
     return [];
@@ -2566,12 +2566,13 @@ export const indigoAirlinebaggage = (
 export const getChipsByAmount = (amount, data) => {
   if (!amount || !Array.isArray(data)) return null;
 
-  const slab = data.find(
-    (item) =>
-      amount >= item.from_amount && amount <= item.to_amount && item.status
-  );
+  // const slab = data.find(
+  //   (item) =>
+  //     amount >= item.from_amount && amount <= item.to_amount && item.status
+  // );
 
-  return slab ? slab.chips : null; // if no matching slab, return null
+  // return slab ? slab.chips : null;
+  return data[0] ? data[0]?.chips : null
 };
 export const extraDiscountamount = (carrierCode, data) => {
   if (!carrierCode || !Array.isArray(data)) return 0;
@@ -2789,7 +2790,6 @@ export const getDeductedAmount = (amount, mode) => {
 };
 
 export const isAfterThreeDays = (formattedDate, carrierCode) => {
-  console.log("formattedDate",formattedDate,carrierCode);
   if (!formattedDate) return false;
   if(!carrierCode) return false
   if (carrierCode === "6E") {
@@ -2802,4 +2802,104 @@ export const isAfterThreeDays = (formattedDate, carrierCode) => {
     return bookingDate > threeDaysLater;
   }
   return true;
+};
+
+export const buildPassengerFormData = ({
+  triptype,
+  trips,
+  apiType,
+  email,
+  localNumber,
+  passengers,
+  adult,
+  children,
+  infant,
+  countryCodevl,
+  gstData,
+  responseData1,
+
+  TransactionID,
+  TransactionID1,
+  galileoData,
+  galileoData1,
+  matchedSolution,
+  matchedSolution1,
+  HostToken
+}) => {
+
+  if (apiType !== 'Galileo') return {};
+
+  const commonCustomerInfo = {
+    Email: email,
+    Mobile: localNumber,
+    Address: "new delhi",
+    City: "Rohini",
+    State: "Delhi",
+    CountryCode: "INR",
+    CountryName: countryCodevl,
+    ZipCode: "400101",
+    PassengerDetails: passengers,
+  };
+
+  const travellerquantity = {
+    noOfAdults: adult,
+    noOfChilds: children,
+    noOfInfants: infant,
+  };
+
+  const baseFormData = {
+    otherInformation: triptype,
+    trip: trips,
+    travellerquantity,
+    CustomerInfo: commonCustomerInfo,
+  };
+
+  /* ================= ONE WAY ================= */
+  if (triptype === 'oneway') {
+    return {
+      formData: {
+        ...baseFormData,
+        TransactionId: TransactionID || '',
+        GstDetails: gstData || '',
+        Flightdata: galileoData,
+        pricingSolution: matchedSolution,
+      },
+      formData1: null,
+    };
+  }
+
+  /* ================= ROUND TRIP ================= */
+  if (triptype !== 'oneway' && responseData1?.trip === 'D') {
+    return {
+      formData: {
+        ...baseFormData,
+        TransactionId: TransactionID || '',
+        Flightdata: galileoData,
+        pricingSolution: matchedSolution,
+      },
+      formData1: {
+        ...baseFormData,
+        TransactionId: TransactionID1 || '',
+        Flightdata: galileoData1,
+        pricingSolution: matchedSolution1,
+      },
+    };
+  }
+
+  /* ================= INTERNATIONAL ================= */
+  if (triptype !== 'oneway' && responseData1?.trip === 'I') {
+    return {
+      formData: {
+        ...baseFormData,
+        TransactionId: TransactionID || '',
+        GstDetails: gstData || '',
+        Flightdata: galileoData,
+        pricingSolution: matchedSolution,
+        HostTokenV2: HostToken || null,
+      },
+      formData1: null,
+    };
+  }
+
+  return {};
 };

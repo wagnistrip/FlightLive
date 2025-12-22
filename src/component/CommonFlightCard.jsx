@@ -8,17 +8,25 @@ import { useSelector } from 'react-redux';
 
 const CommonFlightCard = ({ index, data, responseData, bookFlightGAL, isOpen, toggleFlightDetails, bookNowSpecialflight }) => {
     const user = useSelector((state) => state.auth.user);
-    // console.log("user => ",user);
+    // console.log("user => ", user);
     const samed = "Ak"
     return (
         <div className='list-unstyled'>
 
 
             <div style={{ borderRadius: '4px', position: 'relative' }} data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-offset="0" className="py-1 tour_details_boxed mt-3">
+            
+            {/* {
+                (user && user?.users?.role === 2) && (
+               <>
+                <div className="watermark" style={{ top: '40%', left: '10%' }}>Wagnistrip</div>
+                <div className="watermark" style={{ top: '40%', right: '35%' }}>Wagnistrip</div>
+                <div className="watermark" style={{ top: '40%', right: '65%' }}>Wagnistrip</div>
+                <div className="watermark" style={{ top: '40%', right: '10%' }}>Wagnistrip</div>
+               </>
 
-                {/* <div className="watermark" style={{ top: '40%', left: '10%' }}>Wagnistrip-899828</div>
-                                                                    <div className="watermark" style={{ top: '40%', right: '10%' }}>Wagnistrip-899828</div>
-                                                                    <div className="watermark" style={{ top: '40%', right: '45%' }}>Wagnistrip-899828</div> */}
+                )
+            } */}
 
                 <div style={{ marginBottom: 0 }} className='row flight-row-cardlist border-2  overflow-hidden p-0'>
                     {
@@ -188,7 +196,7 @@ const CommonFlightCard = ({ index, data, responseData, bookFlightGAL, isOpen, to
                                                         data.PricingInfos["@attributes"].ApproximateTotalPrice.replace('INR', '').trim()
                                                     );
                                                     if (user?.users?.role === 2) {
-                                                        price += getServiceFee(responseData?.trip,user?.users?.agent_type);
+                                                        price += getServiceFee(responseData?.trip, user?.users?.agent_type);
                                                     } else if (user?.users.role === 1) {
                                                         price -= responseData && responseData?.coupons && responseData?.coupons?.discount_amount || 0
                                                     } else {
@@ -208,7 +216,7 @@ const CommonFlightCard = ({ index, data, responseData, bookFlightGAL, isOpen, to
                                                         let price = parseFloat(rawPrice.replace("INR", "").trim()) || 0;
 
                                                         // 🟩 Step 2: Add service fee (using utility function)
-                                                        const serviceFee = getServiceFee(responseData?.trip,user?.users?.agent_type);
+                                                        const serviceFee = getServiceFee(responseData?.trip, user?.users?.agent_type);
                                                         price += serviceFee;
 
                                                         let netFare = price;
@@ -217,9 +225,9 @@ const CommonFlightCard = ({ index, data, responseData, bookFlightGAL, isOpen, to
                                                         const greenChips = getChipsByAmount(price, responseData?.chips);
                                                         if (!isNaN(greenChips) && greenChips > 0 && user?.users?.agent_type === 'B') {
                                                             netFare -= greenChips;
-                                                            
+
                                                         }
-                                                        if(user?.users?.agent_type === 'A'){
+                                                        if (user?.users?.agent_type === 'A') {
                                                             netFare -= getAdditiondiscount(responseData?.trip);
                                                         }
 
@@ -309,7 +317,7 @@ const CommonFlightCard = ({ index, data, responseData, bookFlightGAL, isOpen, to
                                             </div>
                                             <div>
                                                 <h6 className="fw-bold fs-6 text-danger">
-                                                    <span> ₹ {Math.round( matchedSpecial.total_payable_price + (matchedSpecial?.ticket_id ? (matchedSpecial.total_payable_price * 0.05) : 0)
+                                                    <span> ₹ {Math.round(matchedSpecial.total_payable_price + (matchedSpecial?.ticket_id ? (matchedSpecial.total_payable_price * 0.05) : 0)
                                                     ).toLocaleString("en-IN")} </span>
 
                                                 </h6>
@@ -353,15 +361,7 @@ const CommonFlightCard = ({ index, data, responseData, bookFlightGAL, isOpen, to
                                 >
                                     <FiberManualRecordIcon fontSize='14px' className='text-danger' /> FLAT ₹ {responseData && responseData?.coupons && responseData?.coupons?.discount_amount} OFF using <strong>{responseData && responseData?.coupons && responseData?.coupons?.code}</strong> UPTO 10% OFF
                                 </div>
-                            ) : user?.users.role === 2 && user?.users?.agent_type === 'B' ?
-                                (
-                                    <div
-                                        style={{ fontSize: '12px', width: 'fit-content', background: '#e0ffe3' }}
-                                        className='my-2 d-flex align-items-center justify-content-center gap-2 mx-auto py-1 text-black text-center'
-                                    >
-                                        <FiberManualRecordIcon fontSize='14px' className='text-danger' /> Commission Earn upto {responseData?.trip === 'I' ? '3000' : '1000'}
-                                    </div>
-                                ) : null
+                            ) : null
                         )
 
                     }

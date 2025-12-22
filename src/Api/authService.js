@@ -6,14 +6,14 @@ export const getSession = () => {
 };
 
 export const setSession = (user, expiryTimeInSeconds) => {
-  const expiry = new Date().getTime() + expiryTimeInSeconds * 1000; // Calculate expiry time in milliseconds
-  Cookies.set('user', JSON.stringify({ ...user, expiry }), { expires: expiryTimeInSeconds / 86400 }); // Convert seconds to days
+  const expiry = new Date().getTime() + expiryTimeInSeconds * 1000; 
+  Cookies.set('user', JSON.stringify({ ...user, expiry }), { expires: expiryTimeInSeconds / 86400 });
 
   // Cookies.set("user", JSON.stringify({ ...user, expiry }), {
-  //   expires: expiryTimeInSeconds / 86400, // convert seconds -> days
-  //   domain: ".wagnistrip.com", // ✅ share cookie across subdomains
-  //   secure: true, // ✅ only over HTTPS
-  //   sameSite: "None", // ✅ required for cross-subdomain cookies
+  //   expires: expiryTimeInSeconds / 86400,
+  //   domain: ".wagnistrip.com", 
+  //   secure: true, 
+  //   sameSite: "None",
   // });
 };
 

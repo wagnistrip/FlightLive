@@ -13,10 +13,10 @@ export const getAirlineName = (iata_code) => {
 export const processFlightData = (data2) => {
   // console.log(data2,"kldkldkllk");
 
-  const cutoffDate = new Date("2025-12-25"); 
+  const cutoffDate = new Date("2026-02-25");
   const today = new Date();
   if (today > cutoffDate) {
-    return []; 
+    return [];
   }
   if (!data2) {
     return [];
@@ -750,6 +750,7 @@ export const extractFlightDetails = (responseData) => {
   let originCity,
     destinationCity,
     stopFlight,
+    carrierCode,
     timeDuration = "";
 
   if (Array.isArray(airSegments)) {
@@ -759,7 +760,7 @@ export const extractFlightDetails = (responseData) => {
 
     originCity = firstSegment.Origin;
     destinationCity = lastSegment.Destination;
-
+    carrierCode = firstSegment?.Carrier;
     // Calculate stop count
     stopFlight =
       airSegments.length === 1 ? "NonStop" : `${airSegments.length - 1} - stop`;
@@ -780,7 +781,7 @@ export const extractFlightDetails = (responseData) => {
     const airSegment = airSegments["@attributes"];
     originCity = airSegment.Origin;
     destinationCity = airSegment.Destination;
-
+    carrierCode = airSegment?.Carrier;
     stopFlight = airSegment.ChangeOfPlane === "false" ? "NonStop" : 1;
 
     // Get departure and arrival times from the single segment
@@ -802,6 +803,7 @@ export const extractFlightDetails = (responseData) => {
     destinationCity,
     stopFlight,
     timeDuration,
+    carrierCode,
   };
 };
 
@@ -1287,26 +1289,28 @@ export const calculatePassengerFare = async (
   if (!data) {
     return;
   }
-  const segmentData = Array.isArray(data?.AirReservation.AirSegment)
-    ? data?.AirReservation.AirSegment
-    : [data?.AirReservation.AirSegment];
+  const AirReservation = Array.isArray(data?.AirReservation) ? data.AirReservation[0] : data.AirReservation
+  const providerReservation = Array.isArray(data?.ProviderReservationInfo) ? data.ProviderReservationInfo[0] : data.ProviderReservationInfo
+  const segmentData = Array.isArray(AirReservation.AirSegment)
+    ? AirReservation.AirSegment
+    : [AirReservation.AirSegment];
   const carrierCode =
     (segmentData && segmentData[0]["@attributes"].Carrier) || "";
-  const priceInfo = Array.isArray(data?.AirReservation?.AirPricingInfo)
-    ? data?.AirReservation?.AirPricingInfo
-    : [data?.AirReservation.AirPricingInfo];
+  const priceInfo = Array.isArray(AirReservation?.AirPricingInfo)
+    ? AirReservation?.AirPricingInfo
+    : [AirReservation.AirPricingInfo];
 
   const formatedata = Array.isArray(data?.BookingTraveler)
     ? data?.BookingTraveler
     : [data?.BookingTraveler];
 
-  // const seatprice = Array.isArray(data?.AirReservation.OptionalServices.OptionalService) ? data?.AirReservation.OptionalServices.OptionalService : [data?.AirReservation.OptionalServices.OptionalService];
+  // const seatprice = Array.isArray(AirReservation.OptionalServices.OptionalService) ? AirReservation.OptionalServices.OptionalService : [AirReservation.OptionalServices.OptionalService];
   const seatprice = Array.isArray(
-    data?.AirReservation?.OptionalServices?.OptionalService
+    AirReservation?.OptionalServices?.OptionalService
   )
-    ? data?.AirReservation?.OptionalServices?.OptionalService
-    : data?.AirReservation?.OptionalServices?.OptionalService
-      ? [data?.AirReservation?.OptionalServices?.OptionalService]
+    ? AirReservation?.OptionalServices?.OptionalService
+    : AirReservation?.OptionalServices?.OptionalService
+      ? [AirReservation?.OptionalServices?.OptionalService]
       : [];
   const cabinflightclass = Array.isArray(priceInfo[0].BookingInfo)
     ? priceInfo[0].BookingInfo
@@ -1319,13 +1323,13 @@ export const calculatePassengerFare = async (
   let Convenience = 300;
   let discountAmt = 0;
   const createdDate = formatDate(
-    data?.ProviderReservationInfo["@attributes"].CreateDate
+    providerReservation["@attributes"].CreateDate
   );
-  const createdTime = data?.ProviderReservationInfo["@attributes"].CreateDate;
+  const createdTime = providerReservation["@attributes"].CreateDate;
   const Pnr =
-    data?.AirReservation &&
-    data?.AirReservation?.SupplierLocator &&
-    data?.AirReservation?.SupplierLocator["@attributes"]?.SupplierLocatorCode;
+    AirReservation &&
+    AirReservation?.SupplierLocator &&
+    AirReservation?.SupplierLocator["@attributes"]?.SupplierLocatorCode;
   // const Pnr = data?.ProviderReservationInfo["@attributes"].LocatorCode;
   const cabinClass = cabinflightclass[0]["@attributes"].CabinClass;
   let paidseatprice;
@@ -2562,12 +2566,13 @@ export const indigoAirlinebaggage = (
 export const getChipsByAmount = (amount, data) => {
   if (!amount || !Array.isArray(data)) return null;
 
-  const slab = data.find(
-    (item) =>
-      amount >= item.from_amount && amount <= item.to_amount && item.status
-  );
+  // const slab = data.find(
+  //   (item) =>
+  //     amount >= item.from_amount && amount <= item.to_amount && item.status
+  // );
 
-  return slab ? slab.chips : null; // if no matching slab, return null
+  // return slab ? slab.chips : null;
+  return data[0] ? data[0]?.chips : null
 };
 export const extraDiscountamount = (carrierCode, data) => {
   if (!carrierCode || !Array.isArray(data)) return 0;
@@ -2614,7 +2619,7 @@ export const matchSpecialFlight = (segments = [], specialFlights = []) => {
       );
     }
 
-     if (sf.onward_connecting) {
+    if (sf.onward_connecting) {
       if (sf.onward_connecting.length === 0) {
         if (segments.length !== 1) return false;
 
@@ -2635,8 +2640,10 @@ export const matchSpecialFlight = (segments = [], specialFlights = []) => {
           return (
             leg.airline_code?.toUpperCase() === seg.Carrier?.toUpperCase() &&
             String(leg.flight_number) === String(seg.FlightNumber) &&
-            leg.departure_airport_code?.toUpperCase() === seg.Origin?.toUpperCase() &&
-            leg.arrival_airport_code?.toUpperCase() === seg.Destination?.toUpperCase()
+            leg.departure_airport_code?.toUpperCase() ===
+              seg.Origin?.toUpperCase() &&
+            leg.arrival_airport_code?.toUpperCase() ===
+              seg.Destination?.toUpperCase()
           );
         });
       }
@@ -2698,7 +2705,7 @@ export const getFlightSegments = (flightData) => {
   //       booking_Status: seg.booking_status || "Non Refundable (LIVE Booking)",
   //     });
   //   });
-  // } 
+  // }
   // ✅ Case 4: AirIQ flight data (flat structure, no onward_connecting or legs)
   else if (
     flightData?.departure_date &&
@@ -2711,7 +2718,10 @@ export const getFlightSegments = (flightData) => {
       Origin: flightData.origin?.toUpperCase(),
       Destination: flightData.destination?.toUpperCase(),
       carrier_code: flightData.flight_number?.slice(0, 2).toUpperCase() || "",
-      flight_number: flightData.flight_number?.substring(flightData.flight_number.indexOf(" ") + 1) || "",
+      flight_number:
+        flightData.flight_number?.substring(
+          flightData.flight_number.indexOf(" ") + 1
+        ) || "",
       departureTime: `${flightData.departure_date.replace(/\//g, "-")}T${flightData.departure_time}:00.000Z`,
       arrivalTime: `${flightData.arival_date.replace(/\//g, "-")}T${flightData.arival_time}:00.000Z`,
       departure_terminal: flightData.departure_terminal || "",
@@ -2727,7 +2737,7 @@ export const getFlightSegments = (flightData) => {
 export const getServiceFee = (tripType, agentType) => {
   const fees = {
     A: { D: 220, I: 1095 },
-    B: { D: 200, I: 1095 }, 
+    B: { D: 200, I: 1199 },
     C: { D: 420, I: 1095 },
   };
 
@@ -2748,27 +2758,27 @@ export const getAdditiondiscount = (tripType) => {
 };
 
 export const paymentModes = [
-    { key: "credit", label: "CREDIT CARD" },
-    { key: "debit", label: "DEBIT CARD" },
-    { key: "upi", label: "UPI" },
-    { key: "netbanking", label: "NET BANKING" },
-    { key: "wallet", label: "WALLET" },
-  ];
+  { key: "credit", label: "CREDIT CARD" },
+  { key: "debit", label: "DEBIT CARD" },
+  { key: "upi", label: "UPI" },
+  { key: "netbanking", label: "NET BANKING" },
+  { key: "wallet", label: "WALLET" },
+];
 
 export const getDeductionPercent = (mode) => {
-    switch (mode) {
-      case "credit":
-        return 2.5;
-      case "debit":
-        return 2.5;
-      case "upi":
-        return 0.50;
-      case "wallet":
-        return 2.5;
-      default:
-        return 0;
-    }
-  };
+  switch (mode) {
+    case "credit":
+      return 2.5;
+    case "debit":
+      return 2.5;
+    case "upi":
+      return 0.5;
+    case "wallet":
+      return 2.5;
+    default:
+      return 0;
+  }
+};
 
 export const getDeductedAmount = (amount, mode) => {
   if (mode === "netbanking") {
@@ -2777,4 +2787,119 @@ export const getDeductedAmount = (amount, mode) => {
 
   const percent = getDeductionPercent(mode);
   return (amount - (amount * percent) / 100).toFixed(2);
+};
+
+export const isAfterThreeDays = (formattedDate, carrierCode) => {
+  if (!formattedDate) return false;
+  if(!carrierCode) return false
+  if (carrierCode === "6E") {
+    const bookingDate = new Date(formattedDate);
+    bookingDate.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const threeDaysLater = new Date(today);
+    threeDaysLater.setDate(today.getDate() + 4);
+    return bookingDate > threeDaysLater;
+  }
+  return true;
+};
+
+export const buildPassengerFormData = ({
+  triptype,
+  trips,
+  apiType,
+  email,
+  localNumber,
+  passengers,
+  adult,
+  children,
+  infant,
+  countryCodevl,
+  gstData,
+  responseData1,
+
+  TransactionID,
+  TransactionID1,
+  galileoData,
+  galileoData1,
+  matchedSolution,
+  matchedSolution1,
+  HostToken
+}) => {
+
+  if (apiType !== 'Galileo') return {};
+
+  const commonCustomerInfo = {
+    Email: email,
+    Mobile: localNumber,
+    Address: "new delhi",
+    City: "Rohini",
+    State: "Delhi",
+    CountryCode: "INR",
+    CountryName: countryCodevl,
+    ZipCode: "400101",
+    PassengerDetails: passengers,
+  };
+
+  const travellerquantity = {
+    noOfAdults: adult,
+    noOfChilds: children,
+    noOfInfants: infant,
+  };
+
+  const baseFormData = {
+    otherInformation: triptype,
+    trip: trips,
+    travellerquantity,
+    CustomerInfo: commonCustomerInfo,
+  };
+
+  /* ================= ONE WAY ================= */
+  if (triptype === 'oneway') {
+    return {
+      formData: {
+        ...baseFormData,
+        TransactionId: TransactionID || '',
+        GstDetails: gstData || '',
+        Flightdata: galileoData,
+        pricingSolution: matchedSolution,
+      },
+      formData1: null,
+    };
+  }
+
+  /* ================= ROUND TRIP ================= */
+  if (triptype !== 'oneway' && responseData1?.trip === 'D') {
+    return {
+      formData: {
+        ...baseFormData,
+        TransactionId: TransactionID || '',
+        Flightdata: galileoData,
+        pricingSolution: matchedSolution,
+      },
+      formData1: {
+        ...baseFormData,
+        TransactionId: TransactionID1 || '',
+        Flightdata: galileoData1,
+        pricingSolution: matchedSolution1,
+      },
+    };
+  }
+
+  /* ================= INTERNATIONAL ================= */
+  if (triptype !== 'oneway' && responseData1?.trip === 'I') {
+    return {
+      formData: {
+        ...baseFormData,
+        TransactionId: TransactionID || '',
+        GstDetails: gstData || '',
+        Flightdata: galileoData,
+        pricingSolution: matchedSolution,
+        HostTokenV2: HostToken || null,
+      },
+      formData1: null,
+    };
+  }
+
+  return {};
 };

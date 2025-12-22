@@ -10,7 +10,7 @@ import FlightCard from './RoundTrip/FlightCard';
 import { PiAirplaneTakeoffLight, PiAirplaneInFlight } from "react-icons/pi";
 import BottomNavbar from './RoundTrip/BottomNavbar';
 import LoadingBar from 'react-top-loading-bar';
-import { calculateTravelTime, filterFlights, filterGalileoData, filterGalileoDataIntern, formatDate, getAirlineName, getAirportDataByCountry, getImageUrl1, matchSegmentsWithHostToken, matchWithHostToken, processFlightData, timeRangeData, timeRanges } from '../utils/airlineUtils';
+import { filterFlights, filterGalileoData, filterGalileoDataIntern, formatDate, getAirlineName, getAirportDataByCountry, getImageUrl1, matchSegmentsWithHostToken, matchWithHostToken, processFlightData, timeRangeData, timeRanges } from '../utils/airlineUtils';
 import { FaRegEdit } from "react-icons/fa";
 import { FaFilterCircleXmark } from "react-icons/fa6";
 import errorimg from '../../src/image/errorpage.png'

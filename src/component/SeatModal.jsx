@@ -54,6 +54,7 @@ function SeatModal({ data, goToStep, modalVisible, setModalVisible, data1, fligh
       return null;
     }
   };
+  
   const fetchSeatMap = async (flightroutes, flightSegmentData) => {
     try {
       const responseData = await galileoApi(flightroutes, flightSegmentData);

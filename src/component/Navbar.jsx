@@ -23,7 +23,6 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const displayName = user?.users ? user.users.email || user.users.phone || '' : '';
-
   const greenChipsPrice = useSelector((state) => state.booking.greenChipsPrice);
   const walletAmout = useSelector((state) => state.booking.walletAmount);
   useEffect(() => {
@@ -202,11 +201,11 @@ const Navbar = () => {
                         Flights
                       </Link>
                     </li>
-                    {/* <li className="nav-item">
-                      <Link onClick={() => setActiveBtn('Hotels')} className={`nav-link  ${activeBtn === 'Hotels' ? 'active' : ''}`} to="/hotels">
-                        Hotels
+                    <li className="nav-item">
+                      <Link onClick={() => setActiveBtn('package')} className={`nav-link  ${activeBtn === 'Hotels' ? 'active' : ''}`} to="https://package.wagnistrip.com/package-list">
+                        Holidays
                       </Link>
-                    </li> */}
+                    </li>
                     <li className="nav-item">
                       <Link className={`nav-link`} to="https://event.wagnistrip.com/">
                         Events
@@ -217,11 +216,11 @@ const Navbar = () => {
                         Blogs
                       </Link>
                     </li>
-                    <li className="nav-item">
+                    {/* <li className="nav-item">
                       <Link className={`nav-link`} to="https://visa.wagnistrip.com/">
                         Visa
                       </Link>
-                    </li>
+                    </li> */}
                     <li className="nav-item">
                       <Link onClick={() => setActiveBtn('Cabs')} className={`nav-link  ${activeBtn === 'Cabs' ? 'active' : ''}`} to="https://cab.wagnistrip.com/">
                         Cabs
@@ -474,11 +473,11 @@ const Navbar = () => {
                                 Contact
                               </Link>
                             </li>
-                            <li className="nav-item" data-bs-dismiss="offcanvas">
+                            {/* <li className="nav-item" data-bs-dismiss="offcanvas">
                               <Link className="nav-link active" to="https://demo.wagnistrip.com/">
                                 Visa
                               </Link>
-                            </li>
+                            </li> */}
                             {user?.users ? (
                               user.users.role === 2 ? (
                                 <li className="nav-item" data-bs-dismiss="offcanvas">

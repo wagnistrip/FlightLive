@@ -497,3 +497,22 @@ input[data-autocompleted] {
   opacity: 1;
 }
 
+
+.new-badge {
+    position: absolute;
+    top: -10px;
+    right: -16px;
+    background: red;
+    color: #fff;
+    font-size: 10px;
+    font-weight: medium;
+    padding: 2px 6px;
+    border-radius: 10px;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}

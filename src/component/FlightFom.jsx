@@ -569,13 +569,12 @@ function Flightform({ existingData, type = '' }) {
 
 
 
-
+const currentNum = user && user?.users.agent_type === 'B' ? 0 : 1;
 
 
   useEffect(() => {
     if (existingData) {
 
-      // console.log("localstorage data", existingData);
       const dubaiSector = {
         iata: "DXB",
         text: "Dubai\n (DXB) \n Dubai United Arab Emirates\nDubai International Airport",
@@ -595,14 +594,15 @@ function Flightform({ existingData, type = '' }) {
         "country": "India"
       };
 
+      
       // this is testing start 
       const currentDate = dayjs().startOf("day"); // today's start
       const minAllowedDate = currentDate.add(1, "day"); // today + 1
-      let departureDate = existingData.departureDate ? dayjs(existingData.departureDate) : currentDate.add(1, "day");
+      let departureDate = existingData.departureDate ? dayjs(existingData.departureDate) : currentDate.add(currentNum, "day");
 
       // If departureDate is less than (today + 1), update it to (today + 2)
       if (departureDate.isBefore(minAllowedDate, "day")) {
-        departureDate = currentDate.add(1, "day");
+        departureDate = currentDate.add(currentNum, "day");
       }
 
       let returnDate = existingData.returnDate ? dayjs(existingData.returnDate) : null;
@@ -965,7 +965,10 @@ function Flightform({ existingData, type = '' }) {
                                 }}
                                 showDaysOutsideCurrentMonth
                                 numberOfMonths={isSmallScreen ? 1 : 2}
-                                minDate={new Date(new Date().setDate(new Date().getDate() + 0))}
+                                minDate = {
+                                   user && user?.users.agent_type === 'B' ? dayjs().startOf("day").toDate() : new Date(new Date().setDate(new Date().getDate() + 0))
+                                }
+                                // minDate={new Date(new Date().setDate(new Date().getDate() + 0))}
                                 // minDate={dayjs().startOf("day").toDate()}
                                 containerStyle={{
                                   position: "absolute",

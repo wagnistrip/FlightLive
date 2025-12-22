@@ -475,14 +475,16 @@ const AirIqCard = ({ flight, travellers, handleBookNow }) => {
             >
               ₹ {Math.round(
                 flight.total_payable_price +
-                (flight.total_payable_price * 0.05) +
-                ((flight.isinternational ? 1000 : 600) * (travellers?.adults + travellers?.children))
+                (flight.total_payable_price * 0.005) +
+                // ((flight.isinternational ? 1000 : 600) * (travellers?.adults + travellers?.children))
+                ((flight.isinternational ? 200 : 200) * (travellers?.adults + travellers?.children))
               ).toLocaleString("en-IN")}
             </Typography>
 
             <Typography variant="h6" fontWeight="bold" sx={{ color: '#052c65',fontSize:'14px' }}>
                Net Fare : {Math.round(
-                flight.total_payable_price
+                flight.total_payable_price +
+                (flight.total_payable_price * 0.005) + 50
               ).toLocaleString("en-IN")}
             </Typography>
           </Grid>

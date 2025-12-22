@@ -33,7 +33,7 @@ import PaymentFailed from "./paymentFailed";
 import CouponSection from "./component/CouponSection";
 import Maintancepage from "./component/Maintancepage";
 import Test from "./Test";
-import { loadSession } from "./redux/actions/authActions";
+import { loadSession, login } from "./redux/actions/authActions";
 import Dashboard from "./component/agent/Dashboard";
 import { navbarRoutes } from "./utils/airlineUtils";
 import AgentData from './component/agent/AgentPage';
@@ -49,6 +49,7 @@ import Domesticroutes from "./component/Domesticroutes";
 import Internationalroutes from "./component/Internationalroutes";
 import { HelmetProvider } from "react-helmet-async";
 import Seo from "./seo/Seo";
+import { customerProfile, decryptPayload } from "./Api/apiService";
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   useEffect(() => {
@@ -99,6 +100,22 @@ function ConditionalNavbar() {
 function App() {
   const [loading, setLoading] = useState(true);
   const location = useLocation();
+  const user = useSelector((state) => state.auth.user)
+  const dispatch = useDispatch();
+
+
+  const fetchCustomerProfile = async (token) => {
+    try {
+      const response = await customerProfile("/check-users", token);
+      const decryptedResponse1 = decryptPayload(response?.data || "");
+      const parsed = JSON.parse(decryptedResponse1);
+      if (parsed && parsed?.users) {
+        dispatch(login(parsed))
+      }
+    } catch (error) {
+      console.error("Error fetching customer profile:", error);
+    }
+  };
 
   useEffect(() => {
     const images = document.images;
@@ -125,7 +142,19 @@ function App() {
     return () => clearTimeout(timeout);
   }, [location]);
 
-  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const path = location.pathname;
+
+    const isHomePage = path === "/";
+    const isFlightDetailsPage = path.startsWith("/flightdetails");
+
+    if ((isHomePage || isFlightDetailsPage)
+      && user?.users?.role === 2
+      && user?.token) {
+      fetchCustomerProfile(user.token);
+    }
+  }, [location?.pathname, user?.token])
 
   useEffect(() => {
     dispatch(loadSession()); // Load session on app start
@@ -133,55 +162,54 @@ function App() {
 
   return (
     <>
-     <HelmetProvider>
-    
-     {loading && <LoadingScreen />}
-     {/* <LoadingScreen/> */}
-  
-      <ScrollToTop />
-      <ConditionalNavbar />
-      <LocationRequest />
-      <Seo/>
-      <Routes>
-        {/* Public Routes (Accessible without login) */}
-        <Route path="/login/user-login" element={<PublicRoute element={<Userlogin />} />} />
-        <Route path="/login/agent-login" element={<PublicRoute element={<Userlogin />} />} />
-        
-        {/* Private Routes (Require Login) */}
-        <Route path="/agent/profile" element={<PrivateRoute element={<Dashboard />} allowedRoles={[2]} />} />
-        <Route path="/agent/registration" element={<PrivateRoute element={<AgentLogin />} allowedRoles={[2]} />} />
-        <Route path="/customer-profile" element={<PrivateRoute element={<ProfileData />} allowedRoles={[1]} />} />
+      <HelmetProvider>
 
-        <Route path="/" element={<PublicRoute element={<Layout />} />} />
-        <Route path="/contact-us" element={<PublicRoute element={<ContactUs />} />} />
-        <Route path="/agents" element={<PublicRoute element={<AgentData />} />} />
-        <Route path="/testimonial" element={<PublicRoute element={<Testimonial />} />} />
-        <Route path="/web-check-in" element={<PublicRoute element={<WebCheckIn />} />} />
-        <Route path="/privacy-policy" element={<PublicRoute element={<PrivacyPolicy />} />} />
-        <Route path="/terms-and-conditions" element={<PublicRoute element={<TermsCondition />} />} />
-        <Route path="/user-agreement" element={<PublicRoute element={<UserAgreement />} />} />
-        <Route path="/about-pages" element={<PublicRoute element={<About />} />} />
-        <Route path="/careerspages" element={<PublicRoute element={<Career />} />} />
-        <Route path="/offers/terms-and-conditionss" element={<PublicRoute element={<CouponSection />} />} />
-        <Route path="/flightreview" element={<PublicRoute element={<FlightReview />} />} />
-        {/* <Route path="/tour-details/:title" element={<PublicRoute element={<TourDetails />} />} /> */}
-        <Route path="/flightdetails/*" element={<PublicRoute element={<FlightDetail />} />} />
-        <Route path="/api/payment/success/" element={<PublicRoute element={<CancelBooking />} />} />
-        <Route path="/api/payment/failed" element={<PublicRoute element={<PaymentFailed />} />} />
-        <Route path="/flights/*" element={<PublicRoute element={<Test />} />} />
-        <Route path="/hotels" element={<PublicRoute element={<Maintancepage />} />} />
-        <Route path="/blogs" element={<PublicRoute element={<Blogpage />} />} />
-        <Route path="/holidays" element={<PublicRoute element={<Maintancepage />} />} />
-        <Route path="/domestic-flights" element={<PublicRoute element={<Domesticroutes />} />} />
-        <Route path="/international-flights" element={<PublicRoute element={<Internationalroutes />} />} />
-        <Route path="/SpecialFlight" element={<PrivateRoute element={<SpecialFlight/>} allowedRoles={[2]} />} />
-        <Route path="/SpecialFlightCard" element={<PublicRoute element={<SpecialFlightCard/>} />} />
-        <Route path="/SpecialFlightDetails" element={<PublicRoute element={ <SpecialFlightDetails/>} />} />
-        <Route path="/SpecialTicket-booking" element={<PublicRoute element={ <SpecialTicket/>} />} />
-        <Route path="/play-game" element={<PrivateRoute element={ <WheelSpinner/>}  allowedRoles={[2]}/>} />
-        <Route path="/payment-error" element={<PublicRoute element={ <PaymentError/>} />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+        {loading && <LoadingScreen />}
+        {/* <LoadingScreen/> */}
+        <ScrollToTop />
+        <ConditionalNavbar />
+        <LocationRequest />
+        <Seo />
+        <Routes>
+          {/* Public Routes (Accessible without login) */}
+          <Route path="/login/user-login" element={<PublicRoute element={<Userlogin />} />} />
+          <Route path="/login/agent-login" element={<PublicRoute element={<Userlogin />} />} />
+
+          {/* Private Routes (Require Login) */}
+          <Route path="/agent/profile" element={<PrivateRoute element={<Dashboard />} allowedRoles={[2]} />} />
+          <Route path="/agent/registration" element={<PrivateRoute element={<AgentLogin />} allowedRoles={[2]} />} />
+          <Route path="/customer-profile" element={<PrivateRoute element={<ProfileData />} allowedRoles={[1]} />} />
+
+          <Route path="/" element={<PublicRoute element={<Layout />} />} />
+          <Route path="/contact-us" element={<PublicRoute element={<ContactUs />} />} />
+          <Route path="/agents" element={<PublicRoute element={<AgentData />} />} />
+          <Route path="/testimonial" element={<PublicRoute element={<Testimonial />} />} />
+          <Route path="/web-check-in" element={<PublicRoute element={<WebCheckIn />} />} />
+          <Route path="/privacy-policy" element={<PublicRoute element={<PrivacyPolicy />} />} />
+          <Route path="/terms-and-conditions" element={<PublicRoute element={<TermsCondition />} />} />
+          <Route path="/user-agreement" element={<PublicRoute element={<UserAgreement />} />} />
+          <Route path="/about-pages" element={<PublicRoute element={<About />} />} />
+          <Route path="/careerspages" element={<PublicRoute element={<Career />} />} />
+          <Route path="/offers/terms-and-conditionss" element={<PublicRoute element={<CouponSection />} />} />
+          <Route path="/flightreview" element={<PublicRoute element={<FlightReview />} />} />
+          {/* <Route path="/tour-details/:title" element={<PublicRoute element={<TourDetails />} />} /> */}
+          <Route path="/flightdetails/*" element={<PublicRoute element={<FlightDetail />} />} />
+          <Route path="/api/payment/success/" element={<PublicRoute element={<CancelBooking />} />} />
+          <Route path="/api/payment/failed" element={<PublicRoute element={<PaymentFailed />} />} />
+          <Route path="/flights/*" element={<PublicRoute element={<Test />} />} />
+          <Route path="/hotels" element={<PublicRoute element={<Maintancepage />} />} />
+          <Route path="/blogs" element={<PublicRoute element={<Blogpage />} />} />
+          <Route path="/holidays" element={<PublicRoute element={<Maintancepage />} />} />
+          <Route path="/domestic-flights" element={<PublicRoute element={<Domesticroutes />} />} />
+          <Route path="/international-flights" element={<PublicRoute element={<Internationalroutes />} />} />
+          <Route path="/SpecialFlight" element={<PrivateRoute element={<SpecialFlight />} allowedRoles={[2]} />} />
+          <Route path="/SpecialFlightCard" element={<PublicRoute element={<SpecialFlightCard />} />} />
+          <Route path="/SpecialFlightDetails" element={<PublicRoute element={<SpecialFlightDetails />} />} />
+          <Route path="/SpecialTicket-booking" element={<PublicRoute element={<SpecialTicket />} />} />
+          <Route path="/play-game" element={<PrivateRoute element={<WheelSpinner />} allowedRoles={[2]} />} />
+          <Route path="/payment-error" element={<PublicRoute element={<PaymentError />} />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </HelmetProvider>
     </>
 
@@ -194,10 +222,10 @@ export default App;
 const LoadingScreen = () => {
   return (
     <div className="loading-container">
-    {[...Array(3)].map((_, i) => (
-      <span key={i} className="dot" style={{ animationDelay: `${i * 0.1}s` }}></span>
-    ))}
-  </div>
+      {[...Array(3)].map((_, i) => (
+        <span key={i} className="dot" style={{ animationDelay: `${i * 0.1}s` }}></span>
+      ))}
+    </div>
   );
 }
 

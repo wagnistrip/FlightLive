@@ -28,6 +28,7 @@ import amazon from "../../image/amazon.png";
 import { decryptPayload, encryptPayload, galileoApi, porfileImgeupload } from "../../Api/apiService";
 import { useSelector } from "react-redux";
 import { getDeductedAmount, getDeductionPercent, paymentModes } from "../../utils/airlineUtils";
+import toast from "react-hot-toast";
 
 const AddFundModal = ({ open, onClose }) => {
   const [option, setOption] = useState("neft");
@@ -71,6 +72,13 @@ const AddFundModal = ({ open, onClose }) => {
   };
 
   const handleSubmit = async () => {
+
+    if(user?.users?.email === "kanishka@wagnistrip.com"){
+      toast.error('You have no permission for fund upload. Please contact administration.')
+      setFileUploaded(null)
+      return
+    }
+
     if (!fileUploaded) {
       setSnackbar({
         open: true,
@@ -120,6 +128,12 @@ const AddFundModal = ({ open, onClose }) => {
   };
 
   const handleEasebuzzPayment = async () => {
+    
+    if(user?.users?.email === "kanishka@wagnistrip.com"){
+        toast.error('You have no permission for fund upload. Please contact administration.')
+        return
+    }
+
     const token = user?.token || ''
     const payload = {
       amount: Number(amount) || 0,

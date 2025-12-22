@@ -164993,5 +164993,18 @@
   "CityCode": "RDP",
   "created_at": null,
   "updated_at": null
+},
+{
+  "id": 11784,
+  "CountryCode": "USA",
+  "city": "Imam Khomeini",
+  "state": "Iran",
+  "country": "United States Of America",
+  "airport": "Imam Khomeini International Airport",
+  "stateCode": "US",
+  "iata": "IKA",
+  "CityCode": "Dur",
+  "created_at": null,
+  "updated_at": null
 }
 ]

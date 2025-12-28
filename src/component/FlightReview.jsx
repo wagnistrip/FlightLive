@@ -14,14 +14,16 @@ import { buildPassengerFormData, extractFlightAma, extractFlightDetails, findMat
 import Offer from './Offer';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormControlLabel, Radio, RadioGroup, TextField, useMediaQuery } from '@mui/material';
-import { setCommonChips, setGreenChipsUsed } from '../redux/actions/bookingActions';
+import { removeSelectedBaggage, setCommonChips, setGreenChipsUsed } from '../redux/actions/bookingActions';
 import LoadingPage from '../LoadingPage';
 import PaymentSummary from './PaymentSummary';
+import toast from 'react-hot-toast';
 function FlightReview() {
 
     const user = useSelector((state) => state.auth.user);
     const greenChipsPrice = useSelector((state) => state.booking.greenChipsPrice);
     const isGreenChipsUsed = useSelector((state) => state.booking.isGreenChipsUsed);
+    const selectedBaggage = useSelector(state => state.booking.selectedBaggage);
     const walletAmout = useSelector((state) => state.booking.walletAmount);
     const dispatch = useDispatch();
     const isMobile = useMediaQuery("(max-width: 768px)");
@@ -376,20 +378,6 @@ function FlightReview() {
     }
 
     const isCouponActive = (couponCode) => {
-        //     if (couponCode === "WT FREE SEAT") {
-        //     return othercharges > 0 && othercharges <= 300;
-        // }
-        // if (!couponCode.startsWith('WTNCF')) return true; // Non-WTNCF coupons are always active
-
-        // if (grandTotal >= 2000 && grandTotal <= 6000) return couponCode === 'WTNCF12';
-        // if (grandTotal >= 7000 && grandTotal <= 12000) return couponCode === 'WTNCF10';
-        // if (grandTotal >= 13000 && grandTotal <= 25000) return couponCode === 'WTNCF8';
-        // if (grandTotal >= 26000 && grandTotal <= 50000) return couponCode === 'WTNCF6';
-        // if (grandTotal >= 51000 && grandTotal <= 100000) return couponCode === 'WTNCF4';
-        // if (grandTotal > 100000) return couponCode === 'WTNCF2';
-
-        // return false;
-
         if (!couponCode.startsWith('WTNCF')) return true; // Non-WTNCF coupons are always active
 
         // Find applicable range for the current grandTotal
@@ -748,10 +736,13 @@ function FlightReview() {
                 // Note: No interval check for window close since it's in the same tab
             } else {
                 setloadingcompon(false);
+                 toast.error('booking is failed due to technical issue')
                 console.error("No redirect URL received in the response");
             }
 
         } catch (error) {
+             setloadingcompon(false);
+             toast.error('booking is failed due to technical issue')
             console.error('Error createReservation:', error);
             throw error;
         }
@@ -847,6 +838,7 @@ function FlightReview() {
             greenChipsfetch(token, responseData1 && responseData1?.trip, responseData1 && responseData1?.trip_type, totalAmt, responseData1 && responseData1?.travellers, carrierCode, carrierCode1);
         }
         dispatch(setGreenChipsUsed(false));
+        dispatch(removeSelectedBaggage());
         offerApi(responseData1 && responseData1?.trip, responseData1 && responseData1?.trip_type, responseData1 && responseData1?.travellers, responseData1);
     }, [responseData1]);
 
@@ -1199,35 +1191,48 @@ function FlightReview() {
                                                         <>
                                                             <Card className="tour_details_boxed">
                                                                 <div className="d-flex justify-content-between align-items-center">
-                                                                    {/* <div className='d-flex align-items-center justify-content-start gap-2'>
-                                                                        <span className='fs-6 fw-bold'>Seats</span> <span style={{ fontSize: '13px' }}><strong>Departure : </strong> {getSeatCodes(selectSeat).join(", ") || "Not Assigned"}, {responseData1 && responseData1.trip_type === "roundtrip" ? <span> <strong>Return:</strong> {getSeatCodes(selectSeat1).join(", ") || "Not Assigned"}</span> : ''}</span>
-                                                                    </div> */}
-                                                                    <div className='d-flex align-items-center justify-content-start gap-2'>
-                                                                        <span className='fs-6 fw-bold'>Seats</span>
-                                                                        <span style={{ fontSize: '13px' }} className='d-flex flex-wrap'>
-                                                                            <strong>Departure :</strong>
-                                                                            {selectSeat ? (
-                                                                                Object.entries(getSeatCodes(selectSeat)).map(([origin, seats]) => (
-                                                                                    <span key={origin}>
-                                                                                        <strong> {origin}:</strong> {seats.length > 0 ? seats.join(", ") : "Not Assigned"}
+                                                                    <div>
+
+
+                                                                        <div className='d-flex align-items-center justify-content-start gap-2'>
+                                                                            <span className='fs-6 fw-bold'>Seats</span>
+                                                                            <span style={{ fontSize: '13px' }} className='d-flex flex-wrap'>
+                                                                                <strong>Departure :</strong>
+                                                                                {selectSeat ? (
+                                                                                    Object.entries(getSeatCodes(selectSeat)).map(([origin, seats]) => (
+                                                                                        <span key={origin}>
+                                                                                            <strong> {origin}:</strong> {seats.length > 0 ? seats.join(", ") : "Not Assigned"}
+                                                                                        </span>
+                                                                                    ))
+                                                                                ) : "Not Assigned"}
+
+                                                                                {responseData1 && responseData1.trip_type === "roundtrip" && (
+                                                                                    <span className=''>
+                                                                                        <strong> Return:</strong>
+                                                                                        {selectSeat1 ? (
+                                                                                            Object.entries(getSeatCodes(selectSeat1)).map(([origin, seats]) => (
+                                                                                                <span key={origin}>
+                                                                                                    <strong> {origin}:</strong> {seats.length > 0 ? seats.join(", ") : "Not Assigned"}
+                                                                                                </span>
+                                                                                            ))
+                                                                                        ) : "Not Assigned"}
                                                                                     </span>
-                                                                                ))
-                                                                            ) : "Not Assigned"}
+                                                                                )}
 
-                                                                            {responseData1 && responseData1.trip_type === "roundtrip" && (
-                                                                                <span className=''>
-                                                                                    <strong> Return:</strong>
-                                                                                    {selectSeat1 ? (
-                                                                                        Object.entries(getSeatCodes(selectSeat1)).map(([origin, seats]) => (
-                                                                                            <span key={origin}>
-                                                                                                <strong> {origin}:</strong> {seats.length > 0 ? seats.join(", ") : "Not Assigned"}
-                                                                                            </span>
-                                                                                        ))
-                                                                                    ) : "Not Assigned"}
-                                                                                </span>
-                                                                            )}
+                                                                            </span>
+                                                                        </div>
 
-                                                                        </span>
+                                                                        {
+                                                                            selectedBaggage && (
+                                                                                <div className='d-flex align-items-center justify-content-start gap-2'>
+                                                                                    <span className='fs-6 fw-bold'>Baggage</span>
+                                                                                    <span style={{ fontSize: '13px' }} className='d-flex flex-wrap'>
+                                                                                        1 Bag Added
+                                                                                    </span>
+                                                                                </div>
+
+                                                                            )
+                                                                        }
                                                                     </div>
 
                                                                     <button onClick={() => goToStep(2)} type="button" className="btn btn-link"><i className="fa-solid text-primary fa-pen-to-square"></i></button>

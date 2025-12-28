@@ -18,15 +18,15 @@ const apiClient = axios.create({
 export const fetchAirlineCodes = (searchQuery = "") => {
   try {
     const query = searchQuery.trim().toLowerCase();
-
-    // Use the appropriate dataset based on type
-    // const dataset = type === "specailFlight" ? specialdata : data;
-
-    // If no search query, return the top 10 results sorted by IATA
-    if (!query) {
+     if (!query) {
       return data
-        .slice(0, 10) // slice before sort for performance
-        .sort((a, b) => a.iata.localeCompare(b.iata));
+        .filter(
+          (item) =>
+            item.country?.toLowerCase() === "india" ||
+            item.CountryCode?.toLowerCase() === "ind"
+        )
+        .slice(0, 10)
+        .sort((a, b) => a.iata.localeCompare(b.iata))
     }
 
     const exactMatches = [];

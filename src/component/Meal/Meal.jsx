@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import image from "./img/Coffees.png";
-import { HiMiniShoppingBag } from "react-icons/hi2";
+import { BsSuitcase2Fill } from "react-icons/bs";
 import "./meal.scss"
 import seatIcon from "./img/first1.png"
 import MealIcon from "./img/first3.png"
@@ -20,23 +20,32 @@ import SeatMapGal from './SeatMapGal';
 import toast from 'react-hot-toast';
 import { calculateTotalPriceByOrigin, getAirlineName, getImageUrl1 } from '../../utils/airlineUtils';
 import { Fade } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeSelectedBaggage, setSelectedBaggage } from '../../redux/actions/bookingActions';
 const fareRanges = [
-  { className: 'free', label: 'Free' },
-  { className: 'fare1', label: '0-200' },
-  { className: 'fare2', label: '201-400' },
-  { className: 'fare3', label: '401-500' },
-  { className: 'fare4', label: '501-1200' },
-  { className: 'fare5', label: '1201-1399' },
-  { className: 'fare6', label: '1400-1499' },
-  { className: 'fare7', label: '1500-3000' },
-  { className: 'fare8', label: '3000+' },
+    { className: 'free', label: 'Free' },
+    { className: 'fare1', label: '0-200' },
+    { className: 'fare2', label: '201-400' },
+    { className: 'fare3', label: '401-500' },
+    { className: 'fare4', label: '501-1200' },
+    { className: 'fare5', label: '1201-1399' },
+    { className: 'fare6', label: '1400-1499' },
+    { className: 'fare7', label: '1500-3000' },
+    { className: 'fare8', label: '3000+' },
 ];
 const Meal = ({ goToStep, responseData, flightType, noOfAdults, noOfChildren, passangerres, sea, seat, optionservice, selectSeat, setSelectSeat, setOtherCharge }) => {
     const [activeSection, setActiveSection] = useState('seatMap');
+    const selectedBaggage = useSelector(state => state.booking.selectedBaggage);
+    const dispatch = useDispatch();
+    const hasBaggage =
+        Array.isArray(optionservice) && optionservice.length > 0;
+    // console.log("Baggage data => ", optionservice);
     const sections = [
         { key: 'seatMap', label: 'Seat', icon: seatIcon },
         // { key: 'meal', label: 'Meal', icon: MealIcon },
-        // { key: 'baggage', label: 'Baggage', icon: LuggageIcon },
+        ...(hasBaggage
+            ? [{ key: "baggage", label: "Baggage", icon: LuggageIcon }]
+            : [])
         // { key: 'popular', label: 'Popular Add-Ons', icon: pouplarIcon },
     ];
     // console.log("offer bagage data =>",responseData,sea,seat);
@@ -45,28 +54,16 @@ const Meal = ({ goToStep, responseData, flightType, noOfAdults, noOfChildren, pa
     const [activeBtn, setActiveBtn] = useState("");
     const adultsCount = noOfAdults + noOfChildren;
     const [currentAdultIndex, setCurrentAdultIndex] = useState(0);
-    const [selectedBaggage, setSelectedBaggage] = useState(null);
     const selectSeats = selectSeat[activeBtn] || [];
     let totalFare = 0;
     let grandTotal = 0;
     let segmentDetails;
     let amadeusSegmentdetails;
 
-    // Function to handle the Continue button click
-    const handleContinue = () => {
-        const currentIndex = sections.findIndex(section => section.key === activeSection);
 
-        if (currentIndex < sections.length - 1) {
-            // Move to the next section
-            setActiveSection(sections[currentIndex + 1].key);
-        } else if (currentIndex === sections.length - 1) {
-            // After "Popular," go to step 3
-            goToStep(3);
-        }
-    };
     const handleBaggageSelection = (index, item) => {
 
-        // console.log("index = >",index,"item => ",item);
+        // console.log("index = >", index, "item => ", item);
         if (selectedBaggage && selectedBaggage.index !== index) {
             // If a baggage is already selected, show a warning message
             toast.error("At one time only one baggage can be selected. Remove the current baggage first to complete the process.");
@@ -75,15 +72,20 @@ const Meal = ({ goToStep, responseData, flightType, noOfAdults, noOfChildren, pa
 
         if (selectedBaggage && selectedBaggage.index === index) {
             // If the same baggage is clicked, remove it
-            setSelectedBaggage(null);
+            dispatch(removeSelectedBaggage());
             toast.success("Baggage removed successfully.");
         } else {
             // Add the new baggage
-            setSelectedBaggage({
+            const rawPrice = item["@attributes"].TotalPrice;
+
+            // Remove non-numeric characters (INR, spaces, symbols)
+            const numericPrice = Number(rawPrice.replace(/[^\d]/g, ""));
+            dispatch(setSelectedBaggage({
                 index,
+                baggage: item,
                 weight: item["@attributes"].TotalWeight,
-                price: item["@attributes"].TotalPrice,
-            });
+                price: numericPrice,
+            }));
             toast.success("Baggage added successfully.");
             // console.log("selected baggage", selectedBaggage);
         }
@@ -327,11 +329,10 @@ const Meal = ({ goToStep, responseData, flightType, noOfAdults, noOfChildren, pa
                     </div>
                 </div>
 
-                {/* ************seat-map************ */}
                 {activeSection === 'seatMap' && (
                     <div className="container">
                         <div className='row'>
-                        {/* left side  */}
+                            {/* left side  */}
                             <div className='col-lg-6 col-md-12 col-sm-6 border-right mt-2'>
 
                                 <div>
@@ -526,7 +527,7 @@ const Meal = ({ goToStep, responseData, flightType, noOfAdults, noOfChildren, pa
 
 
                             </div>
-                        {/* right side */}
+                            {/* right side */}
                             <div className='col-lg-6 col-md-12 px-4 col-sm-6 py-5 d-flex bg-white flex-column align-items-center seat-design-section scroll-grid overflow-auto '>
                                 {flightType === 'Amadeus' && (
                                     seatMap != null ? (
@@ -578,8 +579,6 @@ const Meal = ({ goToStep, responseData, flightType, noOfAdults, noOfChildren, pa
                     </div>
 
                 )}
-
-                {/* *********meal************** */}
                 {activeSection === 'meal' && (
 
                     <div className='row mt-3'>
@@ -609,10 +608,6 @@ const Meal = ({ goToStep, responseData, flightType, noOfAdults, noOfChildren, pa
                     </div>
 
                 )}
-
-
-                {/* *****************bagge-section*********** */}
-
                 {activeSection === "baggage" && (
                     <div className='row mt-3'>
                         {/* <div
@@ -627,52 +622,56 @@ const Meal = ({ goToStep, responseData, flightType, noOfAdults, noOfChildren, pa
                             - {" "}
                             {optionservice?.passanger.Body.AirMerchandisingOfferAvailabilityRsp.AirSolution.AirSegment["@attributes"].Destination}
                         </div> */}
-                        <div className='row mt-3 meal-section'>
+                        <div className="row mt-3 meal-section">
+                            {optionservice
+                                ?.filter(
+                                    item =>
+                                        item?.["@attributes"]?.TotalWeight &&
+                                        item?.["@attributes"]?.TotalPrice
+                                )
+                                .map((item, index) => (
+                                    <div
+                                        className="col-lg-6 col-md-12 col-sm-12 p-2"
+                                        key={item["@attributes"].Key || index}
+                                    >
+                                        <div className="d-flex align-items-center justify-content-between border-bottom py-1 px-2">
 
-                            {optionservice && optionservice?.passanger && optionservice?.passanger.Body.AirMerchandisingOfferAvailabilityRsp.OptionalServices.OptionalService.map((item, index) => (
-                                <div className='col-lg-6 col-md-12 col-sm-12 p-2' key={index}>
-
-                                    {
-                                        (item["@attributes"].TotalWeight && item["@attributes"].TotalPrice) && (
-                                            <div className='d-flex flex-row border-bottom ml-2 align-items-center'>
-                                                <div className='bg-success p-2 text-dark bg-opacity-10 rounded'>
-                                                    <HiMiniShoppingBag size={36} className='text-primary' />
+                                            {/* LEFT : Icon + Baggage Info */}
+                                            <div className="d-flex align-items-center gap-3">
+                                                <div className="bg-success p-2 bg-opacity-10 rounded">
+                                                    <BsSuitcase2Fill size={36} className="text-primary" />
                                                 </div>
-                                                <div className='p-2'>
-                                                    <div className='fw-bold'>{item["@attributes"].TotalWeight}</div>
+
+                                                <div className="p-2">
+                                                    <div className="fw-bold">
+                                                        {item["@attributes"].TotalWeight}
+                                                    </div>
                                                     <div>
-                                                        {item["@attributes"].TotalPrice.startsWith('INR')
-                                                            ? `INR ${item["@attributes"].TotalPrice.slice(3)}`
-                                                            : item["@attributes"].TotalPrice}
+                                                        INR {item["@attributes"].TotalPrice.replace("INR", "")}
                                                     </div>
                                                 </div>
-                                                <div className='p-2 ml-auto'>
-                                                    <div className="btn-group" role="group" aria-label="First group">
-                                                        <button
-                                                            type="button"
-                                                            className={`btn ${selectedBaggage?.index === index
-                                                                ? "btn-outline-danger"
-                                                                : "btn-outline-secondary"
-                                                                }`}
-                                                            onClick={() =>
-                                                                handleBaggageSelection(index, item)
-                                                            }
-                                                        >
-                                                            {selectedBaggage?.index === index
-                                                                ? "Remove"
-                                                                : "Add"}
-                                                        </button>
-                                                    </div>
-                                                </div>
-
-
                                             </div>
-                                        )
-                                    }
 
-                                </div>
-                            ))}
+                                            {/* RIGHT : Action Button */}
+                                            <div>
+                                                <button
+                                                    type="button"
+                                                    className={`btn btn-sm ${selectedBaggage?.index === index
+                                                        ? "btn-outline-danger"
+                                                        : "btn-outline-primary"
+                                                        }`}
+                                                    onClick={() => handleBaggageSelection(index, item)}
+                                                >
+                                                    {selectedBaggage?.index === index ? "Remove" : "Add"}
+                                                </button>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                ))}
                         </div>
+
                     </div>
                 )}
 

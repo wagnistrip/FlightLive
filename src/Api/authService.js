@@ -7,21 +7,21 @@ export const getSession = () => {
 
 export const setSession = (user, expiryTimeInSeconds) => {
   const expiry = new Date().getTime() + expiryTimeInSeconds * 1000; 
-  Cookies.set('user', JSON.stringify({ ...user, expiry }), { expires: expiryTimeInSeconds / 86400 });
+  // Cookies.set('user', JSON.stringify({ ...user, expiry }), { expires: expiryTimeInSeconds / 86400 });
 
-  // Cookies.set("user", JSON.stringify({ ...user, expiry }), {
-  //   expires: expiryTimeInSeconds / 86400,
-  //   domain: ".wagnistrip.com", 
-  //   secure: true, 
-  //   sameSite: "None",
-  // });
+  Cookies.set("user", JSON.stringify({ ...user, expiry }), {
+    expires: expiryTimeInSeconds / 86400,
+    domain: ".wagnistrip.com", 
+    secure: true, 
+    sameSite: "None",
+  });
 };
 
 export const clearSession = () => {
-  Cookies.remove('user');
-  // Cookies.remove("user", {
-  //   domain: ".wagnistrip.com",
-  //   secure: true,
-  //   sameSite: "None",
-  // });
+  // Cookies.remove('user');
+  Cookies.remove("user", {
+    domain: ".wagnistrip.com",
+    secure: true,
+    sameSite: "None",
+  });
 };

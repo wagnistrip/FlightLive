@@ -2,9 +2,10 @@ import React from "react";
 import { Checkbox, Typography } from '@mui/material';
 import { Card } from "react-bootstrap";
 import { getAdditiondiscount, getServiceFee } from "../utils/airlineUtils";
+import { useSelector } from "react-redux";
 
 const PaymentSummary = ({ noOfAdults, noOfChildren, noOfInfants, responseData, responseData1, activeStep, othercharges, othercharges1, adultPrice, adultPrice2, childPrice, childPrice2, totalTaxes, totalTaxes2, discountedPrice, grandTotal, grandTotal2, user, couponOption, selectedCoupon, typedCoupon, handleCouponChange, handleApplyCoupon, warningMessage, discountMessage, visibleCoupons, isCouponActive, handleClearCoupon, infantPrice, infantPrice2, convenienceFee, handleCouponSelect, setShowAll, showAll, isGreenChipsUsed, greenChipsPrice, handleRadioChange, walletAmout, greenchipsamt, tripType, trip, usechipsamt1, AdditionCharge, usechipsamt }) => {
-    // console.log("dldlkd => ", usechipsamt1);
+    const selectedBaggage = useSelector(state => state.booking.selectedBaggage);
     return (
         <>
             <div className="tour_details_right_sidebar_wrapper">
@@ -128,6 +129,10 @@ const PaymentSummary = ({ noOfAdults, noOfChildren, noOfInfants, responseData, r
                                                         finalTotal += AdditionCharge;
                                                     }
 
+                                                    if (selectedBaggage) {
+                                                        finalTotal += selectedBaggage?.price;
+                                                    }
+
                                                     return finalTotal.toFixed(2);
                                                 })()}
                                             </h5>
@@ -180,6 +185,15 @@ const PaymentSummary = ({ noOfAdults, noOfChildren, noOfInfants, responseData, r
 
                                             )}
 
+                                        {
+                                            activeStep > 1 && selectedBaggage && (
+                                                <div style={{ borderBottom: '1px solid #e8e2e2' }} className='d-flex py-1 align-items-center  justify-content-between'>
+                                                    <p style={{ fontSize: '12px' }}>Baggage (1 Bag)</p>
+                                                    <strong style={{ fontSize: '13px' }}>{responseData && responseData?.currency && responseData?.currency?.currency_symbol} {selectedBaggage?.price || 0}</strong>
+                                                </div>
+                                            )
+                                        }
+
                                     </div>
 
 
@@ -221,6 +235,10 @@ const PaymentSummary = ({ noOfAdults, noOfChildren, noOfInfants, responseData, r
                                             finalTotal += AdditionCharge;
                                         }
 
+                                        if (selectedBaggage) {
+                                            finalTotal += selectedBaggage?.price;
+                                        }
+
                                         if (shouldApplyConvenienceFee) {
                                             finalTotal += convenienceFee;
                                         } else {
@@ -247,7 +265,7 @@ const PaymentSummary = ({ noOfAdults, noOfChildren, noOfInfants, responseData, r
                                             <strike>{responseData && responseData.currency && responseData.currency.currency_symbol} {grandTotal + grandTotal2 - discountedPrice + othercharges + othercharges1 + getServiceFee(trip, user?.users?.agent_type)}</strike>
                                             <span className="text-danger fw-bold ml-1">
                                                 {responseData?.currency?.currency_symbol}{" "}
-                                                {grandTotal + grandTotal2 - discountedPrice + othercharges + othercharges1 + getServiceFee(trip, user?.users?.agent_type) - (isGreenChipsUsed ? usechipsamt : 0) - (user?.users?.role === 2 && user?.users?.agent_type === 'A' ? getAdditiondiscount(trip) : 0) -(user?.users?.role === 2 && user?.users?.agent_type === 'B' ? greenchipsamt : 0)}
+                                                {grandTotal + grandTotal2 - discountedPrice + othercharges + othercharges1 + getServiceFee(trip, user?.users?.agent_type) - (isGreenChipsUsed ? usechipsamt : 0) - (user?.users?.role === 2 && user?.users?.agent_type === 'A' ? getAdditiondiscount(trip) : 0) - (user?.users?.role === 2 && user?.users?.agent_type === 'B' ? greenchipsamt : 0)}
                                             </span>
                                         </div>
                                     </div>

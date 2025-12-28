@@ -21,7 +21,7 @@ const DashProfile = () => {
   const [profileImage, setProfileImage] = useState('');
   const [loading, setLoading] = useState(false);
   const user = useSelector((state) => state.auth.user);
-  console.log('Address => ',user);
+  console.log('Address => ', user);
 
   const handleImageChange = async (e) => {
     const token = user?.token;
@@ -53,9 +53,9 @@ const DashProfile = () => {
   };
 
 
-  useEffect(()=>{
+  useEffect(() => {
     setProfileImage(user?.users && user?.users?.image);
-  },[])
+  }, [])
 
   if (loading) {
     return (
@@ -112,6 +112,44 @@ const DashProfile = () => {
           </Typography>
           <Typography color="text.secondary">Agent</Typography>
           <Typography color="text.secondary">{user && user?.users?.user_detail?.state_name || 'Nangloe'}, {user && user?.users?.user_detail?.country_name || 'India'}</Typography>
+          {/* Portal Type Badge */}
+          <Box mt={1}>
+            { user && user?.users?.agent_type === "A" ? (
+              <Box
+                sx={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 1,
+                  px: 2,
+                  py: 0.5,
+                  borderRadius: "20px",
+                  backgroundColor: "#e8f5e9",
+                  color: "#2e7d32",
+                  fontWeight: 600,
+                  fontSize: "13px",
+                }}
+              >
+                🆓 Free Portal
+              </Box>
+            ) : user?.users?.agent_type === "B" ? (
+              <Box
+                sx={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 1,
+                  px: 2,
+                  py: 0.5,
+                  borderRadius: "20px",
+                  backgroundColor: "#fff3e0",
+                  color: "#ef6c00",
+                  fontWeight: 600,
+                  fontSize: "13px",
+                }}
+              >
+                ⭐ Paid Portal
+              </Box>
+            ) : null}
+          </Box>
         </Box>
       </Card>
 

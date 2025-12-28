@@ -807,104 +807,113 @@ export const extractFlightDetails = (responseData) => {
   };
 };
 
-export const formatPassengers = (passengerData) => {
-  if (passengerData === null) {
-    return;
-  }
-  const formattedData = {
-    ContactEmail: passengerData.CustomerInfo.Email
-      ? passengerData.CustomerInfo.Email
-      : "xyz@gmail.com",
-    phone: passengerData.CustomerInfo.Mobile
-      ? passengerData.CustomerInfo.Mobile
-      : "+917837837831",
-    nationaliety: passengerData.CustomerInfo.CountryName
-      ? passengerData.CustomerInfo.CountryName
-      : "IN",
-    awsseSessionId: passengerData.CustomerInfo.awsseSessionId
-      ? passengerData.CustomerInfo.awsseSessionId
-      : "",
-    awsseSequenceNumber: passengerData.CustomerInfo.awsseSequenceNumber
-      ? passengerData.CustomerInfo.awsseSequenceNumber
-      : "",
-    awsseSecurityToken: passengerData.CustomerInfo.awsseSecurityToken
-      ? passengerData.CustomerInfo.awsseSecurityToken
-      : "",
-    Flight: passengerData.Flightstatus ? passengerData.Flightstatus : "Direct",
-    CarrierCode: passengerData.CarrierCode ? passengerData.CarrierCode : "",
-    TripType: passengerData.TripType ? passengerData.TripType : "",
-    noOfAdults: passengerData.travellerquantity
-      ? passengerData.travellerquantity.noOfAdults
-      : "1",
-    noOfChilds: passengerData.travellerquantity
-      ? passengerData.travellerquantity.noOfChilds
-      : "0",
-    noOfInfants: passengerData.travellerquantity
-      ? passengerData.travellerquantity.noOfInfants
-      : "0",
-    adults: [],
-    children: [],
-  };
-
-  // Separate passengers by type
-  const adults = passengerData.CustomerInfo.PassengerDetails.filter(
-    (passenger) => passenger.type === "ADT"
-  );
-  const children = passengerData.CustomerInfo.PassengerDetails.filter(
-    (passenger) => passenger.type === "CHD"
-  );
-  const infants = passengerData.CustomerInfo.PassengerDetails.filter(
-    (passenger) => passenger.type === "INF"
-  );
-
-  // Map over adults and attach any corresponding infant data if available
-  adults.forEach((adult, index) => {
-    const formattedAdult = {
-      // FirstName: adult.name.firstName,
-      // LastName: adult.name.lastName,
-      Name: adult.name,
-      Gender: adult.gender,
-      Dob: "2000-01-01",
-      Nationality: adult.documents[0].nationality,
-      Passport: adult.documents,
-      //   CarrierCode: "",
-      //   Flight: "direct"
-    };
-
-    // Check if an infant is present for this adult by using the same index
-    if (infants[index]) {
-      formattedAdult.infant = {
-        // FirstName: infants[index].name.firstName,
-        // LastName: infants[index].name.lastName,
-        Name: infants[index].name,
-        Gender: infants[index].gender,
-        Dob: infants[index].dateOfBirth,
-        Nationality: infants[index].documents[0].nationality,
-        Passport: infants[index].documents,
-        //   CarrierCode: "",
-        //   Flight: "direct"
-      };
+const formatPassengerDetails = (customerInfo) => {
+  const structuredPassengers = { adult: [], child: [], infant: [] };
+  customerInfo?.PassengerDetails?.forEach((passenger) => {
+    if (passenger.PaxType === "ADT") {
+      structuredPassengers.adult.push(passenger);
+    } else if (passenger.PaxType === "CHD") {
+      structuredPassengers.child.push(passenger);
+    } else if (passenger.PaxType === "INF") {
+      structuredPassengers.infant.push(passenger);
     }
-
-    formattedData.adults.push(formattedAdult);
   });
+  return structuredPassengers;
+};
 
-  // Process children data
-  children.forEach((child) => {
-    formattedData.children.push({
-      // FirstName: child.name.firstName,
-      // LastName: child.name.lastName,
-      Name: child.name,
-      Gender: child.gender,
-      Dob: child.dateOfBirth,
-      Nationality: child.documents[0].nationality,
-      Passport: child.documents,
-      // CarrierCode: "",
-      // Flight: "direct"
-    });
-  });
+export const formatPricingData = (pricingSolution, travellerQuantity) => {
+  const airPriceCheck = Array.isArray(pricingSolution?.AirPricingInfo)
+    ? pricingSolution?.AirPricingInfo
+    : [pricingSolution?.AirPricingInfo];
 
-  return formattedData;
+  let dataAdt, dataChd, dataInf;
+
+  if (airPriceCheck[0]) {
+    dataAdt = airpriceData(airPriceCheck[0]);
+  }
+  if (airPriceCheck[1]) {
+    if (travellerQuantity.noOfChilds && travellerQuantity.noOfChilds > 0) {
+      dataChd = airpriceData(airPriceCheck[1]);
+    } else {
+      dataInf = airpriceData(airPriceCheck[1]);
+    }
+  }
+  if (airPriceCheck[2]) {
+    dataInf = airpriceData(airPriceCheck[2]);
+  }
+
+  return { dataAdt, dataChd, dataInf };
+};
+
+export const createRequestBody = (flightData, pricingData, customerInfo) => {
+  const priceInfodata = Array.isArray(
+    flightData?.pricingSolution?.AirPricingInfo
+  )
+    ? flightData?.pricingSolution?.AirPricingInfo
+    : [flightData?.pricingSolution?.AirPricingInfo];
+  const bookingData = Array.isArray(priceInfodata[0].BookingInfo)
+    ? priceInfodata[0].BookingInfo
+    : [priceInfodata[0].BookingInfo];
+
+  const flightSegments = Array.isArray(
+    flightData?.Flightdata?.AirItinerary?.AirSegment
+  )
+    ? flightData?.Flightdata?.AirItinerary?.AirSegment
+    : [flightData?.Flightdata?.AirItinerary?.AirSegment];
+
+  const updatedFlightSegments = addHostTokensToSegments(
+    flightSegments,
+    bookingData
+  );
+  const returnSegments = flightData?.Flightdata?.AirItinerary?.returnSegment
+    ? Array.isArray(flightData.Flightdata.AirItinerary.returnSegment)
+      ? flightData.Flightdata.AirItinerary.returnSegment
+      : [flightData.Flightdata.AirItinerary.returnSegment]
+    : null; // Set to null if not available
+  const updatedFlightSegments1 = addHostTokensToSegments(
+    returnSegments,
+    bookingData
+  );
+
+  // console.log("debug here hosttoke details => ",updatedFlightSegments1,updatedFlightSegments);
+
+  const hostToken = Array.isArray(flightData?.pricingSolution?.HostToken)
+    ? flightData?.pricingSolution?.HostToken
+    : [flightData?.pricingSolution?.HostToken];
+
+  return {
+    otherInformation: flightData?.otherInformation,
+    trip: flightData?.trip,
+    TransactionId: flightData?.TransactionId,
+    travellerquantity: flightData?.travellerquantity,
+    gstDetails: flightData?.GstDetails || {
+      companyName: "WAGNISTRIP (OPC) PRIVATE LIMITED",
+      gstNumber: "07AAOCM4506G1ZF",
+    },
+    CustomerInfo: {
+      Email: customerInfo?.Email,
+      Mobile: customerInfo?.Mobile,
+      Address: "",
+      City: "",
+      State: "",
+      CountryCode: customerInfo?.CountryName,
+      CountryName: customerInfo?.CountryName,
+      ZipCode: "",
+      Flightdate: flightSegments[0]["@attributes"].DepartureTime,
+      flightNumber: `${flightSegments[0]["@attributes"].Carrier}-${flightSegments[0]["@attributes"].FlightNumber}`,
+      PassengerDetails: formatPassengerDetails(customerInfo),
+    },
+    segmentData: updatedFlightSegments,
+    ...(updatedFlightSegments1
+      ? { returnSegmentData: updatedFlightSegments1 }
+      : {}),
+    pricingSolution: [flightData.pricingSolution["@attributes"]],
+    adultData: [pricingData.dataAdt],
+    childData: [pricingData.dataChd],
+    infantData: [pricingData.dataInf],
+    common_v52_0HostToken: hostToken,
+    hostTokenAgain: flightData?.HostTokenV2,
+  };
 };
 
 export const calculateTotalFare = (seats) => {
@@ -1289,8 +1298,12 @@ export const calculatePassengerFare = async (
   if (!data) {
     return;
   }
-  const AirReservation = Array.isArray(data?.AirReservation) ? data.AirReservation[0] : data.AirReservation
-  const providerReservation = Array.isArray(data?.ProviderReservationInfo) ? data.ProviderReservationInfo[0] : data.ProviderReservationInfo
+  const AirReservation = Array.isArray(data?.AirReservation)
+    ? data.AirReservation[0]
+    : data.AirReservation;
+  const providerReservation = Array.isArray(data?.ProviderReservationInfo)
+    ? data.ProviderReservationInfo[0]
+    : data.ProviderReservationInfo;
   const segmentData = Array.isArray(AirReservation.AirSegment)
     ? AirReservation.AirSegment
     : [AirReservation.AirSegment];
@@ -1322,9 +1335,7 @@ export const calculatePassengerFare = async (
   let grandTotal = 0;
   let Convenience = 300;
   let discountAmt = 0;
-  const createdDate = formatDate(
-    providerReservation["@attributes"].CreateDate
-  );
+  const createdDate = formatDate(providerReservation["@attributes"].CreateDate);
   const createdTime = providerReservation["@attributes"].CreateDate;
   const Pnr =
     AirReservation &&
@@ -2572,7 +2583,7 @@ export const getChipsByAmount = (amount, data) => {
   // );
 
   // return slab ? slab.chips : null;
-  return data[0] ? data[0]?.chips : null
+  return data[0] ? data[0]?.chips : null;
 };
 export const extraDiscountamount = (carrierCode, data) => {
   if (!carrierCode || !Array.isArray(data)) return 0;
@@ -2791,7 +2802,7 @@ export const getDeductedAmount = (amount, mode) => {
 
 export const isAfterThreeDays = (formattedDate, carrierCode) => {
   if (!formattedDate) return false;
-  if(!carrierCode) return false
+  if (!carrierCode) return false;
   if (carrierCode === "6E") {
     const bookingDate = new Date(formattedDate);
     bookingDate.setHours(0, 0, 0, 0);
@@ -2824,10 +2835,9 @@ export const buildPassengerFormData = ({
   galileoData1,
   matchedSolution,
   matchedSolution1,
-  HostToken
+  HostToken,
 }) => {
-
-  if (apiType !== 'Galileo') return {};
+  if (apiType !== "Galileo") return {};
 
   const commonCustomerInfo = {
     Email: email,
@@ -2855,12 +2865,12 @@ export const buildPassengerFormData = ({
   };
 
   /* ================= ONE WAY ================= */
-  if (triptype === 'oneway') {
+  if (triptype === "oneway") {
     return {
       formData: {
         ...baseFormData,
-        TransactionId: TransactionID || '',
-        GstDetails: gstData || '',
+        TransactionId: TransactionID || "",
+        GstDetails: gstData || "",
         Flightdata: galileoData,
         pricingSolution: matchedSolution,
       },
@@ -2869,17 +2879,17 @@ export const buildPassengerFormData = ({
   }
 
   /* ================= ROUND TRIP ================= */
-  if (triptype !== 'oneway' && responseData1?.trip === 'D') {
+  if (triptype !== "oneway" && responseData1?.trip === "D") {
     return {
       formData: {
         ...baseFormData,
-        TransactionId: TransactionID || '',
+        TransactionId: TransactionID || "",
         Flightdata: galileoData,
         pricingSolution: matchedSolution,
       },
       formData1: {
         ...baseFormData,
-        TransactionId: TransactionID1 || '',
+        TransactionId: TransactionID1 || "",
         Flightdata: galileoData1,
         pricingSolution: matchedSolution1,
       },
@@ -2887,12 +2897,12 @@ export const buildPassengerFormData = ({
   }
 
   /* ================= INTERNATIONAL ================= */
-  if (triptype !== 'oneway' && responseData1?.trip === 'I') {
+  if (triptype !== "oneway" && responseData1?.trip === "I") {
     return {
       formData: {
         ...baseFormData,
-        TransactionId: TransactionID || '',
-        GstDetails: gstData || '',
+        TransactionId: TransactionID || "",
+        GstDetails: gstData || "",
         Flightdata: galileoData,
         pricingSolution: matchedSolution,
         HostTokenV2: HostToken || null,
@@ -2902,4 +2912,19 @@ export const buildPassengerFormData = ({
   }
 
   return {};
+};
+
+export const indigoFlightType = (data) => {
+  const fareList = data?.airFareInfolist;
+
+  if (!Array.isArray(fareList)) return null;
+
+  // Find first Indigo (6E) fare with FareFamily
+  const indigoFare = fareList.find(
+    (item) =>
+      item?.["@attributes"]?.SupplierCode === "6E" &&
+      item?.["@attributes"]?.FareFamily
+  );
+
+  return indigoFare?.["@attributes"]?.FareFamily || null;
 };

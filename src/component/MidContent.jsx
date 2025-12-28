@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import "./MidContent.css"
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Flightform from './FlightFom';
-import CommonHeader from './commonHeader';
 import TopDestinations from './topDestination';
-import airlineicon from '../image/airlineicon.png'
-import { getImageUrl, travelNewsimg } from '../utils/airlineUtils';
-import { Box, Button, Card, CardContent, CardMedia, Container, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import Promosection from './Promosection';
 import domesticflight from '../image/domesticflight.webp'
 import internationalflight from '../image/internationflight.webp'
@@ -16,7 +13,6 @@ import { useSelector } from 'react-redux';
 import ServicesCarousel from './ServicesCarousel';
 const MidContent = () => {
   const user = useSelector((state) => state.auth.user);
-  // console.log("user data ", user);
   const location = useLocation();
   const currentPath = location.pathname;
   const [passangerData, setPassangerData] = useState(null);
@@ -45,7 +41,7 @@ const MidContent = () => {
       route: "/international-flights",
       btnName: user && user?.users?.role === 2 ? "Purchase Now" : "Book Now",
       status: user && user?.users?.role === 2 ? "true" : "false",
-       price: 199,
+      price: 199,
       chips: 1000,
     }
 
@@ -80,7 +76,6 @@ const MidContent = () => {
         currentPath !== '/specialflight' && (
           <>
             <TopDestinations />
-            {/* <HomeNews travelNews={travelNewsimg} /> */}
           </>
 
         )
@@ -91,165 +86,6 @@ const MidContent = () => {
 }
 
 export default MidContent
-
-
-const HomeNews = ({ travelNews }) => {
-  const slug = (title) => title.replace(/\s+/g, '-');
-
-  return (
-    <section id="home_news" className="section_padding_top">
-      <div className="container">
-        <CommonHeader title="Latest travel news" />
-        <div className="row">
-          <div className="col-lg-6">
-            <div className="home_news_left_wrapper">
-
-              {travelNews.map((news) => (
-                <div key={news.id} className="home_news_item">
-                  <div className="home_news_img">
-                    <Link to={`/tour-details/${slug(news.title)}`}>
-                      <img src={news.image} alt="img" />
-                    </Link>
-                  </div>
-                  <div className="home_news_content">
-                    <h3>
-                      <Link to={`/tour-details/${slug(news.title)}`}>{news.title}</Link>
-                    </h3>
-                    <p>
-                      <Link to={`/tour-details/${slug(news.title)}`}>{news.date}</Link>{" "}
-                      <span>
-                        <i className="fas fa-circle" /> {news.readTime}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-              ))}
-              <div className="home_news_item">
-                <div className="seeall_link">
-                  <Link to="/blogs">
-                    See all article <i className="fas fa-arrow-right" />
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-lg-6">
-            <div className="home_news_big">
-              <div className="news_home_bigest img_hover">
-                <Link to="/#!">
-                  <img
-                    src={getImageUrl('travelNews.jpg')}
-                    alt="img"
-                  />
-                </Link>
-              </div>
-              <h3>
-                <Link to="/#!">
-                  Top Three Beaches to Experience the Real Goa Night Life
-                </Link>{" "}
-              </h3>
-              <p>
-                As the summer season came the craze of beaches was on trend. If you are living in India
-                then Goa will be the most chosen location as it serves multiple of the most mesmerizing
-                beaches and mouthwatering food, and the most important thing we will talk about today is
-                <strong> Goa nightlife</strong>.
-              </p>
-              <p>
-                Goa is already popular for so many things in India among youngsters and couples who want
-                to invest their time in a trip that is worthy of every penny.
-              </p>
-              <p>The month that is considered to be the best time in Goa is November to February that time
-                the weather is pleasant, full of festivals, and a very soothing environment.</p>
-              <Link to={`/tour-details/${slug("Top Three Beaches to Experience the Real Goa Night Life")}`}>
-                Read full article <i className="fas fa-arrow-right" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-
-const AirlineBanner = ({ airlineicon }) => {
-  return (
-    <div className="container pb-2">
-      <Card
-        sx={{
-          display: 'flex',
-          flexDirection: { xs: 'column', md: 'row' },
-          overflow: 'hidden',
-          borderRadius: 5,
-          boxShadow: '0px 8px 25px rgba(0, 0, 0, 0.1)',
-          background: 'linear-gradient(to right, #ffffff, #f8fbff)',
-          transition: 'all 0.4s ease',
-          height: { xs: 'auto', md: '230px' },
-
-        }}
-      >
-        {/* Left Image */}
-        <CardMedia
-          component="img"
-          image={airlineicon}
-          alt="IndiGo Airlines"
-          sx={{
-            width: { xs: '100%', md: '26%' },
-            height: '100%',
-            objectFit: 'cover',
-            borderRadius: { md: '0 999px 999px 0' },
-            filter: 'brightness(0.95)',
-          }}
-        />
-
-        {/* Right Content */}
-        <CardContent
-          sx={{
-            width: { xs: '100%', md: '74%' },
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            gap: 2,
-            p: { xs: 3, md: 5 },
-          }}
-        >
-          <Typography
-            component="h1" // 👈 This makes it an actual <h1> tag
-            variant="h4"   // 👈 Keeps the visual style same as h4
-            sx={{
-              fontWeight: 700,
-              fontSize: { xs: '1.5rem', md: '1.4rem' },
-              color: '#2b2b2b',
-              textAlign: { xs: 'center', md: 'left' },
-              mb: 1,
-            }}
-          >
-            Experience{' '}
-            <Box component="span" sx={{ color: 'var(--main-color)' }}>
-              All Domestic & International Flights
-            </Box>{' '}
-            with Wagnistrip
-          </Typography>
-
-          <Typography
-            variant="body1"
-            sx={{
-              color: '#555',
-              fontSize: '1rem',
-              textAlign: { xs: 'center', md: 'left' },
-              mb: 2,
-            }}
-          >
-            Where elegance meets world-class travel solutions.
-          </Typography>
-
-
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
-
 
 const Articlesection = () => {
   const [show, setShow] = useState(false);

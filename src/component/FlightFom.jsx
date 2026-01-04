@@ -407,9 +407,6 @@ function Flightform({ existingData, type = '' }) {
 
     const formData = {
       tripType: flightOptions?.tripSelection ? flightOptions?.tripSelection : 'oneway',
-      // departure: 'DEL' || 'ATQ',
-      // arrival: 'BOM' || 'DXB',
-      // departureDate: '2025-11-10',
       departure: selectedFromCountry ? selectedFromCountry.iata : 'DEL',
       arrival: selectedToCountry ? selectedToCountry.iata : 'BOM',
       departureDate: departureDate.format('YYYY-MM-DD'),
@@ -418,10 +415,12 @@ function Flightform({ existingData, type = '' }) {
       noOfChilds: childCount,
       noOfInfants: infantCount,
       cabinClass: flightOptions?.cabinClass ? flightOptions?.cabinClass : 'Y',
-      flightFare: flightOptions.flightFare ? flightOptions?.flightFare : 'ADT'
+      flightFare: flightOptions.flightFare ? flightOptions?.flightFare : 'ADT',
+      CCODE: 'IN',
+      curr: 'INR',
+      apptype: user && user?.users.role === 2 ? 'B2B' : 'B2C',
+      usertype: user && user?.users.role === 2 && user?.users.agent_type === "B" ? 'intermediate' : user?.users.agent_type === "A" ? 'beginer' : 'guest'
     };
-
-
     if (infantCount > 0 && type === "specailFlight") {
       toast.error("don't select infant");
       return;
@@ -501,8 +500,8 @@ function Flightform({ existingData, type = '' }) {
             amadeus: responseData1.amadeus,
             currency: responseData1.currency,
             galileo: Array.isArray(responseData1?.galileo)
-              ? (responseData1.galileo.length > 200
-                ? responseData1.galileo.slice(0, 200)
+              ? (responseData1.galileo.length > 150
+                ? responseData1.galileo.slice(0, 150)
                 : responseData1.galileo)
               : [],
             // galileo: responseData1?.galileo,
@@ -569,7 +568,7 @@ function Flightform({ existingData, type = '' }) {
 
 
 
-const currentNum = user && user?.users.agent_type === 'B' ? 0 : 1;
+  const currentNum = user && user?.users.agent_type === 'B' ? 0 : 1;
 
 
   useEffect(() => {
@@ -594,7 +593,7 @@ const currentNum = user && user?.users.agent_type === 'B' ? 0 : 1;
         "country": "India"
       };
 
-      
+
       // this is testing start 
       const currentDate = dayjs().startOf("day"); // today's start
       const minAllowedDate = currentDate.add(1, "day"); // today + 1
@@ -965,8 +964,8 @@ const currentNum = user && user?.users.agent_type === 'B' ? 0 : 1;
                                 }}
                                 showDaysOutsideCurrentMonth
                                 numberOfMonths={isSmallScreen ? 1 : 2}
-                                minDate = {
-                                   user && user?.users.agent_type === 'B' ? dayjs().startOf("day").toDate() : new Date(new Date().setDate(new Date().getDate() + 0))
+                                minDate={
+                                  user && user?.users.agent_type === 'B' ? dayjs().startOf("day").toDate() : new Date(new Date().setDate(new Date().getDate() + 0))
                                 }
                                 // minDate={new Date(new Date().setDate(new Date().getDate() + 0))}
                                 // minDate={dayjs().startOf("day").toDate()}

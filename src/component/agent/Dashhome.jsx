@@ -109,6 +109,43 @@ const Dashhome = ({ data, cards, data1, totalbooking }) => {
                   ? `${user?.users?.name} ${user?.users?.lastName}`
                   : 'Sunil Narine'}
               </Typography>
+                 <Box mt={1}>
+                          { user && user?.users?.agent_type === "A" ? (
+                            <Box
+                              sx={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: 1,
+                                px: 2,
+                                py: 0.5,
+                                borderRadius: "20px",
+                                backgroundColor: "#e8f5e9",
+                                color: "#2e7d32",
+                                fontWeight: 600,
+                                fontSize: "13px",
+                              }}
+                            >
+                              🆓 Free Portal
+                            </Box>
+                          ) : user?.users?.agent_type === "B" ? (
+                            <Box
+                              sx={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: 1,
+                                px: 2,
+                                py: 0.5,
+                                borderRadius: "20px",
+                                backgroundColor: "#fff3e0",
+                                color: "#ef6c00",
+                                fontWeight: 600,
+                                fontSize: "13px",
+                              }}
+                            >
+                              ⭐ Paid Portal
+                            </Box>
+                          ) : null}
+                        </Box>
             </Grid>
 
             <Grid item>

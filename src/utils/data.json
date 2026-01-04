@@ -165006,5 +165006,18 @@
   "CityCode": "Dur",
   "created_at": null,
   "updated_at": null
+},
+{
+  "id": 11784,
+  "CountryCode": "IND",
+  "city": "Navi Mumbai",
+  "state": "Maharashtra",
+  "country": "India",
+  "airport": "Navi Mumbai International Airport",
+  "stateCode": "ind",
+  "iata": "NMI",
+  "CityCode": "Mum",
+  "created_at": null,
+  "updated_at": null
 }
 ]

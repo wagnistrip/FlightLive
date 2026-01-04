@@ -203,27 +203,6 @@ const TopNavbar = () => {
                         Visa
                     </p>
                 </Link> */}
-                {/* Contact */}
-                <Link to="/contact-us" className="d-flex flex-column align-items-center">
-                    <img
-                        src={contacticon}
-                        alt="Contact"
-                        style={{
-                            height: '32px',
-                            ...(activeBtn === 'Contact' ? blinkStyle : {})
-                        }}
-                    />
-                    <p
-                        style={{
-                            color: activeBtn === 'Contact' ? 'var(--main-color)' : '#4a4a4a',
-                            fontSize: '14px',
-                            fontWeight: activeBtn === 'Contact' ? '700' : '400',
-                        }}
-                    >
-                        Contact
-                    </p>
-                </Link>
-
             </div>
         </div>
     );

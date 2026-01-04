@@ -38,7 +38,11 @@ const TopDestinations = () => {
             noOfChilds: 0,
             noOfInfants: 0,
             cabinClass: 'Y',
-            flightFare: 'ADT'
+            flightFare: 'ADT',
+            CCODE: 'IN',
+            curr: 'INR',
+            apptype: user && user?.users.role === 2 ? 'B2B' : 'B2C',
+            usertype: user && user?.users.role === 2 && user?.users.agent_type === "B" ? 'intermediate' : user?.users.agent_type === "A" ? 'beginer' : 'guest'
         };
 
 
@@ -51,7 +55,7 @@ const TopDestinations = () => {
 
 
         try {
-            const responseData1 = await galileoApi("/flight/search",formData,token);
+            const responseData1 = await galileoApi("/flight/search", formData, token);
 
             setLoading(false);
             localStorage.setItem('formData', JSON.stringify(formData));

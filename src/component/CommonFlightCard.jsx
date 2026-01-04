@@ -3,20 +3,22 @@ import FlightFeeDetails from './FlightFeeDetails';
 import OfferSection from './OfferSection';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import { calculateTravelTime, extraDiscountamount, getAdditiondiscount, getAirlineName, getAirportDataByCountry, getBookingCount, getChipsByAmount, getImageUrl1, getServiceFee, matchSpecialFlight } from '../utils/airlineUtils';
+import { calculateTravelTime, extraDiscountamount, getAdditiondiscount, getAirlineName, getAirportDataByCountry, getBookingCount, getChipsByAmount, getImageUrl1, getServiceFee, indigoFlightType, matchSpecialFlight } from '../utils/airlineUtils';
 import { useSelector } from 'react-redux';
 
 const CommonFlightCard = ({ index, data, responseData, bookFlightGAL, isOpen, toggleFlightDetails, bookNowSpecialflight }) => {
     const user = useSelector((state) => state.auth.user);
     // console.log("user => ", user);
+
+    const fareFamily = indigoFlightType(data);
     const samed = "Ak"
     return (
         <div className='list-unstyled'>
 
 
             <div style={{ borderRadius: '4px', position: 'relative' }} data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-offset="0" className="py-1 tour_details_boxed mt-3">
-            
-            {/* {
+
+                {/* {
                 (user && user?.users?.role === 2) && (
                <>
                 <div className="watermark" style={{ top: '40%', left: '10%' }}>Wagnistrip</div>
@@ -74,6 +76,18 @@ const CommonFlightCard = ({ index, data, responseData, bookFlightGAL, isOpen, to
                                 </div>
                             </div>
 
+
+                            {
+                                fareFamily && (
+                                    <div
+                                        style={{ fontSize: '12px', width: 'fit-content', background: '#f5f6fcff' }}
+                                        className='my-1 d-flex align-items-center justify-content-start gap-2 px-2 mx-auto py-1 text-black text-start'
+                                    >
+                                        <FiberManualRecordIcon fontSize='14px' className='text-danger' /> <strong className='text-danger'>{fareFamily}</strong>
+                                    </div>
+
+                                )
+                            }
 
 
 

@@ -208,6 +208,7 @@ function FlightDetail() {
                 galileoCarriers = flightData.length > 0 && flightData.map(flight => ({
                     code: flight?.segments[0]["@attributes"].Carrier,
                     price: parseFloat(flight?.PricingInfos["@attributes"].ApproximateTotalPrice.replace('INR', ''))
+                    // price: 0
                 })) || [];
             }
         }
@@ -434,6 +435,7 @@ function FlightDetail() {
         const galileoPrices = newGalileoFlights.length > 0
             ? newGalileoFlights.map(flight =>
                 parseFloat(flight?.PricingInfos["@attributes"].ApproximateTotalPrice.replace("INR", ""))
+                // 0
             )
             : [];
 

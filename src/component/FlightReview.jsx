@@ -736,13 +736,13 @@ function FlightReview() {
                 // Note: No interval check for window close since it's in the same tab
             } else {
                 setloadingcompon(false);
-                 toast.error('booking is failed due to technical issue')
+                toast.error('booking is failed due to technical issue')
                 console.error("No redirect URL received in the response");
             }
 
         } catch (error) {
-             setloadingcompon(false);
-             toast.error('booking is failed due to technical issue')
+            setloadingcompon(false);
+            toast.error('booking is failed due to technical issue')
             console.error('Error createReservation:', error);
             throw error;
         }
@@ -1223,11 +1223,11 @@ function FlightReview() {
                                                                         </div>
 
                                                                         {
-                                                                            selectedBaggage && (
+                                                                            selectedBaggage && selectedBaggage?.quantity > 0 && (
                                                                                 <div className='d-flex align-items-center justify-content-start gap-2'>
                                                                                     <span className='fs-6 fw-bold'>Baggage</span>
                                                                                     <span style={{ fontSize: '13px' }} className='d-flex flex-wrap'>
-                                                                                        1 Bag Added
+                                                                                        {selectedBaggage && selectedBaggage?.quantity} Bag Added
                                                                                     </span>
                                                                                 </div>
 
@@ -1361,7 +1361,7 @@ function FlightReview() {
                                                                     </div>
                                                                 </h2>
                                                                 <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                                                    <Meal goToStep={goToStep} responseData={responseData1?.responseData} flightType={flightType} noOfAdults={responseData1?.travellers?.noOfAdults} noOfChildren={responseData1?.travellers?.noOfChilds} sea={seatMaps} seat={seatMap} optionservice={optionservice} selectSeat={selectSeat} setSelectSeat={setSelectSeat} setOtherCharge={setOtherCharge} />
+                                                                    <Meal responseData={responseData1?.responseData} flightType={flightType} noOfAdults={responseData1?.travellers?.noOfAdults} noOfChildren={responseData1?.travellers?.noOfChilds} sea={seatMaps} seat={seatMap} optionservice={optionservice} selectSeat={selectSeat} setSelectSeat={setSelectSeat} setOtherCharge={setOtherCharge} />
                                                                 </div>
                                                             </div>
                                                             {
@@ -1389,7 +1389,7 @@ function FlightReview() {
                                                                             </div>
                                                                         </h2>
                                                                         <div id="collapseTwo" className="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                                                                            <Meal goToStep={goToStep} responseData={responseData1 && responseData1.trip === 'I' && responseData1.trip_type === 'roundtrip' ? seatSegmentRt : responseData1?.responseData1} flightType={flightType} noOfAdults={responseData1?.travellers?.noOfAdults} noOfChildren={responseData1?.travellers?.noOfChilds} sea={seatMaps1} seat={seatMap1} optionservice={optionservice} selectSeat={selectSeat1} setSelectSeat={setSelectSeat1} setOtherCharge={setOtherCharge1} />
+                                                                            <Meal responseData={responseData1 && responseData1.trip === 'I' && responseData1.trip_type === 'roundtrip' ? seatSegmentRt : responseData1?.responseData1} flightType={flightType} noOfAdults={responseData1?.travellers?.noOfAdults} noOfChildren={responseData1?.travellers?.noOfChilds} sea={seatMaps1} seat={seatMap1} optionservice={optionservice} selectSeat={selectSeat1} setSelectSeat={setSelectSeat1} setOtherCharge={setOtherCharge1} />
                                                                         </div>
                                                                     </div>
                                                                 )

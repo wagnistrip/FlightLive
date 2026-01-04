@@ -1,7 +1,6 @@
 export const SET_BOOKING_STATUS = "SET_BOOKING_STATUS";
 export const SET_BOOKING_DATA = "SET_BOOKING_DATA";
 export const SET_FARE_DETAILS = "SET_FARE_DETAILS";
-// export const SET_AIRLINES = "SET_AIRLINES";
 export const SET_MODAL_VISIBLE = "SET_MODAL_VISIBLE";
 export const SET_COMMON_PRICE = "SET_COMMON_PRICE";
 export const SET_COMMON_WALLET = "SET_COMMON_WALLET";
@@ -26,12 +25,6 @@ export const setFareDetails = (details) => ({
   type: SET_FARE_DETAILS,
   payload: details,
 });
-
-// Set Airlines
-// export const setAirlines = (airlines) => ({
-//   type: SET_AIRLINES,
-//   payload: airlines,
-// });
 
 // Set Modal Visibility
 export const setModalvisible = (visible) => ({
@@ -59,13 +52,12 @@ export const setGreenChipsUsed = (status) => ({
   payload: status,
 });
 
-// Set Selected Baggage
-export const setSelectedBaggage = (baggage) => ({
+export const setSelectedBaggage = (payload) => ({
   type: SET_SELECTED_BAGGAGE,
-  payload: baggage
+  payload
 });
 
-// Remove Selected Baggage
-export const removeSelectedBaggage = () => ({
-  type: REMOVE_SELECTED_BAGGAGE
+export const removeSelectedBaggage = (payload) => ({
+  type: REMOVE_SELECTED_BAGGAGE,
+  payload
 });

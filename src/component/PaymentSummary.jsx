@@ -1,7 +1,7 @@
 import React from "react";
 import { Checkbox, Typography } from '@mui/material';
 import { Card } from "react-bootstrap";
-import { getAdditiondiscount, getServiceFee } from "../utils/airlineUtils";
+import { getAdditiondiscount, getServiceFee, getTotalBaggageSummary } from "../utils/airlineUtils";
 import { useSelector } from "react-redux";
 
 const PaymentSummary = ({ noOfAdults, noOfChildren, noOfInfants, responseData, responseData1, activeStep, othercharges, othercharges1, adultPrice, adultPrice2, childPrice, childPrice2, totalTaxes, totalTaxes2, discountedPrice, grandTotal, grandTotal2, user, couponOption, selectedCoupon, typedCoupon, handleCouponChange, handleApplyCoupon, warningMessage, discountMessage, visibleCoupons, isCouponActive, handleClearCoupon, infantPrice, infantPrice2, convenienceFee, handleCouponSelect, setShowAll, showAll, isGreenChipsUsed, greenChipsPrice, handleRadioChange, walletAmout, greenchipsamt, tripType, trip, usechipsamt1, AdditionCharge, usechipsamt }) => {
@@ -129,8 +129,14 @@ const PaymentSummary = ({ noOfAdults, noOfChildren, noOfInfants, responseData, r
                                                         finalTotal += AdditionCharge;
                                                     }
 
-                                                    if (selectedBaggage) {
-                                                        finalTotal += selectedBaggage?.price;
+                                                    // if (selectedBaggage) {
+                                                    //     finalTotal += selectedBaggage?.price;
+                                                    // }
+
+                                                    // const baggageTotal = getTotalBaggagePrice(selectedBaggage);
+                                                    const { totalPrice, totalQuantity } = getTotalBaggageSummary(selectedBaggage);
+                                                    if (totalPrice) {
+                                                        finalTotal += totalPrice;
                                                     }
 
                                                     return finalTotal.toFixed(2);
@@ -185,14 +191,28 @@ const PaymentSummary = ({ noOfAdults, noOfChildren, noOfInfants, responseData, r
 
                                             )}
 
-                                        {
-                                            activeStep > 1 && selectedBaggage && (
-                                                <div style={{ borderBottom: '1px solid #e8e2e2' }} className='d-flex py-1 align-items-center  justify-content-between'>
-                                                    <p style={{ fontSize: '12px' }}>Baggage (1 Bag)</p>
-                                                    <strong style={{ fontSize: '13px' }}>{responseData && responseData?.currency && responseData?.currency?.currency_symbol} {selectedBaggage?.price || 0}</strong>
-                                                </div>
-                                            )
-                                        }
+                                        {(() => {
+                                            const { totalPrice, totalQuantity } =
+                                                getTotalBaggageSummary(selectedBaggage);
+
+                                            return (
+                                                activeStep > 1 && totalQuantity > 0 && (
+                                                    <div
+                                                        style={{ borderBottom: "1px solid #e8e2e2" }}
+                                                        className="d-flex py-1 align-items-center justify-content-between"
+                                                    >
+                                                        <p style={{ fontSize: "12px" }}>
+                                                            Baggage ({totalQuantity} Bag{totalQuantity > 1 ? "s" : ""})
+                                                        </p>
+
+                                                        <strong style={{ fontSize: "13px" }}>
+                                                            {responseData?.currency?.currency_symbol} {totalPrice}
+                                                        </strong>
+                                                    </div>
+                                                )
+                                            );
+                                        })()}
+
 
                                     </div>
 
@@ -235,8 +255,9 @@ const PaymentSummary = ({ noOfAdults, noOfChildren, noOfInfants, responseData, r
                                             finalTotal += AdditionCharge;
                                         }
 
-                                        if (selectedBaggage) {
-                                            finalTotal += selectedBaggage?.price;
+                                        const { totalPrice, totalQuantity } = getTotalBaggageSummary(selectedBaggage);
+                                        if (totalPrice) {
+                                            finalTotal += totalPrice;
                                         }
 
                                         if (shouldApplyConvenienceFee) {
@@ -262,10 +283,51 @@ const PaymentSummary = ({ noOfAdults, noOfChildren, noOfInfants, responseData, r
 
                                     <div className="text-end">
                                         <div className="fw-bold">
-                                            <strike>{responseData && responseData.currency && responseData.currency.currency_symbol} {grandTotal + grandTotal2 - discountedPrice + othercharges + othercharges1 + getServiceFee(trip, user?.users?.agent_type)}</strike>
+                                            <strike>{responseData && responseData.currency && responseData.currency.currency_symbol}{" "}
+                                                {
+                                                    (() => {
+                                                        let baseTotal = grandTotal + grandTotal2 - discountedPrice + othercharges + othercharges1;
+                                                        let finalTotal = baseTotal;
+                                                        if (user?.users?.role === 2) {
+                                                            finalTotal += getServiceFee(trip, user?.users?.agent_type);
+                                                        }
+                                                        const { totalPrice, totalQuantity } = getTotalBaggageSummary(selectedBaggage);
+                                                        if (totalPrice) {
+                                                            finalTotal += totalPrice;
+                                                        }
+                                                        return finalTotal;
+                                                    })()
+                                                }
+                                            </strike>
                                             <span className="text-danger fw-bold ml-1">
                                                 {responseData?.currency?.currency_symbol}{" "}
-                                                {grandTotal + grandTotal2 - discountedPrice + othercharges + othercharges1 + getServiceFee(trip, user?.users?.agent_type) - (isGreenChipsUsed ? usechipsamt : 0) - (user?.users?.role === 2 && user?.users?.agent_type === 'A' ? getAdditiondiscount(trip) : 0) - (user?.users?.role === 2 && user?.users?.agent_type === 'B' ? greenchipsamt : 0)}
+                                                {
+                                                    (() => {
+                                                        let baseTotal = grandTotal + grandTotal2 - discountedPrice + othercharges + othercharges1;
+                                                        let finalTotal = baseTotal;
+
+                                                        if (user?.users?.role === 2) {
+                                                            finalTotal += getServiceFee(trip, user?.users?.agent_type);
+                                                        }
+                                                        const { totalPrice, totalQuantity } = getTotalBaggageSummary(selectedBaggage);
+                                                        if (totalPrice) {
+                                                            finalTotal += totalPrice;
+                                                        }
+                                                        if (isGreenChipsUsed) {
+                                                            finalTotal -= usechipsamt
+                                                        }
+                                                        const additionDis = getAdditiondiscount(trip)
+                                                        if (user?.users?.role === 2 && user?.users?.agent_type === 'A') {
+                                                            finalTotal -= additionDis
+                                                        }
+                                                        if (user?.users?.role === 2 && user?.users?.agent_type === 'B') {
+                                                            finalTotal -= greenchipsamt
+                                                        }
+
+                                                        return finalTotal
+
+                                                    })()
+                                                }
                                             </span>
                                         </div>
                                     </div>
@@ -306,6 +368,11 @@ const PaymentSummary = ({ noOfAdults, noOfChildren, noOfInfants, responseData, r
 
                                                     if (greenchipsamt > 0 && user?.users?.agent_type === 'B') {
                                                         finalTotal -= greenchipsamt;
+                                                    }
+
+                                                    const { totalPrice, totalQuantity } = getTotalBaggageSummary(selectedBaggage);
+                                                    if (totalPrice) {
+                                                        finalTotal += totalPrice;
                                                     }
                                                     // if (isGreenChipsUsed) {
                                                     //     finalTotal -= trip === 'I' ? 400 : trip === 'D' ? 100 : 0;

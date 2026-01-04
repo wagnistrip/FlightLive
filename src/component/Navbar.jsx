@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FaFacebookSquare, FaUserCircle } from "react-icons/fa";
-import { FaInstagram, FaWallet } from "react-icons/fa6";
-import { FaLinkedin } from "react-icons/fa6";
-import { FaXTwitter } from "react-icons/fa6";
+import { FaUserCircle } from "react-icons/fa";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, loadSession } from '../redux/actions/authActions';

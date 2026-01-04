@@ -9,6 +9,93 @@ export const getAirlineName = (iata_code) => {
   );
   return airline ? airline.airline_name : iata_code;
 };
+
+
+const getSegmentKey = (segments) => {
+  return segments
+    .map(
+      (s) =>
+        `${s["@attributes"].Carrier}-${s["@attributes"].FlightNumber}-${s["@attributes"].Origin}-${s["@attributes"].Destination}-${s["@attributes"].DepartureTime}`
+    )
+    .join("|");
+};
+
+const mergeFlightsBySegment = (flights) => {
+  const flightMap = new Map();
+
+  flights.forEach((flight) => {
+    const segmentKey = getSegmentKey(flight.segments);
+
+    if (flightMap.has(segmentKey)) {
+      const existing = flightMap.get(segmentKey);
+
+      /* ---------------- Pricing ---------------- */
+      existing.PricingInfos.push(flight.PricingInfos);
+
+      /* ---------------- Cabin ---------------- */
+      existing.cabinService = Array.from(
+        new Set([...existing.cabinService, ...flight.cabinService])
+      );
+
+      /* ---------------- Booking Codes ---------------- */
+      existing.bookingCode = Array.from(
+        new Set([...existing.bookingCode, ...flight.bookingCode])
+      );
+
+      /* ---------------- Fare Info ---------------- */
+      const fareMap = new Map(
+        existing.airFareInfolist.map((f) => [
+          f["@attributes"].Key,
+          f,
+        ])
+      );
+
+      flight.airFareInfolist.forEach((fare) => {
+        const fareKey = fare["@attributes"].Key;
+        if (!fareMap.has(fareKey)) {
+          fareMap.set(fareKey, fare);
+        }
+      });
+
+      existing.airFareInfolist = Array.from(fareMap.values());
+
+      /* ---------------- Booking Info (NEW) ---------------- */
+      const bookingMap = new Map(
+        existing.BookingInfo.map((b) => {
+          const a = b["@attributes"];
+          return [
+            `${a.BookingCode}-${a.SegmentRef}-${a.FareInfoRef}`,
+            b,
+          ];
+        })
+      );
+
+      flight.BookingInfo.forEach((b) => {
+        const a = b["@attributes"];
+        const key = `${a.BookingCode}-${a.SegmentRef}-${a.FareInfoRef}`;
+
+        if (!bookingMap.has(key)) {
+          bookingMap.set(key, b);
+        }
+      });
+
+      existing.BookingInfo = Array.from(bookingMap.values());
+    } else {
+      /* ---------------- New Flight ---------------- */
+      flightMap.set(segmentKey, {
+        ...flight,
+        PricingInfos: [flight.PricingInfos],
+        cabinService: [...new Set(flight.cabinService)],
+        bookingCode: [...new Set(flight.bookingCode)],
+        airFareInfolist: [...flight.airFareInfolist],
+        BookingInfo: [...flight.BookingInfo],
+      });
+    }
+  });
+
+  return Array.from(flightMap.values());
+};
+
 // this function is used for merge data
 export const processFlightData = (data2) => {
   // console.log(data2,"kldkldkllk");
@@ -79,6 +166,8 @@ export const processFlightData = (data2) => {
           ? bookingInfo.map((info) => info["@attributes"].BookingCode)
           : [bookingInfo["@attributes"].BookingCode];
 
+        const BookingInfo = Array.isArray(bookingInfo) ? bookingInfo : [bookingInfo];
+
         // Extract fareInfo references
         const fareInfoRefs = Array.isArray(bookingInfo)
           ? bookingInfo.map((info) => info["@attributes"].FareInfoRef)
@@ -90,6 +179,7 @@ export const processFlightData = (data2) => {
           cabinService,
           bookingCode,
           PricingInfos: pricePoint,
+          BookingInfo,
           // airpriceInfo: {
           //     FareBreakDowns: {
           //         priceStatus: pricingInfo, // Full pricing info object for each passenger type
@@ -141,8 +231,7 @@ export const processFlightData = (data2) => {
     });
   });
 
-  // Update the state with the combined flight data
-  // setFlightData(allFlights);
+    // const mergedFlights = mergeFlightsBySegment(allFlights);
   return allFlights;
 };
 // utils.js
@@ -2415,6 +2504,8 @@ export const filterGalileoData = (
     const priceB = parseFloat(
       b?.PricingInfos["@attributes"].ApproximateTotalPrice.replace("INR", "")
     );
+    // const priceA = 0;
+    // const priceB = 0;
     return priceA - priceB;
   });
 };
@@ -2748,7 +2839,7 @@ export const getFlightSegments = (flightData) => {
 export const getServiceFee = (tripType, agentType) => {
   const fees = {
     A: { D: 220, I: 1095 },
-    B: { D: 200, I: 1199 },
+    B: { D: 400, I: 1199 },
     C: { D: 420, I: 1095 },
   };
 
@@ -2928,3 +3019,30 @@ export const indigoFlightType = (data) => {
 
   return indigoFare?.["@attributes"]?.FareFamily || null;
 };
+
+
+export const getTotalBaggageSummary = (selectedBaggage = []) => {
+  if (!Array.isArray(selectedBaggage) || selectedBaggage.length === 0) {
+    return {
+      totalPrice: 0,
+      totalQuantity: 0,
+    };
+  }
+
+  return selectedBaggage.reduce(
+    (acc, item) => {
+      const price = Number(item.price) || 0;
+      const qty = Number(item.quantity) || 0;
+
+      acc.totalPrice += price * qty;
+      acc.totalQuantity += qty;
+
+      return acc;
+    },
+    {
+      totalPrice: 0,
+      totalQuantity: 0,
+    }
+  );
+};
+

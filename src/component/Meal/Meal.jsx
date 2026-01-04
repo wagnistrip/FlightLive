@@ -15,6 +15,8 @@ import exitRowSeat from "./img/exitSeat.png"
 import seatTypeIcon from "./img/windowSeatIcon.png"
 import flightfrontIcon from "./img/flightFrontIcon.png"
 import FlightbackIcon from "./img/flightBackIcon.png"
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 import SeatStructure from './SeatStructure';
 import SeatMapGal from './SeatMapGal';
 import toast from 'react-hot-toast';
@@ -33,9 +35,12 @@ const fareRanges = [
     { className: 'fare7', label: '1500-3000' },
     { className: 'fare8', label: '3000+' },
 ];
-const Meal = ({ goToStep, responseData, flightType, noOfAdults, noOfChildren, passangerres, sea, seat, optionservice, selectSeat, setSelectSeat, setOtherCharge }) => {
+const Meal = ({ responseData, flightType, noOfAdults, noOfChildren, sea, seat, optionservice, selectSeat, setSelectSeat, setOtherCharge }) => {
     const [activeSection, setActiveSection] = useState('seatMap');
+    const maxBaggageAllowed = noOfAdults + noOfChildren;
+
     const selectedBaggage = useSelector(state => state.booking.selectedBaggage);
+    console.log("dldlkdl => ",selectedBaggage);
     const dispatch = useDispatch();
     const hasBaggage =
         Array.isArray(optionservice) && optionservice.length > 0;
@@ -45,11 +50,11 @@ const Meal = ({ goToStep, responseData, flightType, noOfAdults, noOfChildren, pa
         // { key: 'meal', label: 'Meal', icon: MealIcon },
         ...(hasBaggage
             ? [{ key: "baggage", label: "Baggage", icon: LuggageIcon }]
-            : [])
+            : []),
         // { key: 'popular', label: 'Popular Add-Ons', icon: pouplarIcon },
     ];
     // console.log("offer bagage data =>",responseData,sea,seat);
-    const [seatMaps, setSeatMaps] = useState(sea);
+    const [seatMaps] = useState(sea);
     const [seatMap, setSeatMap] = useState(seat);
     const [activeBtn, setActiveBtn] = useState("");
     const adultsCount = noOfAdults + noOfChildren;
@@ -60,36 +65,24 @@ const Meal = ({ goToStep, responseData, flightType, noOfAdults, noOfChildren, pa
     let segmentDetails;
     let amadeusSegmentdetails;
 
-
-    const handleBaggageSelection = (index, item) => {
-
-        // console.log("index = >", index, "item => ", item);
-        if (selectedBaggage && selectedBaggage.index !== index) {
-            // If a baggage is already selected, show a warning message
-            toast.error("At one time only one baggage can be selected. Remove the current baggage first to complete the process.");
-            return;
-        }
-
-        if (selectedBaggage && selectedBaggage.index === index) {
-            // If the same baggage is clicked, remove it
-            dispatch(removeSelectedBaggage());
-            toast.success("Baggage removed successfully.");
-        } else {
-            // Add the new baggage
-            const rawPrice = item["@attributes"].TotalPrice;
-
-            // Remove non-numeric characters (INR, spaces, symbols)
-            const numericPrice = Number(rawPrice.replace(/[^\d]/g, ""));
-            dispatch(setSelectedBaggage({
-                index,
-                baggage: item,
-                weight: item["@attributes"].TotalWeight,
-                price: numericPrice,
-            }));
-            toast.success("Baggage added successfully.");
-            // console.log("selected baggage", selectedBaggage);
-        }
+    const handleAddBaggage = (item) => {
+        dispatch(setSelectedBaggage({
+            key: item["@attributes"].Key,
+            baggage: item,
+            price: Number(item["@attributes"].TotalPrice.replace(/[^\d]/g, "")),
+            weight: item["@attributes"].TotalWeight,
+            maxBaggageAllowed
+        }));
     };
+
+    // const handleRemoveBaggage = () => {
+    //     dispatch(removeSelectedBaggage());
+    // };
+
+    const handleRemoveBaggage = (key) => {
+  dispatch(removeSelectedBaggage(key));
+};
+
 
     const mealSection = [
         { mealimage: image, text: "Masala Tea", price: "150" },
@@ -622,54 +615,77 @@ const Meal = ({ goToStep, responseData, flightType, noOfAdults, noOfChildren, pa
                             - {" "}
                             {optionservice?.passanger.Body.AirMerchandisingOfferAvailabilityRsp.AirSolution.AirSegment["@attributes"].Destination}
                         </div> */}
-                        <div className="row mt-3 meal-section">
+                        <div className="row mt-3 scroll-grid overflow-auto"  style={{ maxHeight: "450px" }}>
                             {optionservice
                                 ?.filter(
-                                    item =>
+                                    (item) =>
                                         item?.["@attributes"]?.TotalWeight &&
                                         item?.["@attributes"]?.TotalPrice
                                 )
-                                .map((item, index) => (
-                                    <div
-                                        className="col-lg-6 col-md-12 col-sm-12 p-2"
-                                        key={item["@attributes"].Key || index}
-                                    >
-                                        <div className="d-flex align-items-center justify-content-between border-bottom py-1 px-2">
+                                .map((item, index) => {
+                                    const baggageKey = item["@attributes"].Key;
 
-                                            {/* LEFT : Icon + Baggage Info */}
-                                            <div className="d-flex align-items-center gap-3">
-                                                <div className="bg-success p-2 bg-opacity-10 rounded">
-                                                    <BsSuitcase2Fill size={36} className="text-primary" />
+                                    // const isSelected = selectedBaggage.key === baggageKey;
+                                    // const qty = isSelected ? selectedBaggage.quantity : 0;
+                                    const selectedItem = selectedBaggage.find(
+                                        b => b.key === baggageKey
+                                    );
+
+                                    const qty = selectedItem?.quantity || 0;
+
+
+                                    return (
+                                        <div
+                                            className="col-lg-6 col-md-12 col-sm-12 p-2"
+                                            key={baggageKey || index}
+                                        >
+                                            <div className="d-flex align-items-center justify-content-between border-bottom py-1 px-2">
+
+                                                {/* LEFT : Icon + Baggage Info */}
+                                                <div className="d-flex align-items-center gap-3">
+                                                    <div className="bg-success p-2 bg-opacity-10 rounded">
+                                                        <BsSuitcase2Fill size={36} className="text-primary" />
+                                                    </div>
+
+                                                    <div className="p-2">
+                                                        <div className="fw-bold">
+                                                            {item["@attributes"].TotalWeight}
+                                                        </div>
+                                                        <div>
+                                                            INR {item["@attributes"].TotalPrice.replace("INR", "")}
+                                                        </div>
+                                                    </div>
                                                 </div>
 
-                                                <div className="p-2">
-                                                    <div className="fw-bold">
-                                                        {item["@attributes"].TotalWeight}
-                                                    </div>
-                                                    <div>
-                                                        INR {item["@attributes"].TotalPrice.replace("INR", "")}
-                                                    </div>
+                                                {/* RIGHT : Add / Remove */}
+                                                <div className="d-flex align-items-center gap-2">
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-outline-danger btn-sm"
+                                                        // disabled={!isSelected || qty === 0}
+                                                        // onClick={handleRemoveBaggage}
+
+                                                        disabled={qty === 0}
+                                                        onClick={() => handleRemoveBaggage(baggageKey)}
+                                                    >
+                                                        −
+                                                    </button>
+
+                                                    <div className="fw-bold">{qty}</div>
+
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-outline-primary btn-sm"
+                                                        onClick={() => handleAddBaggage(item)}
+                                                    >
+                                                        +
+                                                    </button>
                                                 </div>
-                                            </div>
 
-                                            {/* RIGHT : Action Button */}
-                                            <div>
-                                                <button
-                                                    type="button"
-                                                    className={`btn btn-sm ${selectedBaggage?.index === index
-                                                        ? "btn-outline-danger"
-                                                        : "btn-outline-primary"
-                                                        }`}
-                                                    onClick={() => handleBaggageSelection(index, item)}
-                                                >
-                                                    {selectedBaggage?.index === index ? "Remove" : "Add"}
-                                                </button>
                                             </div>
-
                                         </div>
-
-                                    </div>
-                                ))}
+                                    );
+                                })}
                         </div>
 
                     </div>

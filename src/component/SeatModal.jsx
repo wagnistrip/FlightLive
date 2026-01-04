@@ -41,7 +41,10 @@ function SeatModal({ data, goToStep, modalVisible, setModalVisible, data1, fligh
       // return;
 
       if (responseData.status === 200) {
-        setOptionalService(responseData?.passanger?.Body?.AirMerchandisingOfferAvailabilityRsp?.OptionalServices?.OptionalService || [])
+         await new Promise((resolve) => {
+           setOptionalService(responseData?.passanger?.Body?.AirMerchandisingOfferAvailabilityRsp?.OptionalServices?.OptionalService || [])
+          resolve();
+        });
         return responseData;
       }
       setOptionalService([]);

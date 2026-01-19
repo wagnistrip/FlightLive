@@ -568,7 +568,7 @@ function Flightform({ existingData, type = '' }) {
 
 
 
-  const currentNum = user && user?.users.agent_type === 'B' ? 0 : 1;
+  const currentNum = user && user?.users.agent_type === 'C' ? 0 : 1;
 
 
   useEffect(() => {
@@ -965,7 +965,7 @@ function Flightform({ existingData, type = '' }) {
                                 showDaysOutsideCurrentMonth
                                 numberOfMonths={isSmallScreen ? 1 : 2}
                                 minDate={
-                                  user && user?.users.agent_type === 'B' ? dayjs().startOf("day").toDate() : new Date(new Date().setDate(new Date().getDate() + 0))
+                                  user && user?.users.agent_type === 'C' ? dayjs().startOf("day").toDate() : new Date(new Date().setDate(new Date().getDate() + 0))
                                 }
                                 // minDate={new Date(new Date().setDate(new Date().getDate() + 0))}
                                 // minDate={dayjs().startOf("day").toDate()}

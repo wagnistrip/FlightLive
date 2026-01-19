@@ -241,7 +241,7 @@ const BottomNavbar = ({ handleBookNow, selectedDeparture, selectedReturn, curren
 
     const departureTotal = calculateTotalPrice(departureSegments);
     const returnTotal = calculateTotalPrice(returnSegments);
-    const grandTotal = departureTotal + returnTotal + (user?.users?.role === 2 ? getServiceFee('D',user?.users?.agent_type) : 0);; // update 375 to 420 amount
+    const grandTotal = departureTotal + returnTotal + (user?.users?.role === 2 ? getServiceFee('D',"roundtrip",user?.users?.agent_type,adult) : 0);; // update 375 to 420 amount
     const [showOffcanvas1, setShowOffcanvas1] = useState(false);
     const [activeTab, setActiveTab] = useState('flightDetails');
     const [currentActivedata, setCurrentActivedata] = useState(null);
@@ -304,7 +304,7 @@ const BottomNavbar = ({ handleBookNow, selectedDeparture, selectedReturn, curren
                                                 <span style={{ fontSize: "13px" }}>{departureSegments.arrival.iataCode}</span>
                                             </div>
                                             <div className="d-flex flex-column align-items-center">
-                                                <div>{currency} { } {parseInt(departureSegments?.price) + (user?.users?.role === 2 ? (getServiceFee('D',user?.users?.agent_type)/2) : 0)}</div>
+                                                <div>{currency} { } {parseInt(departureSegments?.price) + (user?.users?.role === 2 ? (getServiceFee('D',"roundtrip",user?.users?.agent_type,adult)/2) : 0)}</div>
 
                                                 <div>
                                                     {/* {
@@ -385,7 +385,7 @@ const BottomNavbar = ({ handleBookNow, selectedDeparture, selectedReturn, curren
                                                 <span style={{ fontSize: "13px" }}>{returnSegments.arrival.iataCode}</span>
                                             </div>
                                             <div className="d-flex flex-column align-items-center">
-                                                <div>{currency} { } {parseInt(returnSegments.price) + (user?.users?.role === 2 ? (getServiceFee('D',user?.users?.agent_type)/2) : 0)}</div>
+                                                <div>{currency} { } {parseInt(returnSegments.price) + (user?.users?.role === 2 ? (getServiceFee('D',"roundtrip",user?.users?.agent_type,adult)/2) : 0)}</div>
                                                 <div>
                                                     {/* {
                                                         trip==='D' ? <>
@@ -451,7 +451,7 @@ const BottomNavbar = ({ handleBookNow, selectedDeparture, selectedReturn, curren
 
                                         // Always apply chips first
                                         const chipsDiscount = getChipsByAmount(grandTotal, chips);
-                                        if (!isNaN(chipsDiscount) && chipsDiscount > 0 && user?.users?.agent_type === 'B') {
+                                        if (!isNaN(chipsDiscount) && chipsDiscount > 0) {
                                             netFare -= chipsDiscount;
                                         }
                                         if(user?.users?.agent_type === 'A'){
@@ -466,7 +466,7 @@ const BottomNavbar = ({ handleBookNow, selectedDeparture, selectedReturn, curren
                                             // console.log("Carriers match ✅ applying extra discount:", departureSegments.carrierCode, returnSegments.carrierCode, extra_discount);
 
                                             const extraDiscount = extraDiscountamount(departureSegments.carrierCode, extra_discount || []);
-                                            if (!isNaN(extraDiscount) && extraDiscount > 0 && user?.users?.agent_type === 'B') {
+                                            if (!isNaN(extraDiscount) && extraDiscount > 0) {
                                                 netFare -= extraDiscount;
                                             }
                                         } else {

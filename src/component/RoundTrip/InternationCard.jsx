@@ -520,7 +520,7 @@ const FlightCard = ({ flight, handlebook, currency, travellers, trip, flightFare
                     if (isNaN(price)) return "Invalid Price";
 
                     if (user?.users?.role === 2) {
-                      price += getServiceFee('I',user?.users?.agent_type);
+                      price += getServiceFee('I',"roundtrip",user?.users?.agent_type,travellers?.adults);
                     }
 
                     return price.toLocaleString();
@@ -544,13 +544,13 @@ const FlightCard = ({ flight, handlebook, currency, travellers, trip, flightFare
                       let price = parseFloat(rawPrice.replace("INR", "").trim()) || 0;
 
                       // Step 2: Add service fee
-                      price += getServiceFee("I",user?.users?.agent_type);
+                      price += getServiceFee("I","roundtrip",user?.users?.agent_type,travellers?.adults);
 
                       let netFare = price;
 
                       // Step 3: Apply green chips
                       const greenChips = getChipsByAmount(price, chips);
-                      if (!isNaN(greenChips) && greenChips > 0 && user?.users?.agent_type === 'B') {
+                      if (!isNaN(greenChips) && greenChips > 0 ) {
                         netFare -= greenChips;
                       }
                       if(user?.users?.agent_type === 'A'){
@@ -559,7 +559,7 @@ const FlightCard = ({ flight, handlebook, currency, travellers, trip, flightFare
                       // Step 4: Apply extra discount
                       const carrierCode = selectedDeparture?.[0]?.["@attributes"]?.Carrier || "";
                       const extraDiscount = extraDiscountamount(carrierCode, extra_discount || []);
-                      if (!isNaN(extraDiscount) && extraDiscount > 0 && user?.users?.agent_type === 'B') {
+                      if (!isNaN(extraDiscount) && extraDiscount > 0) {
                         netFare -= extraDiscount;
                       }
                        netFare = Math.floor(netFare); 

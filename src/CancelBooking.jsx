@@ -240,7 +240,7 @@ const CancelBooking = () => {
                       <strong>
                         ₹{" "}
                         {((formateddata?.Amount?.BaseFare || 0) + (formateddata1?.Amount?.BaseFare || 0) + (user?.users?.role === 2
-                          ? (getServiceFee(data?.trip, user?.users?.agent_type) * 3) / 4
+                          ? (getServiceFee(data?.trip,data?.tripType, user?.users?.agent_type,data?.noOfAdults) * 3) / 4
                           : 0)).toLocaleString()}
                       </strong>
                     </div>
@@ -249,7 +249,7 @@ const CancelBooking = () => {
                       <strong>
                         ₹{" "}
                         {((formateddata?.Amount?.Taxes || 0) + (formateddata?.Amount?.Fees || 0) + (formateddata1?.Amount?.Taxes || 0) + (formateddata1?.Amount?.Fees || 0) + (user?.users?.role === 2
-                          ? getServiceFee(data?.trip, user?.users?.agent_type) / 4 
+                          ? getServiceFee(data?.trip,data?.tripType, user?.users?.agent_type,data?.noOfAdults) / 4 
                           : 0)).toLocaleString()}
                       </strong>
                     </div>
@@ -343,7 +343,7 @@ const CancelBooking = () => {
                                 ) -
                                 (data?.discountAmt || 0) -
                                 (data?.useCoin || 0) +
-                                (user?.users?.role === 2 ? getServiceFee(data?.trip,user?.users?.agent_type) : 0)
+                                (user?.users?.role === 2 ? getServiceFee(data?.trip,data?.tripType,user?.users?.agent_type,data?.noOfAdults) : 0)
                               ).toLocaleString()}
                             </strong>
                           ) : (
@@ -368,7 +368,7 @@ const CancelBooking = () => {
                                   ) -
                                   (data?.discountAmt || 0) -
                                   (data?.useCoin || 0) +
-                                  (user?.users?.role === 2 ? getServiceFee(data?.trip,user?.users?.agent_type) : 0)
+                                  (user?.users?.role === 2 ? getServiceFee(data?.trip,data?.tripType,user?.users?.agent_type,data?.noOfAdults) : 0)
                                 ).toLocaleString()}
                               </strike>
                               <span className='ms-2'>
@@ -390,7 +390,7 @@ const CancelBooking = () => {
                                   ) -
                                   (data?.discountAmt || 0) -
                                   (data?.useCoin || 0) +
-                                  (user?.users?.role === 2 ? getServiceFee(data?.trip,user?.users?.agent_type) : 0) -
+                                  (user?.users?.role === 2 ? getServiceFee(data?.trip,data?.tripType,user?.users?.agent_type,data?.noOfAdults) : 0) -
                                   (
                                     (user?.users?.role === 2 && user?.users?.agent_type === 'A')
                                       ? getAdditiondiscount(data?.trip)

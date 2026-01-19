@@ -459,7 +459,7 @@ function FlightFeeDetails({ formData, travellers, buttonsOpen, discoutAmt, trip 
                         }
 
 
-                        {tabopen === 'faredetails' && (
+                        {tabopen === 'faredetailss' && (
                             <div className='container'>
                                 <div className='row'>
                                     <div className='FareDetails&Rules'>
@@ -607,7 +607,7 @@ function FlightFeeDetails({ formData, travellers, buttonsOpen, discoutAmt, trip 
                                                                                             formData?.PricingInfos["@attributes"]?.ApproximateBasePrice.replace(/[^0-9.-]+/g, "")
                                                                                         ) +
                                                                                         (user?.users?.role === 2
-                                                                                             ? (getServiceFee(trip, user?.users?.agent_type) * 3) / 4 
+                                                                                             ? (getServiceFee(trip,"oneway", user?.users?.agent_type,noOfAdults) * 3) / 4 
                                                                                             : 0)
                                                                                     ).toLocaleString()
                                                                                     : '0'
@@ -624,7 +624,7 @@ function FlightFeeDetails({ formData, travellers, buttonsOpen, discoutAmt, trip 
                                                                                             formData?.PricingInfos["@attributes"]?.ApproximateTaxes.replace(/[^0-9.-]+/g, "")
                                                                                         ) +
                                                                                         (user?.users?.role === 2
-                                                                                            ? getServiceFee(trip, user?.users?.agent_type) / 4 
+                                                                                            ? getServiceFee(trip,"oneway", user?.users?.agent_type,noOfAdults) / 4 
                                                                                             : 0)
                                                                                     ).toLocaleString()
                                                                                     : '0'
@@ -670,7 +670,7 @@ function FlightFeeDetails({ formData, travellers, buttonsOpen, discoutAmt, trip 
 
                                                                                     // Apply ₹500 discount only for user role 2
                                                                                     if (user && user.users && user.users.role === 2) {
-                                                                                        const extra = getServiceFee(trip,user?.users?.agent_type);
+                                                                                        const extra = getServiceFee(trip,"roundtrip",user?.users?.agent_type,noOfAdults);
                                                                                         return (price + extra).toLocaleString();
                                                                                     }
                                                                                     else if (!user || user && user.users && user.users.role === 1) {

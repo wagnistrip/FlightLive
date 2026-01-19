@@ -10,6 +10,7 @@ import {
   SET_COMMON_CHIPS,
   SET_SELECTED_BAGGAGE,
   REMOVE_SELECTED_BAGGAGE,
+  CLEAR_SELECTED_BAGGAGE
 } from "../actions/bookingActions";
 
 const initialState = {
@@ -165,6 +166,13 @@ const bookingReducer = (state = initialState, action) => {
         selectedBaggage: list,
       };
     }
+
+    case CLEAR_SELECTED_BAGGAGE:
+  return {
+    ...state,
+    selectedBaggage: [],
+  };
+
 
     default:
       return state;

@@ -8,6 +8,7 @@ export const SET_GREEN_CHIPS_USED = "SET_GREEN_CHIPS_USED";
 export const SET_COMMON_CHIPS = "SET_COMMON_CHIPS"
 export const SET_SELECTED_BAGGAGE = "SET_SELECTED_BAGGAGE";
 export const REMOVE_SELECTED_BAGGAGE = "REMOVE_SELECTED_BAGGAGE";
+export const CLEAR_SELECTED_BAGGAGE = "CLEAR_SELECTED_BAGGAGE";
 // Set Booking Status
 export const setBookingStatus = (status) => ({
   type: SET_BOOKING_STATUS,
@@ -60,4 +61,8 @@ export const setSelectedBaggage = (payload) => ({
 export const removeSelectedBaggage = (payload) => ({
   type: REMOVE_SELECTED_BAGGAGE,
   payload
+});
+
+export const clearSelectedBaggage = () => ({
+  type: CLEAR_SELECTED_BAGGAGE,
 });

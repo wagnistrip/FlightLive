@@ -14,7 +14,7 @@ import { buildPassengerFormData, extractFlightAma, extractFlightDetails, findMat
 import Offer from './Offer';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormControlLabel, Radio, RadioGroup, TextField, useMediaQuery } from '@mui/material';
-import { removeSelectedBaggage, setCommonChips, setGreenChipsUsed } from '../redux/actions/bookingActions';
+import { clearSelectedBaggage, setCommonChips, setGreenChipsUsed } from '../redux/actions/bookingActions';
 import LoadingPage from '../LoadingPage';
 import PaymentSummary from './PaymentSummary';
 import toast from 'react-hot-toast';
@@ -749,14 +749,14 @@ function FlightReview() {
 
     }
 
-    const totalFlgithAmt = grandTotal + grandTotal2 + othercharges + othercharges1 + ((!user || user?.users?.role === 1) ? convenienceFee : 0) + (user?.users?.role === 2 ? getServiceFee(trip, user?.users?.agent_type) : 0) - (user && user?.users.role === 1 ? 0 : (isGreenChipsUsed ? usechipsamt : 0)) - (user?.users?.role === 2 && user?.users?.agent_type === 'A' ? getAdditiondiscount(trip) : 0) - (user?.users?.role === 2 && user?.users?.agent_type === 'B' ? greenchipsamt : 0) - discountedPrice;
+    const totalFlgithAmt = grandTotal + grandTotal2 + othercharges + othercharges1 + ((!user || user?.users?.role === 1) ? convenienceFee : 0) + (user?.users?.role === 2 ? getServiceFee(trip,responseData1?.trip_type, user?.users?.agent_type,noOfAdults) : 0) - (user && user?.users.role === 1 ? 0 : (isGreenChipsUsed ? usechipsamt : 0)) - (user?.users?.role === 2 && user?.users?.agent_type === 'A' ? getAdditiondiscount(trip) : 0) - (user?.users?.role === 2  ? greenchipsamt : 0) - discountedPrice;
     // add here 4% extra charge
     const AdditionCharge = (!user || user?.users?.role === 1) ? parseFloat((totalFlgithAmt * 0.045).toFixed(2)) : 0;
 
     const greenChipsfetch = async (token, trip, triptype, amount, travellers, carrierCode, carrierCode1) => {
         const flightcode = Array.isArray(carrierCode?.AirSegment) ? carrierCode?.AirSegment : [carrierCode?.AirSegment]
         const flightcode1 = Array.isArray(carrierCode1?.AirSegment) ? carrierCode1?.AirSegment : [carrierCode1?.AirSegment] || ""
-        const serviceFee = getServiceFee(trip, user?.users?.agent_type);
+        const serviceFee = getServiceFee(trip,triptype, user?.users?.agent_type,travellers?.noOfAdults);
         const finalTotal = (amount || 0) + serviceFee;
         const carrier1 = flightcode?.[0]?.["@attributes"]?.Carrier || "";
         const carrier2 = flightcode1?.[0]?.["@attributes"]?.Carrier || "";
@@ -838,7 +838,7 @@ function FlightReview() {
             greenChipsfetch(token, responseData1 && responseData1?.trip, responseData1 && responseData1?.trip_type, totalAmt, responseData1 && responseData1?.travellers, carrierCode, carrierCode1);
         }
         dispatch(setGreenChipsUsed(false));
-        dispatch(removeSelectedBaggage());
+        dispatch(clearSelectedBaggage());
         offerApi(responseData1 && responseData1?.trip, responseData1 && responseData1?.trip_type, responseData1 && responseData1?.travellers, responseData1);
     }, [responseData1]);
 

@@ -210,7 +210,7 @@ const CommonFlightCard = ({ index, data, responseData, bookFlightGAL, isOpen, to
                                                         data.PricingInfos["@attributes"].ApproximateTotalPrice.replace('INR', '').trim()
                                                     );
                                                     if (user?.users?.role === 2) {
-                                                        price += getServiceFee(responseData?.trip, user?.users?.agent_type);
+                                                        price += getServiceFee(responseData?.trip,responseData?.tripType, user?.users?.agent_type,responseData?.travellers?.adults);
                                                     } else if (user?.users.role === 1) {
                                                         price -= responseData && responseData?.coupons && responseData?.coupons?.discount_amount || 0
                                                     } else {
@@ -230,14 +230,14 @@ const CommonFlightCard = ({ index, data, responseData, bookFlightGAL, isOpen, to
                                                         let price = parseFloat(rawPrice.replace("INR", "").trim()) || 0;
 
                                                         // 🟩 Step 2: Add service fee (using utility function)
-                                                        const serviceFee = getServiceFee(responseData?.trip, user?.users?.agent_type);
+                                                        const serviceFee = getServiceFee(responseData?.trip,responseData?.tripType, user?.users?.agent_type,responseData?.travellers?.adults);
                                                         price += serviceFee;
 
                                                         let netFare = price;
 
                                                         // Step 3: Apply green chips
                                                         const greenChips = getChipsByAmount(price, responseData?.chips);
-                                                        if (!isNaN(greenChips) && greenChips > 0 && user?.users?.agent_type === 'B') {
+                                                        if (!isNaN(greenChips) && greenChips > 0) {
                                                             netFare -= greenChips;
 
                                                         }
@@ -248,7 +248,7 @@ const CommonFlightCard = ({ index, data, responseData, bookFlightGAL, isOpen, to
                                                         // Step 4: Apply extra discount
                                                         const carrierCode = data?.segments?.[0]?.["@attributes"]?.Carrier || "";
                                                         const extraDiscount = extraDiscountamount(carrierCode, responseData?.extra_discount || []);
-                                                        if (!isNaN(extraDiscount) && extraDiscount > 0 && user?.users?.agent_type === 'B') {
+                                                        if (!isNaN(extraDiscount) && extraDiscount > 0) {
                                                             netFare -= extraDiscount;
                                                         }
 

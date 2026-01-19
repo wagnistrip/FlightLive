@@ -72,7 +72,7 @@ const PaymentSummary = ({ noOfAdults, noOfChildren, noOfInfants, responseData, r
                                             {responseData?.currency?.currency_symbol}{" "}
                                             {
                                                 (() => {
-                                                    const serviceFee = getServiceFee(trip, user?.users?.agent_type);
+                                                    const serviceFee = getServiceFee(trip, user?.users?.agent_type,noOfAdults);
                                                     const baseFareFee = (serviceFee * 3) / 4; // 75% in Base Fare
                                                     return (
                                                         (noOfAdults * (adultPrice + adultPrice2)) +
@@ -98,7 +98,7 @@ const PaymentSummary = ({ noOfAdults, noOfChildren, noOfInfants, responseData, r
                                         (totalTaxes + totalTaxes2) +
                                         (
                                             user && user?.users?.role === 2
-                                                ? getServiceFee(trip, user?.users?.agent_type) / 4  // 25% for logged-in Agent
+                                                ? getServiceFee(trip,tripType, user?.users?.agent_type,noOfAdults) / 4  // 25% for logged-in Agent
                                                 : 0  // 0 for others
                                         )
                                     }
@@ -246,7 +246,7 @@ const PaymentSummary = ({ noOfAdults, noOfChildren, noOfInfants, responseData, r
 
                                         // Add 175 or 595 if role === 2
                                         if (user?.users?.role === 2) {
-                                            finalTotal += getServiceFee(trip, user?.users?.agent_type);
+                                            finalTotal += getServiceFee(trip,tripType, user?.users?.agent_type,noOfAdults);
                                         }
 
                                         const shouldApplyConvenienceFee = (activeStep > 2) && (!user || (user.users && user.users.role !== 2));
@@ -289,7 +289,7 @@ const PaymentSummary = ({ noOfAdults, noOfChildren, noOfInfants, responseData, r
                                                         let baseTotal = grandTotal + grandTotal2 - discountedPrice + othercharges + othercharges1;
                                                         let finalTotal = baseTotal;
                                                         if (user?.users?.role === 2) {
-                                                            finalTotal += getServiceFee(trip, user?.users?.agent_type);
+                                                            finalTotal += getServiceFee(trip,tripType, user?.users?.agent_type,noOfAdults);
                                                         }
                                                         const { totalPrice, totalQuantity } = getTotalBaggageSummary(selectedBaggage);
                                                         if (totalPrice) {
@@ -307,7 +307,7 @@ const PaymentSummary = ({ noOfAdults, noOfChildren, noOfInfants, responseData, r
                                                         let finalTotal = baseTotal;
 
                                                         if (user?.users?.role === 2) {
-                                                            finalTotal += getServiceFee(trip, user?.users?.agent_type);
+                                                            finalTotal += getServiceFee(trip,tripType, user?.users?.agent_type,noOfAdults);
                                                         }
                                                         const { totalPrice, totalQuantity } = getTotalBaggageSummary(selectedBaggage);
                                                         if (totalPrice) {
@@ -320,7 +320,7 @@ const PaymentSummary = ({ noOfAdults, noOfChildren, noOfInfants, responseData, r
                                                         if (user?.users?.role === 2 && user?.users?.agent_type === 'A') {
                                                             finalTotal -= additionDis
                                                         }
-                                                        if (user?.users?.role === 2 && user?.users?.agent_type === 'B') {
+                                                        if (user?.users?.role === 2) {
                                                             finalTotal -= greenchipsamt
                                                         }
 
@@ -363,10 +363,10 @@ const PaymentSummary = ({ noOfAdults, noOfChildren, noOfInfants, responseData, r
 
                                                     // Add 175 or 595 if role === 2
                                                     if (user?.users?.role === 2) {
-                                                        finalTotal += getServiceFee(trip, user?.users?.agent_type);
+                                                        finalTotal += getServiceFee(trip,tripType, user?.users?.agent_type,noOfAdults);
                                                     }
 
-                                                    if (greenchipsamt > 0 && user?.users?.agent_type === 'B') {
+                                                    if (greenchipsamt > 0) {
                                                         finalTotal -= greenchipsamt;
                                                     }
 

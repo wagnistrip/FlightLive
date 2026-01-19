@@ -44,10 +44,7 @@ const mergeFlightsBySegment = (flights) => {
 
       /* ---------------- Fare Info ---------------- */
       const fareMap = new Map(
-        existing.airFareInfolist.map((f) => [
-          f["@attributes"].Key,
-          f,
-        ])
+        existing.airFareInfolist.map((f) => [f["@attributes"].Key, f])
       );
 
       flight.airFareInfolist.forEach((fare) => {
@@ -63,10 +60,7 @@ const mergeFlightsBySegment = (flights) => {
       const bookingMap = new Map(
         existing.BookingInfo.map((b) => {
           const a = b["@attributes"];
-          return [
-            `${a.BookingCode}-${a.SegmentRef}-${a.FareInfoRef}`,
-            b,
-          ];
+          return [`${a.BookingCode}-${a.SegmentRef}-${a.FareInfoRef}`, b];
         })
       );
 
@@ -166,7 +160,9 @@ export const processFlightData = (data2) => {
           ? bookingInfo.map((info) => info["@attributes"].BookingCode)
           : [bookingInfo["@attributes"].BookingCode];
 
-        const BookingInfo = Array.isArray(bookingInfo) ? bookingInfo : [bookingInfo];
+        const BookingInfo = Array.isArray(bookingInfo)
+          ? bookingInfo
+          : [bookingInfo];
 
         // Extract fareInfo references
         const fareInfoRefs = Array.isArray(bookingInfo)
@@ -231,7 +227,7 @@ export const processFlightData = (data2) => {
     });
   });
 
-    // const mergedFlights = mergeFlightsBySegment(allFlights);
+  // const mergedFlights = mergeFlightsBySegment(allFlights);
   return allFlights;
 };
 // utils.js
@@ -2836,24 +2832,66 @@ export const getFlightSegments = (flightData) => {
   return segments;
 };
 
-export const getServiceFee = (tripType, agentType) => {
+// export const getServiceFee = (tripType, agentType,trip) => {
+
+//   const fees = {
+//     A: { D: 220, I: 1095 },
+//     B: { D: 200, I: 1199 },
+//     C: { D: 200, I: 1195 },
+//   };
+
+//   const agentFees = fees[agentType] || fees["A"];
+
+//   return agentFees[tripType] || 0;
+// };
+
+export const getServiceFee = (trip, tripType, agentType = "A", adult = 1) => {
   const fees = {
-    A: { D: 220, I: 1095 },
-    B: { D: 400, I: 1199 },
-    C: { D: 420, I: 1095 },
+    A: {
+      D: {
+        oneway: 200,
+        roundtrip: 400,
+      },
+      I: {
+        oneway: 1199,
+        roundtrip: 2299,
+      },
+    },
+    B: {
+      D: {
+        oneway: 200,
+        roundtrip: 400,
+      },
+      I: {
+        oneway: 1199,
+        roundtrip: 2299,
+      },
+    },
+    C: {
+      D: {
+        oneway: 200,
+        roundtrip: 400,
+      },
+      I: {
+        oneway: 1199,
+        roundtrip: 2299,
+      },
+    },
   };
-
-  const agentFees = fees[agentType] || fees["A"];
-
-  return agentFees[tripType] || 0;
+  if (tripType === "roundtrip") {
+    const amount = fees?.[agentType]?.[trip]?.[tripType];
+    return adult * amount;
+  }
+  return fees?.[agentType]?.[trip]?.[tripType] || 0;
 };
 
 export const getAdditiondiscount = (tripType) => {
+  return 0;
   switch (tripType) {
     case "D":
-      return 500;
+      return 220;
     case "I":
-      return 1400;
+      return 1095;
     default:
       return 0;
   }

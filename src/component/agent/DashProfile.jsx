@@ -148,6 +148,23 @@ const DashProfile = () => {
               >
                 ⭐ Paid Portal
               </Box>
+            ) : user?.users?.agent_type === "C" ? (
+              <Box
+                sx={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 1,
+                  px: 2,
+                  py: 0.5,
+                  borderRadius: "20px",
+                  backgroundColor: "#fff3e0",
+                  color: "#ef6c00",
+                  fontWeight: 600,
+                  fontSize: "13px",
+                }}
+              >
+                ⭐ Expert Paid Portal
+              </Box>
             ) : null}
           </Box>
         </Box>

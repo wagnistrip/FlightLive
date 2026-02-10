@@ -276,7 +276,7 @@ const PaymentSummary = ({ noOfAdults, noOfChildren, noOfInfants, responseData, r
                             user && (user?.users.role === 2) && (
 
 
-                                <div style={{ border: '#f5f5f5' }} className="valid_date_area d-flex py-2.5 border-bottom  align-content-center justify-content-between">
+                                <div style={{ border: '#f5f5f5' }} className="valid_date_area d-none py-2.5 border-bottom  align-content-center justify-content-between">
                                     <div className="valid_date_area_one">
                                         <h5 className='text-danger fw-bold'> Payable Amount</h5>
                                     </div>
@@ -336,8 +336,8 @@ const PaymentSummary = ({ noOfAdults, noOfChildren, noOfInfants, responseData, r
 
                             )}
                         {
-                            user && (user?.users.role === 2) && user?.users?.agent_type === 'B' && activeStep > 2 && (
-                                <div style={{ border: '#f5f5f5' }} className="valid_date_area d-none py-2.5 border-bottom  align-content-center justify-content-between">
+                            user && (user?.users.role === 2) && greenchipsamt > 0 && (
+                                <div style={{ border: '#f5f5f5' }} className="valid_date_area d-flex py-2.5 border-bottom  align-content-center justify-content-between">
                                     <div className="valid_date_area_one">
                                         <p style={{ fontSize: '20px' }} className='text-success fw-normal'>Commission Earn</p>
                                     </div>

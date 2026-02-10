@@ -17,7 +17,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Link } from "react-router-dom";
 import { getAirportDataByCountry } from "../../utils/airlineUtils";
-import { setCommonWallet } from "../../redux/actions/bookingActions";
+import { setCommonChips, setCommonWallet } from "../../redux/actions/bookingActions";
 
 const DashBooking = ({ type, handleClose }) => {
     const user = useSelector((state) => state.auth.user);
@@ -50,9 +50,9 @@ const DashBooking = ({ type, handleClose }) => {
         setLoading(true);
         const token = user?.token;
         const reqbody = {
-            booking_id: selectedBooking?.id,
-            earnCoin: selectedBooking?.earnCoins,
-            amount: selectedBooking?.payment?.amount
+            booking_id: selectedBooking?.id || "",
+            earnCoin: selectedBooking?.earnCoins || 0,
+            amount: selectedBooking?.payment?.amount || 0,
         }
         console.log("Confirm booking for", reqbody);
 
@@ -60,9 +60,11 @@ const DashBooking = ({ type, handleClose }) => {
         const apiType = "/agent/debit-payment"
         try {
             const response = await galileoApi(apiType, reqbody, token);
+            console.log(response,"respone data for ticket confirm")
             if (response?.status === true) {
                 toast.success('Ticket is confirm successfully');
                 dispatch(setCommonWallet(response?.balance));
+                dispatch(setCommonChips(response?.base_amt || 0));
                 await new Promise((res) => setTimeout(res, 1500));
                 handleClose()
                 setOpenModal(false);
@@ -545,7 +547,10 @@ const DashBooking = ({ type, handleClose }) => {
                                                 <strong>Amount:</strong> {selectedBooking?.payment?.amount || "N/A"}
                                             </Typography>
                                             <Typography color="black" variant="body2">
-                                                <strong>Commission Earn :</strong> {selectedBooking.earnCoins || "N/A"}
+                                                <strong>Commission Earn :</strong> {selectedBooking?.earnCoins || "N/A"}
+                                            </Typography>
+                                            <Typography color="black" variant="body2">
+                                                <strong>Target Price :</strong> {selectedBooking?.base_amount || "N/A"}
                                             </Typography>
 
                                         </div>

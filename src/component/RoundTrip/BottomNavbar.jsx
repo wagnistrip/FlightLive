@@ -233,6 +233,11 @@ const BottomNavbar = ({ handleBookNow, selectedDeparture, selectedReturn, curren
     const returnSegments = parseFlightData(selectedReturn);
     const departureSegments2 = parseFlightData2(selectedDeparture);
     const returnSegments2 = parseFlightData2(selectedReturn);
+    let totalBaseAmt = 0 ;
+    if(departureSegments2 && returnSegments2){
+       totalBaseAmt = departureSegments2[0]?.totalBaseFare + returnSegments2[0]?.totalBaseFare || 0;
+
+    }
 
     const calculateTotalPrice = (segments) => {
         const total = parseFloat(segments?.price);
@@ -442,7 +447,7 @@ const BottomNavbar = ({ handleBookNow, selectedDeparture, selectedReturn, curren
                                 <span className="text-light" style={{ fontSize: '14px' }}> {currency} { } {parseInt(grandTotal)}</span><br />
 
                                 <span
-                                    className={`text-light ${chips ? 'd-flex' : 'd-none'}`}
+                                    className={`text-light ${!chips ? 'd-flex' : 'd-none'}`}
                                     style={{ fontSize: '14px' }}
                                 >
                                     Net Fare :{" "}
@@ -465,7 +470,7 @@ const BottomNavbar = ({ handleBookNow, selectedDeparture, selectedReturn, curren
                                         ) {
                                             // console.log("Carriers match ✅ applying extra discount:", departureSegments.carrierCode, returnSegments.carrierCode, extra_discount);
 
-                                            const extraDiscount = extraDiscountamount(departureSegments.carrierCode, extra_discount || []);
+                                            const extraDiscount = extraDiscountamount(departureSegments.carrierCode, extra_discount || [],totalBaseAmt);
                                             if (!isNaN(extraDiscount) && extraDiscount > 0) {
                                                 netFare -= extraDiscount;
                                             }

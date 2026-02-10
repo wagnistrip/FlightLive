@@ -542,6 +542,8 @@ const FlightCard = ({ flight, handlebook, currency, travellers, trip, flightFare
                       // Step 1: Get base price
                       const rawPrice = flight?.PricingInfos?.["@attributes"]?.ApproximateTotalPrice || "0";
                       let price = parseFloat(rawPrice.replace("INR", "").trim()) || 0;
+                      const rawPriceBase = flight?.PricingInfos?.["@attributes"]?.ApproximateBasePrice || "0";
+                      let basePrice = parseFloat(rawPriceBase.replace("INR", "").trim()) || 0;
 
                       // Step 2: Add service fee
                       price += getServiceFee("I","roundtrip",user?.users?.agent_type,travellers?.adults);
@@ -558,7 +560,7 @@ const FlightCard = ({ flight, handlebook, currency, travellers, trip, flightFare
                       }
                       // Step 4: Apply extra discount
                       const carrierCode = selectedDeparture?.[0]?.["@attributes"]?.Carrier || "";
-                      const extraDiscount = extraDiscountamount(carrierCode, extra_discount || []);
+                      const extraDiscount = extraDiscountamount(carrierCode, extra_discount || [],basePrice);
                       if (!isNaN(extraDiscount) && extraDiscount > 0) {
                         netFare -= extraDiscount;
                       }

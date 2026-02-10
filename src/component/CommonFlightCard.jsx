@@ -228,6 +228,8 @@ const CommonFlightCard = ({ index, data, responseData, bookFlightGAL, isOpen, to
                                                         // Step 1: Get base price safely
                                                         const rawPrice = data?.PricingInfos?.["@attributes"]?.ApproximateTotalPrice || "0";
                                                         let price = parseFloat(rawPrice.replace("INR", "").trim()) || 0;
+                                                        const rawPriceBase = data?.PricingInfos?.["@attributes"]?.ApproximateBasePrice || "0";
+                                                        let basePrice = parseFloat(rawPriceBase.replace("INR", "").trim()) || 0;
 
                                                         // 🟩 Step 2: Add service fee (using utility function)
                                                         const serviceFee = getServiceFee(responseData?.trip,responseData?.tripType, user?.users?.agent_type,responseData?.travellers?.adults);
@@ -247,7 +249,7 @@ const CommonFlightCard = ({ index, data, responseData, bookFlightGAL, isOpen, to
 
                                                         // Step 4: Apply extra discount
                                                         const carrierCode = data?.segments?.[0]?.["@attributes"]?.Carrier || "";
-                                                        const extraDiscount = extraDiscountamount(carrierCode, responseData?.extra_discount || []);
+                                                        const extraDiscount = extraDiscountamount(carrierCode, responseData?.extra_discount || [],basePrice);
                                                         if (!isNaN(extraDiscount) && extraDiscount > 0) {
                                                             netFare -= extraDiscount;
                                                         }

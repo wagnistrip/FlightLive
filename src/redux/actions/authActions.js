@@ -172,7 +172,7 @@ export const loadSession = () => {
           );
           if(response && response?.status === 200){
             dispatch(setCommonWallet(response?.total_balance || 0));
-            dispatch(setCommonChips(response?.chips || 0));
+            dispatch(setCommonChips(response?.base_amt || 0));
           }
         } catch (err) {
           console.error("Failed to fetch wallet amount:", err);

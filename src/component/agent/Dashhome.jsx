@@ -23,6 +23,11 @@ const Dashhome = ({ data, cards, data1, totalbooking }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const walletAmout = useSelector((state) => state.booking.walletAmount);
   const greenChipsPrice = useSelector((state) => state.booking.greenChipsPrice);
+  const years = Object.keys(data1).map(Number); // [2025, 2026, 2027]
+  const defaultYear = years[0];
+  const [selectedYear, setSelectedYear] = useState(defaultYear);
+  const [chartData, setChartData] = useState(data1[defaultYear]);
+
   const user = useSelector((state) => state.auth.user);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -30,49 +35,59 @@ const Dashhome = ({ data, cards, data1, totalbooking }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const totalGrowth = chartData.reduce(
+    (sum, item) => sum + item.Domestic + item.International,
+    0
+  );
+
+  useEffect(() => {
+    if (data1[selectedYear]) {
+      setChartData(data1[selectedYear]);
+    }
+  }, [selectedYear]);
 
 
   return (
     <>
       <CardContent sx={{ padding: "8px 0" }}>
         <Box
-      sx={{
-        overflow: "hidden",
-        whiteSpace: "nowrap",
-        backgroundColor: "#fff", // optional
-        padding: "8px 0",
-      }}
-    >
-      <Box
-        sx={{
-          display: "inline-flex",
-          alignItems: "center",
-          animation: "marquee 15s linear infinite",
-          "@keyframes marquee": {
-            "0%": { transform: "translateX(100%)" },
-            "100%": { transform: "translateX(-100%)" },
-          },
-          "&:hover": {
-            animationPlayState: "paused",
-          },
-        }}
-      >
-        <AddIcCallIcon sx={{ marginRight: "4px" }} />
-        <Typography
-          variant="h5"
-          sx={{ marginRight: "8px" }}
-          fontWeight={600}
+          sx={{
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+            backgroundColor: "#fff", // optional
+            padding: "8px 0",
+          }}
         >
-          +91 9654519719
-        </Typography>
-        <Typography
-          variant="h5"
-          sx={{ opacity: 0.8, color: "red" }}
-        >
-          24×7 Helpline ( Account's & Support )
-        </Typography>
-      </Box>
-    </Box>
+          <Box
+            sx={{
+              display: "inline-flex",
+              alignItems: "center",
+              animation: "marquee 15s linear infinite",
+              "@keyframes marquee": {
+                "0%": { transform: "translateX(100%)" },
+                "100%": { transform: "translateX(-100%)" },
+              },
+              "&:hover": {
+                animationPlayState: "paused",
+              },
+            }}
+          >
+            <AddIcCallIcon sx={{ marginRight: "4px" }} />
+            <Typography
+              variant="h5"
+              sx={{ marginRight: "8px" }}
+              fontWeight={600}
+            >
+              +91 9654519719
+            </Typography>
+            <Typography
+              variant="h5"
+              sx={{ opacity: 0.8, color: "red" }}
+            >
+              24×7 Helpline ( Account's & Support )
+            </Typography>
+          </Box>
+        </Box>
       </CardContent>
 
       <Grid sx={{ mb: 4 }}>
@@ -109,60 +124,60 @@ const Dashhome = ({ data, cards, data1, totalbooking }) => {
                   ? `${user?.users?.name} ${user?.users?.lastName}`
                   : 'Sunil Narine'}
               </Typography>
-                 <Box mt={1}>
-                          { user && user?.users?.agent_type === "A" ? (
-                            <Box
-                              sx={{
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: 1,
-                                px: 2,
-                                py: 0.5,
-                                borderRadius: "20px",
-                                backgroundColor: "#e8f5e9",
-                                color: "#2e7d32",
-                                fontWeight: 600,
-                                fontSize: "13px",
-                              }}
-                            >
-                              🆓 Free Portal
-                            </Box>
-                          ) : user?.users?.agent_type === "B" ? (
-                            <Box
-                              sx={{
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: 1,
-                                px: 2,
-                                py: 0.5,
-                                borderRadius: "20px",
-                                backgroundColor: "#fff3e0",
-                                color: "#ef6c00",
-                                fontWeight: 600,
-                                fontSize: "13px",
-                              }}
-                            >
-                              ⭐ Paid Portal
-                            </Box>
-                          ) : user?.users?.agent_type === "C" ? (
-                            <Box
-                              sx={{
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: 1,
-                                px: 2,
-                                py: 0.5,
-                                borderRadius: "20px",
-                                backgroundColor: "#fff3e0",
-                                color: "#ef6c00",
-                                fontWeight: 600,
-                                fontSize: "13px",
-                              }}
-                            >
-                              ⭐ Paid Expert Portal
-                            </Box>
-                          ) : null}
-                        </Box>
+              <Box mt={1}>
+                {user && user?.users?.agent_type === "A" ? (
+                  <Box
+                    sx={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 1,
+                      px: 2,
+                      py: 0.5,
+                      borderRadius: "20px",
+                      backgroundColor: "#e8f5e9",
+                      color: "#2e7d32",
+                      fontWeight: 600,
+                      fontSize: "13px",
+                    }}
+                  >
+                    🆓 Free Portal
+                  </Box>
+                ) : user?.users?.agent_type === "B" ? (
+                  <Box
+                    sx={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 1,
+                      px: 2,
+                      py: 0.5,
+                      borderRadius: "20px",
+                      backgroundColor: "#fff3e0",
+                      color: "#ef6c00",
+                      fontWeight: 600,
+                      fontSize: "13px",
+                    }}
+                  >
+                    ⭐ Paid Portal
+                  </Box>
+                ) : user?.users?.agent_type === "C" ? (
+                  <Box
+                    sx={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 1,
+                      px: 2,
+                      py: 0.5,
+                      borderRadius: "20px",
+                      backgroundColor: "#fff3e0",
+                      color: "#ef6c00",
+                      fontWeight: 600,
+                      fontSize: "13px",
+                    }}
+                  >
+                    ⭐ Paid Expert Portal
+                  </Box>
+                ) : null}
+              </Box>
             </Grid>
 
             <Grid item>
@@ -179,7 +194,7 @@ const Dashhome = ({ data, cards, data1, totalbooking }) => {
                   fontSize: '1rem',
                 }}
               >
-                {greenChipsPrice || 0} Commission Earn
+                {greenChipsPrice || 0} Target Price
               </Box>
             </Grid>
           </Grid>
@@ -319,12 +334,12 @@ const Dashhome = ({ data, cards, data1, totalbooking }) => {
         </Grid>
       </Grid>
 
-      
-      <Card sx={{ p: 2, borderRadius: 2, bgcolor: '#f9fbfd', mt: 4, mb: 2, display: 'none', }}>
+
+      <Card sx={{ p: 2, borderRadius: 2, bgcolor: '#f9fbfd', mt: 4, mb: 2, }}>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Box>
-            <Typography variant="body2" sx={{ color: "#999" }}>Total Growth</Typography>
-            <Typography variant="h5" sx={{ fontWeight: 600 }}>$2,324.00</Typography>
+            <Typography variant="body2" sx={{ color: "#999" }}>Total Growth / Years</Typography>
+            <Typography variant="h5" sx={{ fontWeight: 600 }}>₹{totalGrowth.toLocaleString()}</Typography>
           </Box>
           <Box>
             <Button
@@ -333,28 +348,38 @@ const Dashhome = ({ data, cards, data1, totalbooking }) => {
               onClick={handleClick}
               sx={{ borderRadius: 2 }}
             >
-              Today
+              {selectedYear}
             </Button>
+
             <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-              <MenuItem onClick={handleClose}>Today</MenuItem>
-              <MenuItem onClick={handleClose}>This Month</MenuItem>
-              <MenuItem onClick={handleClose}>This Year</MenuItem>
+              {years && years?.map((year) => (
+                <MenuItem
+                  key={year}
+                  onClick={() => {
+                    setSelectedYear(year);
+                    handleClose();
+                  }}
+                >
+                  {year}
+                </MenuItem>
+              ))}
             </Menu>
+
           </Box>
         </Box>
 
 
         <Box height={300}>
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data1}>
+            <BarChart data={chartData}>
               <XAxis dataKey="name" stroke="#888" />
               <YAxis stroke="#888" />
               <Tooltip />
               <Legend />
-              <Bar dataKey="Investment" stackId="a" fill="#90CAF9" />
-              <Bar dataKey="Loss" stackId="a" fill="#42A5F5" />
-              <Bar dataKey="Profit" stackId="a" fill="#7E57C2" />
-              <Bar dataKey="Maintenance" stackId="a" fill="#EDE7F6" />
+              <Bar dataKey="Domestic" stackId="a" fill="#90CAF9" />
+              <Bar dataKey="International" stackId="a" fill="#7E57C2" />
+              {/* <Bar dataKey="Profit" stackId="a" fill="#7E57C2" />
+              <Bar dataKey="Maintenance" stackId="a" fill="#EDE7F6" /> */}
             </BarChart>
           </ResponsiveContainer>
         </Box>

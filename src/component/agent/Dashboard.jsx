@@ -87,7 +87,7 @@ const NAVIGATION = [
       { segment: "hold_booking", title: "Hold Booking", icon: <PendingActionsIcon /> },
       { segment: "package_booking", title: "Package Booking", icon: <CardGiftcardIcon /> },
       { segment: "wallet", title: "Wallet", icon: <AccountBalanceWalletIcon /> },
-      { segment: "coins", title: "Commission Earn", icon: <MonetizationOnIcon /> },
+      { segment: "coins", title: "Target Price", icon: <MonetizationOnIcon /> },
     ],
 
 
@@ -168,93 +168,97 @@ const monthlyData = [
 
 
 
-const data1 = [
-  {
-    name: "Jan",
-    Investment: 30,
-    Loss: 40,
-    Profit: 30,
-    Maintenance: 0,
-  },
-  {
-    name: "Feb",
-    Investment: 120,
-    Loss: 10,
-    Profit: 140,
-    Maintenance: 0,
-  },
-  {
-    name: "Mar",
-    Investment: 40,
-    Loss: 0,
-    Profit: 40,
-    Maintenance: 80,
-  },
-  {
-    name: "Apr",
-    Investment: 40,
-    Loss: 30,
-    Profit: 30,
-    Maintenance: 0,
-  },
-  {
-    name: "May",
-    Investment: 40,
-    Loss: 50,
-    Profit: 30,
-    Maintenance: 0,
-  },
-  {
-    name: "Jun",
-    Investment: 70,
-    Loss: 50,
-    Profit: 70,
-    Maintenance: 100,
-  },
-  {
-    name: "Jul",
-    Investment: 40,
-    Loss: 70,
-    Profit: 70,
-    Maintenance: 0,
-  },
-  {
-    name: "Aug",
-    Investment: 30,
-    Loss: 20,
-    Profit: 10,
-    Maintenance: 0,
-  },
-  {
-    name: "Sep",
-    Investment: 40,
-    Loss: 20,
-    Profit: 50,
-    Maintenance: 0,
-  },
-  {
-    name: "Oct",
-    Investment: 45,
-    Loss: 80,
-    Profit: 45,
-    Maintenance: 0,
-  },
-  {
-    name: "Nov",
-    Investment: 20,
-    Loss: 20,
-    Profit: 30,
-    Maintenance: 100,
-  },
-  {
-    name: "Dec",
-    Investment: 70,
-    Loss: 90,
-    Profit: 0,
-    Maintenance: 0,
-  },
-];
+// const data1 = [
+//   {
+//     name: "Jan",
+//     Domestic: 40000,
+//     International: 100000,
+//   },
+//   {
+//     name: "Feb",
+//     Domestic: 20000,
+//     International: 80000,
+//   },
+//   {
+//     name: "Mar",
+//     Domestic: 30000,
+//     International: 120000,
+//   },
+//   {
+//     name: "Apr",
+//     Domestic: 40000,
+//     International: 60000,
+//   },
+//   {
+//     name: "May",
+//     Domestic: 40000,
+//     International: 10000,
+//   },
+//   {
+//     name: "Jun",
+//     Domestic: 20000,
+//     International: 70000,
+//   },
+//   {
+//     name: "Jul",
+//     Domestic: 40000,
+//     International: 100000,
+//   },
+//   {
+//     name: "Aug",
+//     Domestic: 40000,
+//     International: 100000,
+//   },
+//   {
+//     name: "Sep",
+//     Domestic: 40000,
+//     International: 100000,
+//   },
+//   {
+//     name: "Oct",
+//     Domestic: 40000,
+//     International: 700000,
+//   },
+//   {
+//     name: "Nov",
+//     Domestic: 40000,
+//     International: 100000,
+//   },
+//   {
+//     name: "Dec",
+//     Domestic: 40000,
+//     International: 200000,
+//   },
+// ];
 
+const data1 = {
+  2025: [
+    { name: "Jan", Domestic: 40000, International: 100000 },
+    { name: "Feb", Domestic: 20000, International: 80000 },
+    { name: "Mar", Domestic: 30000, International: 120000 },
+    { name: "Apr", Domestic: 40000, International: 60000 },
+    { name: "May", Domestic: 40000, International: 10000 },
+    { name: "Jun", Domestic: 20000, International: 70000 },
+    { name: "Jul", Domestic: 40000, International: 100000 },
+    { name: "Aug", Domestic: 40000, International: 100000 },
+    { name: "Sep", Domestic: 40000, International: 100000 },
+    { name: "Oct", Domestic: 40000, International: 700000 },
+    { name: "Nov", Domestic: 40000, International: 100000 },
+    { name: "Dec", Domestic: 40000, International: 200000 },
+  ],
+
+  2026: [
+    { name: "Jan", Domestic: 50000, International: 110000 },
+    { name: "Feb", Domestic: 25000, International: 90000 },
+    { name: "Mar", Domestic: 35000, International: 130000 },
+    // ...
+  ],
+
+  2027: [
+    { name: "Jan", Domestic: 60000, International: 120000 },
+    // ...
+  ],
+};
 
 const weeklySalesData = [{ pv: 100 }, { pv: 300 }, { pv: 500 }, { pv: 400 }, { pv: 700 }, { pv: 600 }];
 const newUsersData = [{ pv: 800 }, { pv: 500 }, { pv: 600 }, { pv: 300 }, { pv: 700 }];

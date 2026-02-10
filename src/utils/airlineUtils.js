@@ -2672,14 +2672,19 @@ export const getChipsByAmount = (amount, data) => {
   // return slab ? slab.chips : null;
   return data[0] ? data[0]?.chips : null;
 };
-export const extraDiscountamount = (carrierCode, data) => {
+export const extraDiscountamount = (carrierCode, data,baseAmt) => {
   if (!carrierCode || !Array.isArray(data)) return 0;
 
   const match = data.find(
     (item) => item.airline === carrierCode && item.status === "1"
   );
 
-  return match ? Number(match.amount) : 0;
+  if (!match || !match.amount) return 0;
+  const percent = Number(match.amount);
+  const discountAmount = (baseAmt * percent) / 100;
+
+  return discountAmount;
+  // return match ? Number(match.amount) : 0;
 };
 
 export const matchSpecialFlight = (segments = [], specialFlights = []) => {
@@ -2846,6 +2851,13 @@ export const getFlightSegments = (flightData) => {
 // };
 
 export const getServiceFee = (trip, tripType, agentType = "A", adult = 1) => {
+
+  if (tripType === "roundtrip" && trip === 'D') {
+    const amount = 300;
+    return amount;
+  }
+  
+  return 0;
   const fees = {
     A: {
       D: {

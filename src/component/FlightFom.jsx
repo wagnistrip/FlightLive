@@ -501,7 +501,7 @@ function Flightform({ existingData, type = '' }) {
             currency: responseData1.currency,
             galileo: Array.isArray(responseData1?.galileo)
               ? (responseData1.galileo.length > 150
-                ? responseData1.galileo.slice(0, 150)
+                ? responseData1.galileo.slice(0, 10)
                 : responseData1.galileo)
               : [],
             // galileo: responseData1?.galileo,

@@ -53,7 +53,7 @@ function FlightReview() {
     let timeDuration = '';
     let timeDuration1 = '';
 
-    // let discountedPrice = 0;
+    let totalAmt = 0;
     let formatedate = ""
     let formatedateRetun = ""
     let flightType = '';
@@ -708,8 +708,8 @@ function FlightReview() {
             ...(userdata?.role === 2 && { paymentShow: selectedOption }),
             ...(userdata?.role === 2 && bookingType === 'WithoutWailet' && { bookingType: "WithoutWailet" }),
             ...(airPriceArray.length > 0 && { airPriceArray }),
-            // ...(userdata?.role === 2 && { earnCoins: (greenchipsamt ?? 0) - (isGreenChipsUsed ? (usechipsamt ?? 0) : 0) }),
-            ...(userdata?.role === 2 && { earnCoins: 0 }),
+            ...(userdata?.role === 2 && { earnCoins: (greenchipsamt ?? 0) - (isGreenChipsUsed ? (usechipsamt ?? 0) : 0) }),
+            ...(userdata?.role === 2 && { total_base_amt: totalAmt || 0 }),
             ...(userdata?.role === 2 && {
                 useCoin: isGreenChipsUsed ? usechipsamt : 0
             }),
@@ -749,14 +749,14 @@ function FlightReview() {
 
     }
 
-    const totalFlgithAmt = grandTotal + grandTotal2 + othercharges + othercharges1 + ((!user || user?.users?.role === 1) ? convenienceFee : 0) + (user?.users?.role === 2 ? getServiceFee(trip,responseData1?.trip_type, user?.users?.agent_type,noOfAdults) : 0) - (user && user?.users.role === 1 ? 0 : (isGreenChipsUsed ? usechipsamt : 0)) - (user?.users?.role === 2 && user?.users?.agent_type === 'A' ? getAdditiondiscount(trip) : 0) - (user?.users?.role === 2  ? greenchipsamt : 0) - discountedPrice;
+    const totalFlgithAmt = grandTotal + grandTotal2 + othercharges + othercharges1 + ((!user || user?.users?.role === 1) ? convenienceFee : 0) + (user?.users?.role === 2 ? getServiceFee(trip, responseData1?.trip_type, user?.users?.agent_type, noOfAdults) : 0) - (user && user?.users.role === 1 ? 0 : (isGreenChipsUsed ? usechipsamt : 0)) - (user?.users?.role === 2 && user?.users?.agent_type === 'A' ? getAdditiondiscount(trip) : 0) - (user?.users?.role === 5 ? greenchipsamt : 0) - discountedPrice;
     // add here 4% extra charge
     const AdditionCharge = (!user || user?.users?.role === 1) ? parseFloat((totalFlgithAmt * 0.045).toFixed(2)) : 0;
 
     const greenChipsfetch = async (token, trip, triptype, amount, travellers, carrierCode, carrierCode1) => {
         const flightcode = Array.isArray(carrierCode?.AirSegment) ? carrierCode?.AirSegment : [carrierCode?.AirSegment]
         const flightcode1 = Array.isArray(carrierCode1?.AirSegment) ? carrierCode1?.AirSegment : [carrierCode1?.AirSegment] || ""
-        const serviceFee = getServiceFee(trip,triptype, user?.users?.agent_type,travellers?.noOfAdults);
+        const serviceFee = getServiceFee(trip, triptype, user?.users?.agent_type, travellers?.noOfAdults);
         const finalTotal = (amount || 0) + serviceFee;
         const carrier1 = flightcode?.[0]?.["@attributes"]?.Carrier || "";
         const carrier2 = flightcode1?.[0]?.["@attributes"]?.Carrier || "";
@@ -806,6 +806,11 @@ function FlightReview() {
         }
     };
 
+    totalAmt =
+        (Number(noOfAdults) * (Number(adultPrice) + Number(adultPrice2))) +
+        (Number(noOfChildren) * (Number(childPrice) + Number(childPrice2))) +
+        (Number(noOfInfants) * (Number(infantPrice) + Number(infantPrice2)));
+        
     useEffect(() => {
         const offerApi = async (trip, triptype, travellers, data) => {
             // console.log("current data = > ",data);
@@ -829,7 +834,8 @@ function FlightReview() {
             }
         };
 
-        const totalAmt = grandTotal + grandTotal2 || 0;
+        // const totalAmt = grandTotal + grandTotal2 || 0;
+
         const token = user?.token || 0;
 
         if (totalAmt > 0 && user?.users.role === 2) {

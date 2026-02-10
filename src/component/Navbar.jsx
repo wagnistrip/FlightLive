@@ -315,7 +315,7 @@ const Navbar = () => {
                               </li>
                               <li to='/agent/profile' className="nav-item">
                                 <Link className="nav-link d-flex w-100 align-items-center justify-content-between" to="/agent/profile">
-                                  <div>Commission Earn</div>
+                                  <div>Target Price</div>
                                   <strong>
                                     ₹ {greenChipsPrice}
                                   </strong>

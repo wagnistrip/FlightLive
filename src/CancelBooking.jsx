@@ -293,7 +293,7 @@ const CancelBooking = () => {
                     }
                     {
                       data && data?.useCoin > 0 && (
-                        <div className="d-flex fs-6 text-success justify-content-between mb-2">
+                        <div className="d-none fs-6 text-success justify-content-between mb-2">
                           <span>Applied Commission Earn</span>
                           <strong>
                             - ₹{" "}
